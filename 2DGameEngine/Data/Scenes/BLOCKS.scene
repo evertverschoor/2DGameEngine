@@ -1,0 +1,21 @@
+Background
+{
+	AssetURI=Assets/World1Background.png
+	Position=0,0,0,
+	Controllable=0
+}
+
+Player
+{
+	AssetURI=Assets/Player.png
+	Position=100,100,2,
+	Controllable=1
+	GamepadNumber=1
+}
+
+NPC
+{
+	AssetURI=Assets/Npc.png
+	Position=500,200,1,
+	Controllable=0
+}

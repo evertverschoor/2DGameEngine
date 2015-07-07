@@ -1,0 +1,13 @@
+Background
+{
+	AssetURI=Assets/World2Background.png
+	Position=0,0,0,
+	Controllable=0
+}
+
+Kiri
+{
+	AssetURI=Assets/Kiri.png
+	Position=400,200,2,
+	Controllable=0
+}

@@ -1,0 +1,9 @@
+#ifndef ASPECTRATIO_H
+#define ASPECTRATIO_H
+
+enum AspectRatio
+{
+	FOUR_BY_THREE, SIXTEEN_BY_NINE, SIXTEEN_BY_TEN
+};
+
+#endif
