@@ -229,3 +229,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Engine Files
+Log.txt

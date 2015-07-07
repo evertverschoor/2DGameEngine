@@ -66,6 +66,14 @@ int ControllableEntity::HandleKeyboardInput(KeyboardState* _state)
 
 int ControllableEntity::HandleMouseInput(MouseState* _state)
 {
+	if (_state->IsMouseButtonPressed(1))
+	{
+		SetDirection(GetDirection() + 3);
+	}
+	if (_state->IsMouseButtonPressed(2))
+	{
+		SetDirection(GetDirection() - 3);
+	}
 	return 1;
 }
 
