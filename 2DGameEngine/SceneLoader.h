@@ -4,6 +4,8 @@
 #include "Scene.h"
 #include "GamepadInputReciever.h"
 #include "PcInputReciever.h"
+#include "Position.h"
+#include "Scene.h"
 #include <string>
 
 /// <summary>
@@ -20,10 +22,11 @@ public:
 	/// </summary>
 	int LoadScene(Scene*);
 private:
+
 	/// <summary>
-	/// Takes the content of the scene file and uses it to put entities in the scene.
+	/// Loads an entity from a file.
 	/// </summary>
-	int DissectString(std::string, Scene*);
+	int LoadEntity(std::string, Position*, Scene*);
 
 	/// <summary>
 	/// Converts a string of coordinates from the scene file to a Position object.

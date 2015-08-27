@@ -6,7 +6,7 @@
 #include "VideoSettings.h"
 
 /// <summary>
-/// The rendere is an interface that will be realized by a DirectX Renderer.
+/// The renderer is an interface that will be realized by a DirectX Renderer.
 /// </summary>
 class Renderer
 {
@@ -17,6 +17,18 @@ public:
 	/// Render all entities in a scene.
 	/// </summary>
 	virtual int Render(Scene*) = 0;
+
+	/// <summary>
+	/// Write some text somewhere on the screen.
+	/// </summary>
+	virtual int WriteText(std::string, Position*) = 0;
+
+	/// <summary>
+	/// Set a custom text format.
+	/// @param1 The name of the font.
+	/// @param2 The size of the font.
+	/// </summary>
+	virtual int SetDefaultTextFormat(std::string, float) = 0;
 
 	/// <summary>
 	/// Initialize the renderer with a window handle.

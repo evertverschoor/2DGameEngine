@@ -31,7 +31,7 @@ int VideoSettings::ImportVideoSettings()
 int VideoSettings::SetVideoSettingsFromString(std::string _string)
 {
 	std::string _strings[80];
-	std::string delimiter = "=";
+	std::string delimiter = ";";
 
 	int i = 0;
 	size_t pos = 0;
@@ -43,14 +43,37 @@ int VideoSettings::SetVideoSettingsFromString(std::string _string)
 		_string.erase(0, pos + delimiter.length());
 	}
 
-	// Set the full screen option
-	Fullscreen = (_strings[1] == "1") ? true : false;
+	int _width, _height;
 
-	// Set the width
-	int _width = atoi(_strings[3].c_str());
+	// Iterate through each line read
+	for (int i = 0; i < _strings->length(); i++)
+	{
+		// Check the fullscreen setting
+		if (_strings[i].find("Fullscreen") != std::string::npos)
+		{
+			std::string _fullscreenString = _strings[i].substr(11, _strings[i].find(";") - 11);
+			Fullscreen = (_fullscreenString == "1") ? true : false;
+		}
 
-	// Set the height
-	int _height = atoi(_strings[5].c_str());
+		// Check the width setting
+		else if (_strings[i].find("DrawWidth") != std::string::npos)
+		{
+			std::string _widthString = _strings[i].substr(10, _strings[i].find(";") - 10);
+			_width = atoi(_widthString.c_str());
+		}
+
+		// Check the height setting
+		else if (_strings[i].find("DrawHeight") != std::string::npos)
+		{
+			std::string _heightString = _strings[i].substr(11, _strings[i].find(";") - 11);
+			_height = atoi(_heightString.c_str());
+		}
+
+		else
+		{
+			break;
+		}
+	}
 
 	// Put it in a screen resolution object
 	ScreenRes = new ScreenResolution(_width, _height);

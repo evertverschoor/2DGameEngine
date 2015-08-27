@@ -1,7 +1,0 @@
-StarDestroyer
-{
-	AssetURI=Assets/StarDestroyer.png
-	Position=600,200,2,
-	Controllable=1
-	GamepadNumber=1
-}

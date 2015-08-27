@@ -31,7 +31,6 @@ std::string FileReader::ReadFile(std::string _fileName)
 	for (int i = 0; i < _linecounter; i++)
 	{
 		_fileString += _lines[i];
-		_fileString += "=";
 	}
 
 	return _fileString;

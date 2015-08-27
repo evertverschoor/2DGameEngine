@@ -1,5 +1,6 @@
 #include "DirectXRenderer.h"
 #include "Logger.h"
+#include "StringConverter.h"
 
 
 DirectXRenderer::DirectXRenderer(DirectXAssetManager* _assetmanager)
@@ -31,6 +32,8 @@ int DirectXRenderer::Render(Scene* _renderableScene)
 	{
 		DrawEntity(_renderableScene->GetEntity(i));
 	}
+
+	WriteText("Text here!", new Position(10,10,2));
 
 	// End drawing here
 	RenderTarget->EndDraw();
@@ -84,9 +87,30 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 	return 1;
 }
 
+int DirectXRenderer::WriteText(std::string _text, Position* _position)
+{
+	RenderTarget->DrawTextW (
+		StringConverter::Instance()->StringToWstring(_text).c_str(),
+		_text.length(),
+		DefaultTextFormat,
+		D2D1::RectF(
+		_position->X,
+		_position->Y,
+		_position->X + Settings->ScreenRes->Width,
+		_position->Y + Settings->ScreenRes->Height
+		),
+		DefaultTextBrush,
+		D2D1_DRAW_TEXT_OPTIONS_CLIP,
+		DWRITE_MEASURING_MODE_NATURAL
+		);
+
+	return 1;
+}
+
 
 int DirectXRenderer::Init(HWND* _windowhandle)
 {
+	// Create D2D factory
 	HRESULT _result = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &Factory);
 
 	if (FAILED(_result))
@@ -94,12 +118,24 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 		return -1;
 	}
 
+	// Create DirectWrite factory
+	_result = DWriteCreateFactory(
+		DWRITE_FACTORY_TYPE_SHARED,
+		__uuidof(IDWriteFactory),
+		reinterpret_cast<IUnknown**>(&DWriteFactory)
+		);
+
+	if (FAILED(_result))
+	{
+		return -2;
+	}
+
 	RECT _rect;
 	GetClientRect(*_windowhandle, &_rect);
 
+	// Create the render target
 	_result = Factory->CreateHwndRenderTarget(
 		D2D1::RenderTargetProperties(),
-		//D2D1::HwndRenderTargetProperties(*_windowhandle, D2D1::SizeU(_rect.right, _rect.bottom)),
 		D2D1::HwndRenderTargetProperties(*_windowhandle, D2D1::SizeU(Settings->ScreenRes->Width, Settings->ScreenRes->Height)),
 		&RenderTarget
 	);
@@ -108,6 +144,28 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 	{
 		return -10;
 	}
+
+	// Create the default text format
+	_result = DWriteFactory->CreateTextFormat(
+		L"Gabriola",
+		NULL,
+		DWRITE_FONT_WEIGHT_REGULAR,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		72.0f,
+		L"en-us",
+		&DefaultTextFormat
+		);
+
+	if (FAILED(_result))
+	{
+		return -20;
+	}
+
+	_result = RenderTarget->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::Black, 1.0f),
+		&DefaultTextBrush
+		);
 
 	ResourceManager->SetRenderTarget(RenderTarget);
 
@@ -118,5 +176,20 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 int DirectXRenderer::SetVideoSettings(VideoSettings* _settings)
 {
 	Settings = _settings;
+	return 1;
+}
+
+int DirectXRenderer::SetDefaultTextFormat(std::string _fontname, float _fontsize)
+{
+	HRESULT _result = DWriteFactory->CreateTextFormat(
+		StringConverter::Instance()->StringToWstring(_fontname).c_str(),
+		NULL,
+		DWRITE_FONT_WEIGHT_REGULAR,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		_fontsize,
+		L"en-us",
+		&DefaultTextFormat
+		);
 	return 1;
 }
