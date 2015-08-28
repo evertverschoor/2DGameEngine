@@ -8,6 +8,7 @@ DirectXRenderer::DirectXRenderer(DirectXAssetManager* _assetmanager)
 	ResourceManager = _assetmanager;
 	Factory = NULL;
 	RenderTarget = NULL;
+	SetVirtualResolution(new Dimension(1920, 1080));
 }
 
 
@@ -68,14 +69,17 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 		);
 	}
 
+	Position* _actualEntityPosition = GetActualDrawPosition(&_entity->GetPosition());
+	Dimension* _actualEntitySize = GetActualDrawSize(new Dimension(_bitmap->GetSize().width, _bitmap->GetSize().height));
+
 	// Draw the bitmap
 	RenderTarget->DrawBitmap(
 		ResourceManager->GetD2D1Bitmap(_entity),
 		D2D1::RectF(
-			_entity->GetPosition().X,
-			_entity->GetPosition().Y,
-			_entity->GetPosition().X + _bitmap->GetSize().width,
-			_entity->GetPosition().Y + _bitmap->GetSize().height
+			_actualEntityPosition->X,
+			_actualEntityPosition->Y,
+			_actualEntityPosition->X + _actualEntitySize->Width,
+			_actualEntityPosition->Y + _actualEntitySize->Height
 		)
 	);
 
@@ -89,15 +93,17 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 
 int DirectXRenderer::WriteText(std::string _text, Position* _position)
 {
+	Position* _actualTextPosition = GetActualDrawPosition(_position);
+
 	RenderTarget->DrawTextW (
 		StringConverter::Instance()->StringToWstring(_text).c_str(),
 		_text.length(),
 		DefaultTextFormat,
 		D2D1::RectF(
-		_position->X,
-		_position->Y,
-		_position->X + Settings->ScreenRes->Width,
-		_position->Y + Settings->ScreenRes->Height
+		_actualTextPosition->X,
+		_actualTextPosition->Y,
+		_actualTextPosition->X + Settings->ScreenRes->Width,
+		_actualTextPosition->Y + Settings->ScreenRes->Height
 		),
 		DefaultTextBrush,
 		D2D1_DRAW_TEXT_OPTIONS_CLIP,
@@ -145,27 +151,7 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 		return -10;
 	}
 
-	// Create the default text format
-	_result = DWriteFactory->CreateTextFormat(
-		L"Gabriola",
-		NULL,
-		DWRITE_FONT_WEIGHT_REGULAR,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		72.0f,
-		L"en-us",
-		&DefaultTextFormat
-		);
-
-	if (FAILED(_result))
-	{
-		return -20;
-	}
-
-	_result = RenderTarget->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF::Black, 1.0f),
-		&DefaultTextBrush
-		);
+	SetDefaultTextFormat("Arial", 72.0f, RED, 1.0f);
 
 	ResourceManager->SetRenderTarget(RenderTarget);
 
@@ -179,17 +165,120 @@ int DirectXRenderer::SetVideoSettings(VideoSettings* _settings)
 	return 1;
 }
 
-int DirectXRenderer::SetDefaultTextFormat(std::string _fontname, float _fontsize)
+int DirectXRenderer::SetDefaultTextFormat(std::string _fontname, float _fontsize, Color _color, float _transparency)
 {
+	// Set the font family and size.
 	HRESULT _result = DWriteFactory->CreateTextFormat(
 		StringConverter::Instance()->StringToWstring(_fontname).c_str(),
 		NULL,
 		DWRITE_FONT_WEIGHT_REGULAR,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
-		_fontsize,
+		GetActualFontSize(_fontsize),
 		L"en-us",
 		&DefaultTextFormat
 		);
+
+	if (FAILED(_result))
+	{
+		return -1;
+	}
+
+	// Set the font color.
+	switch (_color)
+	{
+	case BLACK: 
+		_result = RenderTarget->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::Black, _transparency),
+			&DefaultTextBrush
+			); break;
+
+	case WHITE: 
+		_result = RenderTarget->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::White, _transparency),
+			&DefaultTextBrush
+			); break;
+
+	case GRAY:
+		_result = RenderTarget->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::Gray, _transparency),
+			&DefaultTextBrush
+			); break;
+
+	case RED:
+		_result = RenderTarget->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::Red, _transparency),
+			&DefaultTextBrush
+			); break;
+
+	case GREEN:
+		_result = RenderTarget->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::Green, _transparency),
+			&DefaultTextBrush
+			); break;
+
+	case BLUE:
+		_result = RenderTarget->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::Blue, _transparency),
+			&DefaultTextBrush
+			); break;
+	}
+
+	if (FAILED(_result))
+	{
+		return -2;
+	}
+
 	return 1;
+}
+
+int DirectXRenderer::SetVirtualResolution(Dimension* _resolution)
+{
+	VirtualResolution = _resolution;
+	return 1;
+}
+
+Position* DirectXRenderer::GetActualDrawPosition(Position* _position)
+{
+	// If the virtual resolution and actual resolution are the same, this doesnt need to happen.
+	if (VirtualResolution->Height == Settings->ScreenRes->Height && VirtualResolution->Width == Settings->ScreenRes->Width)
+	{
+		return _position;
+	}
+	else
+	{
+		_position->X = (_position->X * Settings->ScreenRes->Width) / VirtualResolution->Width;
+		_position->Y = (_position->Y * Settings->ScreenRes->Height) / VirtualResolution->Height;
+
+		return _position;
+	}
+}
+
+Dimension* DirectXRenderer::GetActualDrawSize(Dimension* _size)
+{
+	// If the virtual resolution and actual resolution are the same, this doesnt need to happen.
+	if (VirtualResolution->Height == Settings->ScreenRes->Height && VirtualResolution->Width == Settings->ScreenRes->Width)
+	{
+		return _size;
+	}
+	else
+	{
+		_size->Width = (_size->Width * Settings->ScreenRes->Width) / VirtualResolution->Width;
+		_size->Height = (_size->Height * Settings->ScreenRes->Height) / VirtualResolution->Height;
+		return _size;
+	}
+}
+
+float DirectXRenderer::GetActualFontSize(float _size)
+{
+	// If the virtual resolution and actual resolution are the same, this doesnt need to happen.
+	if (VirtualResolution->Height == Settings->ScreenRes->Height && VirtualResolution->Width == Settings->ScreenRes->Width)
+	{
+		return _size;
+	}
+	else
+	{
+		_size = (_size * Settings->ScreenRes->Width) / VirtualResolution->Width;
+		return _size;
+	}
 }

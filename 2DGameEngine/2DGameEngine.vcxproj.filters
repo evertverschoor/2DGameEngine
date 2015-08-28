@@ -36,9 +36,6 @@
     <ClCompile Include="Position.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ScreenResolution.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="VideoSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -87,6 +84,9 @@
     <ClCompile Include="StringConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dimension.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -111,9 +111,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AssetManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScreenResolution.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VideoSettings.h">
@@ -173,10 +170,13 @@
     <ClInclude Include="ConstantMouseState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AspectRatio.h">
+    <ClInclude Include="StringConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StringConverter.h">
+    <ClInclude Include="Color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dimension.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

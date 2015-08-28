@@ -3,7 +3,6 @@
 
 #include <string>
 #include "Windows.h"
-#include "AspectRatio.h"
 
 /// <summary>
 /// The Logger can write anything to the log file.

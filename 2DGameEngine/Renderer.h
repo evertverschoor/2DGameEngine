@@ -4,6 +4,8 @@
 #include "Scene.h"
 #include "Windows.h"
 #include "VideoSettings.h"
+#include "Dimension.h"
+#include "Color.h"
 
 /// <summary>
 /// The renderer is an interface that will be realized by a DirectX Renderer.
@@ -25,10 +27,12 @@ public:
 
 	/// <summary>
 	/// Set a custom text format.
-	/// @param1 The name of the font.
+	/// @param1 The name of the font family;
 	/// @param2 The size of the font.
+	/// @param3 The font color.
+	/// @param4 The font transparency.
 	/// </summary>
-	virtual int SetDefaultTextFormat(std::string, float) = 0;
+	virtual int SetDefaultTextFormat(std::string, float, Color, float) = 0;
 
 	/// <summary>
 	/// Initialize the renderer with a window handle.
@@ -39,6 +43,11 @@ public:
 	/// Set the video settings for the render quality.
 	/// </summary>
 	virtual int SetVideoSettings(VideoSettings*) = 0;
+
+	/// <summary>
+	/// Set the virtual resolution (recommended is the target size of the assets)
+	/// </summary>
+	virtual int SetVirtualResolution(Dimension*) = 0;
 };
 
 #endif

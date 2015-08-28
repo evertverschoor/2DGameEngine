@@ -1,7 +1,7 @@
 #ifndef VIDEOSETTINGS_H
 #define VIDEOSETTINGS_H
 
-#include "ScreenResolution.h"
+#include "Dimension.h"
 #include <string>
 
 /// <summary>
@@ -15,8 +15,8 @@ public:
 	~VideoSettings();
 
 	bool Fullscreen;
-	ScreenResolution* ScreenRes;
-	ScreenResolution* MonitorRes;
+	Dimension* ScreenRes;
+	Dimension* MonitorRes;
 
 	/// <summary>
 	/// Load the video settings from the video settings file.

@@ -7,6 +7,7 @@
 #include "XInputReciever.h"
 #include <iostream>
 #include <thread>
+#include "Color.h"
 
 
 Kernel::Kernel(HINSTANCE* _hInstance)
@@ -60,7 +61,7 @@ Kernel::~Kernel()
 int Kernel::SetupDemoScene()
 {
 	SetActiveScene(SceneManager->CreateNewSceneFromFile("Data/Scenes/SAMPLE.scene"));
-	GameRenderer->SetDefaultTextFormat("Comic Sans MS", 200.0f);
+	GameRenderer->SetDefaultTextFormat("Comic Sans MS", 100.0f, RED, 1.0f);
 	return 1;
 }
 

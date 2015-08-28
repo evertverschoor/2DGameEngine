@@ -76,7 +76,7 @@ int VideoSettings::SetVideoSettingsFromString(std::string _string)
 	}
 
 	// Put it in a screen resolution object
-	ScreenRes = new ScreenResolution(_width, _height);
+	ScreenRes = new Dimension(_width, _height);
 
 	// Log the results
 	Logger::Instance()->Log("\n\nImported these Video Settings:");
@@ -97,7 +97,7 @@ int VideoSettings::DetectMonitorResolution()
 	const HWND hDesktop = GetDesktopWindow();
 	GetWindowRect(hDesktop, &desktop);
 
-	MonitorRes = new ScreenResolution(desktop.right, desktop.bottom);
+	MonitorRes = new Dimension(desktop.right, desktop.bottom);
 
 	Logger::Instance()->Log("\n\nDetected Monitor Resolution: ");
 	Logger::Instance()->Log(MonitorRes->Width);

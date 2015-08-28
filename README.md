@@ -2,8 +2,6 @@
 
 Must Haves:
 
--> Resolution Independence
-
 -> Convert to DLL
 
 -> Support for actually being able to use this as a library

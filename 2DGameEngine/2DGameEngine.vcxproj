@@ -83,7 +83,7 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="MouseState.cpp" />
     <ClCompile Include="Position.cpp" />
-    <ClCompile Include="ScreenResolution.cpp" />
+    <ClCompile Include="Dimension.cpp" />
     <ClCompile Include="VideoSettings.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -93,8 +93,8 @@
     <ClCompile Include="XInputReciever.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AspectRatio.h" />
     <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantMouseState.h" />
     <ClInclude Include="ControllableEntity.h" />
     <ClInclude Include="DirectXAssetLoader.h" />
@@ -115,7 +115,7 @@
     <ClInclude Include="PcInputHandler.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="ScreenResolution.h" />
+    <ClInclude Include="Dimension.h" />
     <ClInclude Include="VideoSettings.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Scene.h" />
