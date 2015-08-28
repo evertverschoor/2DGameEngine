@@ -55,6 +55,20 @@ int VideoSettings::SetVideoSettingsFromString(std::string _string)
 			Fullscreen = (_fullscreenString == "1") ? true : false;
 		}
 
+		// Check the vsync setting
+		else if (_strings[i].find("Vsync") != std::string::npos)
+		{
+			std::string _vsyncString = _strings[i].substr(6, _strings[i].find(";") - 6);
+			Vsync = (_vsyncString == "1") ? true : false;
+		}
+
+		// Check the track fps setting
+		else if (_strings[i].find("TrackFPS") != std::string::npos)
+		{
+			std::string _framerateString = _strings[i].substr(9, _strings[i].find(";") - 9);
+			TrackFramerate = (_framerateString == "1") ? true : false;
+		}
+
 		// Check the width setting
 		else if (_strings[i].find("DrawWidth") != std::string::npos)
 		{

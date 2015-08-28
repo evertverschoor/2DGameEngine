@@ -21,6 +21,21 @@ std::wstring StringConverter::StringToWstring(std::string _string)
 	return r;
 }
 
+std::string StringConverter::FloatToString(float _float)
+{
+	return std::to_string(_float);
+}
+
+std::wstring StringConverter::FloatToWstring(float _float)
+{
+	return StringToWstring(std::to_string(_float));
+}
+
+std::wstring StringConverter::IntToWString(int _int)
+{
+	return std::to_wstring(_int);
+}
+
 StringConverter* StringConverter::Instance()
 {
 	if (!c_instance)

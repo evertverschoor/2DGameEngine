@@ -10,6 +10,9 @@ public:
 	~StringConverter();
 
 	std::wstring StringToWstring(std::string);
+	std::string FloatToString(float);
+	std::wstring FloatToWstring(float);
+	std::wstring IntToWString(int);
 
 	static StringConverter* Instance();
 private:

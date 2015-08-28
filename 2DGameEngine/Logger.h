@@ -2,6 +2,7 @@
 #define LOGGER_H
 
 #include <string>
+#include <time.h>
 #include "Windows.h"
 
 /// <summary>
@@ -32,6 +33,8 @@ public:
 	int Log(LPCWSTR);
 
 	int Log(WPARAM);
+
+	int Log(clock_t);
 
 	static Logger* Instance();
 private:

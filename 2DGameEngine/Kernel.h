@@ -1,3 +1,8 @@
+// The number of frames that are saved before the average framerate is calculated.
+// A higher number results in slower update rate on lower Hz monitors.
+// I.E. 60 will result in an update each second on a 60Hz monitor.
+#define FRAMES_MEASURED 30
+
 #ifndef KERNEL_H
 #define KERNEL_H
 
@@ -11,6 +16,7 @@
 #include "AssetManager.h"
 #include "GamepadInputReciever.h"
 #include "PcInputReciever.h"
+#include <time.h>
 
 /// <summary>
 /// The kernel is the starting point for the engine.
@@ -42,6 +48,11 @@ private:
 	Logger* Log;
 	HINSTANCE* hInstance;
 
+	// Objects for measuring the framerate.
+	clock_t LastFrameTime;
+	float FrametimeList[FRAMES_MEASURED];
+	int NumberOfFramesMeasured;
+
 	/// <summary>
 	/// Set up a demo scene so the engine is ready-to-use.
 	/// </summary>
@@ -64,6 +75,8 @@ private:
 	bool Running();
 
 	int SetActiveScene(Scene*);
+
+	int CalculateCurrentFramerate();
 };
 
 #endif

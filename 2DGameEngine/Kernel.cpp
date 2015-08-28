@@ -8,6 +8,7 @@
 #include <iostream>
 #include <thread>
 #include "Color.h"
+#include "StringConverter.h"
 
 
 Kernel::Kernel(HINSTANCE* _hInstance)
@@ -41,6 +42,9 @@ Kernel::Kernel(HINSTANCE* _hInstance)
 	GameRenderer = new DirectXRenderer(_dx);
 
 	VSettings = new VideoSettings();
+
+	LastFrameTime = NULL;
+	NumberOfFramesMeasured = 0;
 }
 
 
@@ -61,7 +65,7 @@ Kernel::~Kernel()
 int Kernel::SetupDemoScene()
 {
 	SetActiveScene(SceneManager->CreateNewSceneFromFile("Data/Scenes/SAMPLE.scene"));
-	GameRenderer->SetDefaultTextFormat("Comic Sans MS", 100.0f, RED, 1.0f);
+	GameRenderer->SetDefaultTextFormat("Arial", 50.0f, RED, 1.0f);
 	return 1;
 }
 
@@ -112,6 +116,7 @@ int Kernel::OnGameUpdate()
 	if(GamepadReciever) GamepadReciever->ReadInput();
 	if(PcReciever) PcReciever->ReadInput();
 	GameRenderer->Render(ActiveScene);
+	if (VSettings->TrackFramerate) CalculateCurrentFramerate();
 	return 1;
 }
 
@@ -137,6 +142,37 @@ int Kernel::SetActiveScene(Scene* _scene)
 	ActiveScene = _scene;
 	Log->Log("\n\nSetting the active scene to: ");
 	Log->Log(_scene->GetName());
+	return 1;
+}
+
+int Kernel::CalculateCurrentFramerate()
+{
+	clock_t _currentTime = clock();
+
+	if (LastFrameTime == NULL) LastFrameTime = _currentTime;
+
+	float _frameElapsedTime = ((float)_currentTime - LastFrameTime) / CLOCKS_PER_SEC;
+	LastFrameTime = _currentTime;
+
+	FrametimeList[NumberOfFramesMeasured] = _frameElapsedTime;
+	++NumberOfFramesMeasured;
+
+	if (NumberOfFramesMeasured == FRAMES_MEASURED)
+	{
+		float _frametimeBatch = 0;
+
+		for (int i = 0; i < FRAMES_MEASURED; ++i)
+		{
+			_frametimeBatch += FrametimeList[i];
+			FrametimeList[i] = NULL;
+		}
+
+		float _avgFrametime = _frametimeBatch / FRAMES_MEASURED;
+		float _framerate = 1 / _frameElapsedTime;
+		GameRenderer->SetFPSToDraw(std::round(_framerate));
+		NumberOfFramesMeasured = 0;
+	}
+
 	return 1;
 }
 

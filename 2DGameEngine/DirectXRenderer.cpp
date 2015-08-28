@@ -34,7 +34,7 @@ int DirectXRenderer::Render(Scene* _renderableScene)
 		DrawEntity(_renderableScene->GetEntity(i));
 	}
 
-	WriteText("Text here!", new Position(10,10,2));
+	if (Settings->TrackFramerate) DrawFPS();
 
 	// End drawing here
 	RenderTarget->EndDraw();
@@ -142,7 +142,7 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 	// Create the render target
 	_result = Factory->CreateHwndRenderTarget(
 		D2D1::RenderTargetProperties(),
-		D2D1::HwndRenderTargetProperties(*_windowhandle, D2D1::SizeU(Settings->ScreenRes->Width, Settings->ScreenRes->Height)),
+		D2D1::HwndRenderTargetProperties(*_windowhandle, D2D1::SizeU(Settings->ScreenRes->Width, Settings->ScreenRes->Height), Settings->Vsync ? D2D1_PRESENT_OPTIONS_NONE : D2D1_PRESENT_OPTIONS_IMMEDIATELY),
 		&RenderTarget
 	);
 
@@ -152,6 +152,36 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 	}
 
 	SetDefaultTextFormat("Arial", 72.0f, RED, 1.0f);
+
+	// Set the font family and size for the in-engine text
+	_result = DWriteFactory->CreateTextFormat(
+		L"Consolas",
+		NULL,
+		DWRITE_FONT_WEIGHT_REGULAR,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		GetActualFontSize(40.0f),
+		L"en-us",
+		&EngineTextFormat
+		);
+
+	if (FAILED(_result))
+	{
+		return -20;
+	}
+
+	// Set the font color for the in-engine text
+	_result = RenderTarget->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::Yellow, 1.0f),
+		&EngineTextBrush
+		);
+
+	if (FAILED(_result))
+	{
+		return -3;
+	}
+
+	PositionForFPS = GetActualDrawPosition(new Position(5, 5, 5));
 
 	ResourceManager->SetRenderTarget(RenderTarget);
 
@@ -281,4 +311,30 @@ float DirectXRenderer::GetActualFontSize(float _size)
 		_size = (_size * Settings->ScreenRes->Width) / VirtualResolution->Width;
 		return _size;
 	}
+}
+
+int DirectXRenderer::SetFPSToDraw(int _framerate)
+{
+	Framerate = _framerate;
+	return 1;
+}
+
+int DirectXRenderer::DrawFPS()
+{
+	RenderTarget->DrawTextW(
+		StringConverter::Instance()->IntToWString(Framerate).c_str(),
+		StringConverter::Instance()->IntToWString(Framerate).length(),
+		EngineTextFormat,
+		D2D1::RectF(
+		PositionForFPS->X,
+		PositionForFPS->Y,
+		PositionForFPS->X + Settings->ScreenRes->Width,
+		PositionForFPS->Y + Settings->ScreenRes->Height
+		),
+		EngineTextBrush,
+		D2D1_DRAW_TEXT_OPTIONS_CLIP,
+		DWRITE_MEASURING_MODE_NATURAL
+		);
+
+	return 1;
 }

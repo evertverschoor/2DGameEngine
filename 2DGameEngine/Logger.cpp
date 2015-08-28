@@ -97,6 +97,14 @@ int Logger::Log(WPARAM _text)
 	return 1;
 }
 
+int Logger::Log(clock_t _text)
+{
+	std::ofstream outfile;
+	outfile.open("Data/Log.txt", std::ios_base::app);
+	outfile << _text;
+	return 1;
+}
+
 
 Logger* Logger::Instance()
 {

@@ -1,4 +1,4 @@
-
+
 -------------------------------
 NEW ENGINE SESSION STARTED HERE
 -------------------------------
@@ -7,7 +7,41 @@ Detecting Xbox 360 Gamepad(s)
 Done. Number of Gamepads detected: 0
 
 Imported these Video Settings:
-Full Screen: Yes
+Full Screen: No
+Render Resolution: 1280x720
+
+Detected Monitor Resolution: 1920x1080
+
+Creating new Scene from file: Data/Scenes/SAMPLE.scene
+Done creating scene.
+
+Setting the active scene to: Data/Scenes/SAMPLE.sceneHEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!
+-------------------------------
+NEW ENGINE SESSION STARTED HERE
+-------------------------------
+
+Detecting Xbox 360 Gamepad(s)
+Done. Number of Gamepads detected: 0
+
+Imported these Video Settings:
+Full Screen: No
+Render Resolution: 1280x720
+
+Detected Monitor Resolution: 1920x1080
+
+Creating new Scene from file: Data/Scenes/SAMPLE.scene
+Done creating scene.
+
+Setting the active scene to: Data/Scenes/SAMPLE.sceneHEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!HEere!
+-------------------------------
+NEW ENGINE SESSION STARTED HERE
+-------------------------------
+
+Detecting Xbox 360 Gamepad(s)
+Done. Number of Gamepads detected: 0
+
+Imported these Video Settings:
+Full Screen: No
 Render Resolution: 1280x720
 
 Detected Monitor Resolution: 1920x1080
@@ -24,7 +58,7 @@ Detecting Xbox 360 Gamepad(s)
 Done. Number of Gamepads detected: 0
 
 Imported these Video Settings:
-Full Screen: Yes
+Full Screen: No
 Render Resolution: 1280x720
 
 Detected Monitor Resolution: 1920x1080
@@ -41,7 +75,7 @@ Detecting Xbox 360 Gamepad(s)
 Done. Number of Gamepads detected: 0
 
 Imported these Video Settings:
-Full Screen: Yes
+Full Screen: No
 Render Resolution: 1280x720
 
 Detected Monitor Resolution: 1920x1080
@@ -58,7 +92,183 @@ Detecting Xbox 360 Gamepad(s)
 Done. Number of Gamepads detected: 0
 
 Imported these Video Settings:
-Full Screen: Yes
+Full Screen: No
+Render Resolution: 1280x720
+
+Detected Monitor Resolution: 1920x1080
+
+Creating new Scene from file: Data/Scenes/SAMPLE.scene
+Done creating scene.
+
+Setting the active scene to: Data/Scenes/SAMPLE.scene
+-------------------------------
+NEW ENGINE SESSION STARTED HERE
+-------------------------------
+
+Detecting Xbox 360 Gamepad(s)
+Done. Number of Gamepads detected: 0
+
+Imported these Video Settings:
+Full Screen: No
+Render Resolution: 1280x720
+
+Detected Monitor Resolution: 1920x1080
+
+Creating new Scene from file: Data/Scenes/SAMPLE.scene
+Done creating scene.
+
+Setting the active scene to: Data/Scenes/SAMPLE.scene
+-------------------------------
+NEW ENGINE SESSION STARTED HERE
+-------------------------------
+
+Detecting Xbox 360 Gamepad(s)
+Done. Number of Gamepads detected: 0
+
+Imported these Video Settings:
+Full Screen: No
+Render Resolution: 1280x720
+
+Detected Monitor Resolution: 1920x1080
+
+Creating new Scene from file: Data/Scenes/SAMPLE.scene
+Done creating scene.
+
+Setting the active scene to: Data/Scenes/SAMPLE.scene
+-------------------------------
+NEW ENGINE SESSION STARTED HERE
+-------------------------------
+
+Detecting Xbox 360 Gamepad(s)
+Done. Number of Gamepads detected: 0
+
+Imported these Video Settings:
+Full Screen: No
+Render Resolution: 1280x720
+
+Detected Monitor Resolution: 1920x1080
+
+Creating new Scene from file: Data/Scenes/SAMPLE.scene
+Done creating scene.
+
+Setting the active scene to: Data/Scenes/SAMPLE.scene
+-------------------------------
+NEW ENGINE SESSION STARTED HERE
+-------------------------------
+
+Detecting Xbox 360 Gamepad(s)
+Done. Number of Gamepads detected: 0
+
+Imported these Video Settings:
+Full Screen: No
+Render Resolution: 1280x720
+
+Detected Monitor Resolution: 1920x1080
+
+Creating new Scene from file: Data/Scenes/SAMPLE.scene
+Done creating scene.
+
+Setting the active scene to: Data/Scenes/SAMPLE.scene
+-------------------------------
+NEW ENGINE SESSION STARTED HERE
+-------------------------------
+
+Detecting Xbox 360 Gamepad(s)
+Done. Number of Gamepads detected: 0
+
+Imported these Video Settings:
+Full Screen: No
+Render Resolution: 1280x720
+
+Detected Monitor Resolution: 1920x1080
+
+Creating new Scene from file: Data/Scenes/SAMPLE.scene
+Done creating scene.
+
+Setting the active scene to: Data/Scenes/SAMPLE.scene
+-------------------------------
+NEW ENGINE SESSION STARTED HERE
+-------------------------------
+
+Detecting Xbox 360 Gamepad(s)
+Done. Number of Gamepads detected: 0
+
+Imported these Video Settings:
+Full Screen: No
+Render Resolution: 1280x720
+
+Detected Monitor Resolution: 1920x1080
+
+Creating new Scene from file: Data/Scenes/SAMPLE.scene
+Done creating scene.
+
+Setting the active scene to: Data/Scenes/SAMPLE.scene
+-------------------------------
+NEW ENGINE SESSION STARTED HERE
+-------------------------------
+
+Detecting Xbox 360 Gamepad(s)
+Done. Number of Gamepads detected: 0
+
+Imported these Video Settings:
+Full Screen: No
+Render Resolution: 1280x720
+
+Detected Monitor Resolution: 1920x1080
+
+Creating new Scene from file: Data/Scenes/SAMPLE.scene
+Done creating scene.
+
+Setting the active scene to: Data/Scenes/SAMPLE.scene
+-------------------------------
+NEW ENGINE SESSION STARTED HERE
+-------------------------------
+
+Detecting Xbox 360 Gamepad(s)
+Done. Number of Gamepads detected: 0
+
+Imported these Video Settings:
+Full Screen: No
+Render Resolution: 1280x720
+
+Detected Monitor Resolution: 1920x1080
+
+Creating new Scene from file: Data/Scenes/SAMPLE.scene
+Done creating scene.
+
+Setting the active scene to: Data/Scenes/SAMPLE.scene
+-------------------------------
+NEW ENGINE SESSION STARTED HERE
+-------------------------------
+
+Detecting Xbox 360 Gamepad(s)
+Done. Number of Gamepads detected: 0
+-------------------------------
+NEW ENGINE SESSION STARTED HERE
+-------------------------------
+
+Detecting Xbox 360 Gamepad(s)
+Done. Number of Gamepads detected: 0
+
+Imported these Video Settings:
+Full Screen: No
+Render Resolution: 1280x720
+
+Detected Monitor Resolution: 1920x1080
+
+Creating new Scene from file: Data/Scenes/SAMPLE.scene
+Done creating scene.
+
+Setting the active scene to: Data/Scenes/SAMPLE.scene
+-------------------------------
+NEW ENGINE SESSION STARTED HERE
+-------------------------------
+
+Detecting Xbox 360 Gamepad(s)
+Done. Number of Gamepads detected: 0
+
+Imported these Video Settings:
+Full Screen: No
 Render Resolution: 1280x720
 
 Detected Monitor Resolution: 1920x1080
@@ -94,40 +304,6 @@ Done. Number of Gamepads detected: 0
 Imported these Video Settings:
 Full Screen: Yes
 Render Resolution: 3840x2160
-
-Detected Monitor Resolution: 1920x1080
-
-Creating new Scene from file: Data/Scenes/SAMPLE.scene
-Done creating scene.
-
-Setting the active scene to: Data/Scenes/SAMPLE.scene
--------------------------------
-NEW ENGINE SESSION STARTED HERE
--------------------------------
-
-Detecting Xbox 360 Gamepad(s)
-Done. Number of Gamepads detected: 0
-
-Imported these Video Settings:
-Full Screen: No
-Render Resolution: 1280x720
-
-Detected Monitor Resolution: 1920x1080
-
-Creating new Scene from file: Data/Scenes/SAMPLE.scene
-Done creating scene.
-
-Setting the active scene to: Data/Scenes/SAMPLE.scene
--------------------------------
-NEW ENGINE SESSION STARTED HERE
--------------------------------
-
-Detecting Xbox 360 Gamepad(s)
-Done. Number of Gamepads detected: 0
-
-Imported these Video Settings:
-Full Screen: No
-Render Resolution: 1280x720
 
 Detected Monitor Resolution: 1920x1080
 

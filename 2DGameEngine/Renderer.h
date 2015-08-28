@@ -48,6 +48,11 @@ public:
 	/// Set the virtual resolution (recommended is the target size of the assets)
 	/// </summary>
 	virtual int SetVirtualResolution(Dimension*) = 0;
+
+	/// <summary>
+	/// If the Track FPS option is turned on the kernel will pass the framerate here.
+	/// </summary>
+	virtual int SetFPSToDraw(int) = 0;
 };
 
 #endif
