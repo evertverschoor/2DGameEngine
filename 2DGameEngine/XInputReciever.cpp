@@ -45,7 +45,7 @@ int XInputReciever::ReadInput()
 
 bool XInputReciever::HasGamepadsConnected()
 {
-	Logger::Instance()->Log("\nDetecting Xbox 360 Gamepad(s)");
+	Logger::Instance()->Log("\nDetecting XInput Gamepad(s)");
 
 	for (int i = 0; i < MAX_GAMEPADS; ++i)
 	{

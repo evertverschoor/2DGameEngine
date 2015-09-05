@@ -96,6 +96,10 @@ int VideoSettings::SetVideoSettingsFromString(std::string _string)
 	Logger::Instance()->Log("\n\nImported these Video Settings:");
 	Logger::Instance()->Log("\nFull Screen: ");
 	Logger::Instance()->Log(Fullscreen);
+	Logger::Instance()->Log("\nVsync: ");
+	Logger::Instance()->Log(Vsync);
+	Logger::Instance()->Log("\nTrack FPS: ");
+	Logger::Instance()->Log(TrackFramerate);
 	Logger::Instance()->Log("\nRender Resolution: ");
 	Logger::Instance()->Log(_width);
 	Logger::Instance()->Log("x");

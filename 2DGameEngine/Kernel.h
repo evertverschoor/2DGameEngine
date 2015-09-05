@@ -1,7 +1,7 @@
 // The number of frames that are saved before the average framerate is calculated.
 // A higher number results in slower update rate on lower Hz monitors.
 // I.E. 60 will result in an update each second on a 60Hz monitor.
-#define FRAMES_MEASURED 30
+#define FRAMES_MEASURED 10
 
 #ifndef KERNEL_H
 #define KERNEL_H

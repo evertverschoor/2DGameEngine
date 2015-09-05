@@ -12,6 +12,15 @@ Scene::~Scene()
 {
 }
 
+int Scene::OnGameUpdate()
+{
+	for (int i = 0; i < EntityCount(); ++i)
+	{
+		InhabitingEntities[i]->Act();
+	}
+	return 1;
+}
+
 
 int Scene::AddEntity(Entity* _entity)
 {

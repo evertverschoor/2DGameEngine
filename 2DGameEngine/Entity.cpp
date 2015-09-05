@@ -9,6 +9,7 @@ Entity::Entity(std::string _uri)
 	AssetURI = _uri;
 	JumpTo(0, 0);
 	SetDirection(0);
+	SetSpeed(10);
 }
 
 
@@ -19,6 +20,11 @@ Entity::Entity()
 
 Entity::~Entity()
 {
+}
+
+int Entity::Act()
+{
+	return 1;
 }
 
 
@@ -71,4 +77,15 @@ int Entity::SetDirection(int _value)
 		SetDirection(_value - 360);
 	}
 	return Direction;
+}
+
+int Entity::GetSpeed()
+{
+	return Speed;
+}
+
+int Entity::SetSpeed(int _value)
+{
+	Speed = _value >= 0 ? _value : Speed;
+	return 1;
 }

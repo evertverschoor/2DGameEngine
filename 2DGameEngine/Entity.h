@@ -16,6 +16,11 @@ public:
 	~Entity();
 
 	/// <summary>
+	/// Main function that is constantly called if this entity is in the active scene.
+	/// </summary>
+	int Act();
+
+	/// <summary>
 	/// Put the entity at a new x-y position.
 	/// </summary>
 	int JumpTo(double, double);
@@ -38,10 +43,15 @@ public:
 	int GetDirection();
 
 	int SetDirection(int);
+
+	int GetSpeed();
+
+	int SetSpeed(int);
 private:
 	Position EntityPosition;
 	std::string AssetURI;
 	int Direction;
+	int Speed;
 };
 
 #endif

@@ -29,7 +29,15 @@ public:
 	/// </summary>
 	int EntityCount();
 
+	/// <summary>
+	/// Returns the scene name.
+	/// </summary>
 	std::string GetName();
+
+	/// <summary>
+	/// Call Act() on all entities in the scene.
+	/// </summary>
+	int OnGameUpdate();
 protected:
 	Entity* InhabitingEntities[MAX_ENTITIES];
 private:

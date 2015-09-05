@@ -113,10 +113,19 @@ int Kernel::Run()
 
 int Kernel::OnGameUpdate()
 {
+	// Read input if available
 	if(GamepadReciever) GamepadReciever->ReadInput();
 	if(PcReciever) PcReciever->ReadInput();
+
+	// Call Act() on all entities in the active scene
+	ActiveScene->OnGameUpdate();
+
+	// Draw the next frame
 	GameRenderer->Render(ActiveScene);
+
+	// Calculate the framerate
 	if (VSettings->TrackFramerate) CalculateCurrentFramerate();
+
 	return 1;
 }
 
