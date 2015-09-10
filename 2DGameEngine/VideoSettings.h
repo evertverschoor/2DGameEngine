@@ -15,8 +15,10 @@ public:
 	~VideoSettings();
 
 	bool Fullscreen;
-	bool TrackFramerate;
 	bool Vsync;
+	bool TrackFramerate;
+	bool MotionBlur;
+	bool Sharpen;
 	Dimension* ScreenRes;
 	Dimension* MonitorRes;
 

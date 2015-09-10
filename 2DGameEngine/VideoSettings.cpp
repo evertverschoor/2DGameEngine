@@ -69,6 +69,20 @@ int VideoSettings::SetVideoSettingsFromString(std::string _string)
 			TrackFramerate = (_framerateString == "1") ? true : false;
 		}
 
+		// Check the motion blur setting
+		else if (_strings[i].find("Motion") != std::string::npos)
+		{
+			std::string _blurString = _strings[i].substr(11, _strings[i].find(";") - 11);
+			MotionBlur = (_blurString == "1") ? true : false;
+		}
+
+		// Check the sharpen setting
+		else if (_strings[i].find("Sharpen") != std::string::npos)
+		{
+			std::string _sharpString = _strings[i].substr(8, _strings[i].find(";") - 8);
+			Sharpen = (_sharpString == "1") ? true : false;
+		}
+
 		// Check the width setting
 		else if (_strings[i].find("DrawWidth") != std::string::npos)
 		{
@@ -100,6 +114,8 @@ int VideoSettings::SetVideoSettingsFromString(std::string _string)
 	Logger::Instance()->Log(Vsync);
 	Logger::Instance()->Log("\nTrack FPS: ");
 	Logger::Instance()->Log(TrackFramerate);
+	Logger::Instance()->Log("\nMotion Blur: ");
+	Logger::Instance()->Log(MotionBlur);
 	Logger::Instance()->Log("\nRender Resolution: ");
 	Logger::Instance()->Log(_width);
 	Logger::Instance()->Log("x");

@@ -9,6 +9,7 @@
 #include <thread>
 #include "Color.h"
 #include "StringConverter.h"
+#include "MotionBlurTestClass.h"
 
 
 Kernel::Kernel(HINSTANCE* _hInstance)
@@ -43,6 +44,8 @@ Kernel::Kernel(HINSTANCE* _hInstance)
 
 	VSettings = new VideoSettings();
 
+	Gfx = new GFXController(GameRenderer);
+
 	LastFrameTime = NULL;
 	NumberOfFramesMeasured = 0;
 }
@@ -66,6 +69,10 @@ int Kernel::SetupDemoScene()
 {
 	SetActiveScene(SceneManager->CreateNewSceneFromFile("Data/Scenes/SAMPLE.scene"));
 	GameRenderer->SetDefaultTextFormat("Arial", 50.0f, RED, 1.0f);
+
+	MotionBlurTestClass* _test = new MotionBlurTestClass(Gfx);
+	PcReciever->AddPcHandler(_test);
+
 	return 1;
 }
 

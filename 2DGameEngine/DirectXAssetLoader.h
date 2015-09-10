@@ -2,8 +2,8 @@
 #define DIRECTXASSETLOADER_H
 
 #include "Entity.h"
-#include <d2d1.h>
 #include <wincodec.h>
+#include <d2d1.h>
 
 /// <summary>
 /// The DirectX Asset Loader is used by the DirectX Asset Manager to load specific Direct2D assets.

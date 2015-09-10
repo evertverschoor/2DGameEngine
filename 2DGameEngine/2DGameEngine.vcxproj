@@ -48,8 +48,9 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d2d1.lib;dwrite.lib;XInput.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>d2d1.lib;dxguid.lib;dwrite.lib;XInput.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,6 +76,8 @@
     <ClCompile Include="DirectXRenderer.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FileReader.cpp" />
+    <ClCompile Include="GFXController.cpp" />
+    <ClCompile Include="MotionBlurTestClass.cpp" />
     <ClCompile Include="PcInputReciever.cpp" />
     <ClCompile Include="StringConverter.cpp" />
     <ClCompile Include="XInputGamepadState.cpp" />
@@ -103,6 +106,8 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="GamepadState.h" />
+    <ClInclude Include="GFXController.h" />
+    <ClInclude Include="MotionBlurTestClass.h" />
     <ClInclude Include="PcInputReciever.h" />
     <ClInclude Include="StringConverter.h" />
     <ClInclude Include="XInputGamepadState.h" />

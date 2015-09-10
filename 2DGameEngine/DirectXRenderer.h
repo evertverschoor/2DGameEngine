@@ -11,6 +11,10 @@
 #include "Dimension.h"
 #include <d2d1.h>
 #include <dwrite.h>
+#include <d2d1effects.h>
+#include <d2d1_1.h>
+#include <d3d11.h>
+#include <wrl.h>
 
 /// <summary>
 /// The DirectX Renderer that realizes the Renderer interface.
@@ -29,11 +33,20 @@ public:
 	int SetDefaultTextFormat(std::string, float, Color, float);
 	int SetVirtualResolution(Dimension*);
 	int SetFPSToDraw(int);
+	int SetMotionBlur(float, float);
 private:
 	// DirectX objects
 	ID2D1Factory* Factory;
 	IDWriteFactory* DWriteFactory;
 	ID2D1HwndRenderTarget* RenderTarget;
+	ID2D1BitmapRenderTarget* bitmapRenderTarget;
+	ID2D1DeviceContext* DeviceContext;
+
+	// Postproccessing objects
+	Microsoft::WRL::ComPtr<ID2D1Effect> MotionBlur;
+	float MotionBlurAngle, MotionBlurAmount;
+
+	Microsoft::WRL::ComPtr<ID2D1Effect> Sharpen;
 
 	// Text appearance objects for in-game text
 	IDWriteTextFormat* DefaultTextFormat;
@@ -50,6 +63,10 @@ private:
 	Dimension* VirtualResolution;
 	int Framerate;
 	
+	/// <summary>
+	/// Execute any post process effects and draw the image to the screen.
+	/// </summary>
+	int PostProcess(ID2D1Bitmap*);
 
 	/// <summary>
 	/// Wipe the screen empty to a specified RGB colour.

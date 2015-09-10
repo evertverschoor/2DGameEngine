@@ -53,6 +53,13 @@ public:
 	/// If the Track FPS option is turned on the kernel will pass the framerate here.
 	/// </summary>
 	virtual int SetFPSToDraw(int) = 0;
+
+	/// <summary>
+	/// Set the current motion blur angle and amount, put 0.0f on amount for no motion blur.
+	/// @param1 The motion blur angle, between 0 and 360.
+	/// @param2 The motion blur amount.
+	/// </summary>
+	virtual int SetMotionBlur(float, float) = 0;
 };
 
 #endif

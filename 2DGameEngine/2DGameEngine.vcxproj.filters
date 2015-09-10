@@ -87,6 +87,12 @@
     <ClCompile Include="Dimension.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MotionBlurTestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GFXController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -177,6 +183,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dimension.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MotionBlurTestClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GFXController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
