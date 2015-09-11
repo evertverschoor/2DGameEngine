@@ -56,30 +56,35 @@ int DirectXRenderer::Render(Scene* _renderableScene)
 
 int DirectXRenderer::PostProcess(ID2D1Bitmap* _bitmap)
 {
-	int _numberOfEffectsDrawn = 0;
+	ID2D1Image* _finalImage = _bitmap; // Put the bitmap into an image
 
 	DeviceContext->BeginDraw();
-
-	// Apply sharpening if turned on
-	if (Settings->Sharpen)
-	{
-		Sharpen->SetInput(0, _bitmap);
-		DeviceContext->DrawImage(Sharpen.Get());
-		++_numberOfEffectsDrawn;
-	}
 
 	// Apply motion blur if turned on
 	if (Settings->MotionBlur && MotionBlurAmount > 0.0f)
 	{
-		MotionBlur->SetInput(0, _bitmap);
+		MotionBlur->SetInput(0, _finalImage);
 		MotionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_ANGLE, MotionBlurAngle);
 		MotionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_STANDARD_DEVIATION, MotionBlurAmount);
-		DeviceContext->DrawImage(MotionBlur.Get());
-		++_numberOfEffectsDrawn;
+		MotionBlur->GetOutput(&_finalImage);
 	}
 
-	// Draw the original bitmap to the gpu if no postprocessing effects have been drawn.
-	if(_numberOfEffectsDrawn == 0) DeviceContext->DrawBitmap(_bitmap);
+	// Apply saturation if turned on
+	if (Settings->Saturation)
+	{
+		Saturation->SetInput(0, _finalImage);
+		Saturation.Get()->GetOutput(&_finalImage);
+	}
+
+	// Apply sharpening if turned on
+	if (Settings->Sharpen)
+	{
+		Sharpen->SetInput(0, _finalImage);
+		Sharpen.Get()->GetOutput(&_finalImage);
+	}
+	
+	// Draw the processsed image to the backbuffer
+	DeviceContext->DrawImage(_finalImage);
 
 	// Draw FPS on the screen if turned on
 	if (Settings->TrackFramerate) DrawFPS();
@@ -303,8 +308,13 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_Y, 5);
 			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_DIVISOR, 13.0f);
 		}
-		
-		
+	}
+
+	// Set up the saturation effect
+	if (Settings->Saturation)
+	{
+		DeviceContext->CreateEffect(CLSID_D2D1Saturation, &Saturation);
+		Saturation->SetValue(D2D1_SATURATION_PROP_SATURATION, 1.8f);
 	}
 
 	PositionForFPS = GetActualDrawPosition(new Position(5, 5, 5));

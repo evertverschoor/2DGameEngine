@@ -19,6 +19,7 @@ public:
 	bool TrackFramerate;
 	bool MotionBlur;
 	bool Sharpen;
+	bool Saturation;
 	Dimension* ScreenRes;
 	Dimension* MonitorRes;
 

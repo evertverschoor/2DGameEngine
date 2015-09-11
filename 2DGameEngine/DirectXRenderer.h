@@ -47,6 +47,7 @@ private:
 	float MotionBlurAngle, MotionBlurAmount;
 
 	Microsoft::WRL::ComPtr<ID2D1Effect> Sharpen;
+	Microsoft::WRL::ComPtr<ID2D1Effect> Saturation;
 
 	// Text appearance objects for in-game text
 	IDWriteTextFormat* DefaultTextFormat;

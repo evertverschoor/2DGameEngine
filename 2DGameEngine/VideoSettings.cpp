@@ -83,6 +83,13 @@ int VideoSettings::SetVideoSettingsFromString(std::string _string)
 			Sharpen = (_sharpString == "1") ? true : false;
 		}
 
+		// Check the saturation setting
+		else if (_strings[i].find("Saturation") != std::string::npos)
+		{
+			std::string _saturateString = _strings[i].substr(11, _strings[i].find(";") - 11);
+			Saturation = (_saturateString == "1") ? true : false;
+		}
+
 		// Check the width setting
 		else if (_strings[i].find("DrawWidth") != std::string::npos)
 		{
