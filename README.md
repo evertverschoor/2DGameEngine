@@ -14,7 +14,7 @@ PLANNED WORK:
 
 COULD HAVES:
 
--> OpenGL Renderer for Mac and Linux support
+-> OpenGL Renderer for Mac and Linux support (also xinput alternative?)
 
 CHANGELOG:
 
@@ -22,7 +22,11 @@ Sept. 11, 2015
 
 -> Added Sharpening and Motion Blur postprocessing effects, and a class to test motion blur through moving the mouse.
 
+Sept. 12, 2015
+
 -> Added Saturation effect and support for multiple postprocessing effects to work at the same time.
+
+-> Bit of refactoring and renaming some classes to more proper names, stable build before majoring refactoring that might break stuff.
 
 BENCHMARKS:
 
@@ -33,5 +37,7 @@ BENCHMARKS:
 Sept. 11, 2015
 
 -> avg 50-60fps during heavy motion blur
+
+Sept. 12, 2015
 
 -> avg 60+fps during heavy motion blur

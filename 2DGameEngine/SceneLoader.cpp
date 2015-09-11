@@ -35,7 +35,7 @@ int SceneLoader::LoadScene(Scene* _scene)
 
 		std::string _positionString = _sceneString.substr(_sceneString.find("(") + 1, _sceneString.find(")") - _sceneString.find("(") - 1);
 
-		LoadEntity(_entityName, StringToPosition(_positionString), _scene);
+		LoadEntity(_entityName, StringConverter::Instance()->StringToPosition(_positionString), _scene);
 
 		_sceneString.erase(0, _sceneString.find(";") + 1);
 	}
@@ -50,7 +50,7 @@ int SceneLoader::LoadEntity(std::string _entityName, Position* _position, Scene*
 	std::string _assetURI = _entityString.substr(10, _entityString.find(";") - 11);
 	
 	std::string _controllableAsString = _entityString.substr(_entityString.find("Controllable") + 13, 1);
-	bool _controllable = StringToBoolean(_controllableAsString);
+	bool _controllable = StringConverter::Instance()->StringToBoolean(_controllableAsString);
 
 	// Assign a gamepad if controllable
 	if (_controllable)
@@ -78,35 +78,4 @@ int SceneLoader::LoadEntity(std::string _entityName, Position* _position, Scene*
 	}
 
 	return 1;
-}
-
-
-Position* SceneLoader::StringToPosition(std::string _string)
-{
-	int _positions[3];
-	std::string _delimiter = ",";
-
-	int i = 0;
-	size_t pos = 0;
-	std::string token;
-	while ((pos = _string.find(_delimiter)) != std::string::npos) {
-		token = _string.substr(0, pos);
-		_positions[i] = std::stoi(token);
-		++i;
-		_string.erase(0, pos + _delimiter.length());
-	}
-
-	return new Position(_positions[0], _positions[1], _positions[2]);
-}
-
-
-bool SceneLoader::StringToBoolean(std::string _string)
-{
-	return (_string == "1") ? true : false;
-}
-
-
-int SceneLoader::StringToInt(std::string _string)
-{
-	return std::stoi(_string);
 }

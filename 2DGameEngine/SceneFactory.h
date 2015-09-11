@@ -31,7 +31,6 @@ public:
 private:
 	AssetManager* ResourceManager;
 	SceneLoader* Loader;
-	Logger* Log;
 	Scene* CreatedScenes[MAX_SCENES];
 	int NumberOfScenes;
 };

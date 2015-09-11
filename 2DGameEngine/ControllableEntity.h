@@ -25,6 +25,7 @@ public:
 
 	ControllableEntity();
 	~ControllableEntity();
+
 	int GetGamepadNumber();
 
 	/// <summary>

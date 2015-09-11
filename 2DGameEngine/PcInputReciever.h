@@ -26,7 +26,7 @@ private:
 
 	KeyboardState* PresentableKeyboardState;
 	MouseState* PresentableMouseState;
-
+	
 	std::map<int, bool> CurrentKeyboardMap;
 	ConstantMouseState* CurrentMouseMap;
 

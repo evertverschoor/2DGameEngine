@@ -3,6 +3,7 @@
 
 #include <string>
 #include "windows.h"
+#include "Position.h"
 
 class StringConverter
 {
@@ -13,6 +14,9 @@ public:
 	std::string FloatToString(float);
 	std::wstring FloatToWstring(float);
 	std::wstring IntToWString(int);
+	Position* StringToPosition(std::string);
+	bool StringToBoolean(std::string);
+	int StringToInt(std::string);
 
 	static StringConverter* Instance();
 private:

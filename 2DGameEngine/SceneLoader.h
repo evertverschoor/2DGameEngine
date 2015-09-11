@@ -6,6 +6,7 @@
 #include "PcInputReciever.h"
 #include "Position.h"
 #include "Scene.h"
+#include "StringConverter.h"
 #include <string>
 
 /// <summary>
@@ -27,21 +28,6 @@ private:
 	/// Loads an entity from a file.
 	/// </summary>
 	int LoadEntity(std::string, Position*, Scene*);
-
-	/// <summary>
-	/// Converts a string of coordinates from the scene file to a Position object.
-	/// </summary>
-	Position* StringToPosition(std::string);
-
-	/// <summary>
-	/// Convert a string to a boolean
-	/// </summary>
-	bool StringToBoolean(std::string);
-
-	/// <summary>
-	/// Convert a string to an int
-	/// </summary>
-	int StringToInt(std::string);
 
 	GamepadInputReciever* GamepadReciever;
 	PcInputReciever* PcReciever;

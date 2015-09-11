@@ -1,21 +1,21 @@
-#include "X360Controller.h"
+#include "XInputController.h"
 #include <Windows.h>
 
 
-X360Controller::X360Controller(int _gamepadno)
+XInputController::XInputController(int _gamepadno)
 {
 	ControllerNumber = _gamepadno;
 	AbstractState = new XInputGamepadState();
 }
 
 
-X360Controller::~X360Controller()
+XInputController::~XInputController()
 {
 	delete AbstractState;
 }
 
 
-int X360Controller::Vibrate(int _left, int _right)
+int XInputController::Vibrate(int _left, int _right)
 {
 	// Ensure the values are within the controller's constraints
 	if (_left > MAX_VIBRATION_VALUE) _left = MAX_VIBRATION_VALUE;
@@ -40,7 +40,7 @@ int X360Controller::Vibrate(int _left, int _right)
 }
 
 
-XInputGamepadState* X360Controller::GetState()
+XInputGamepadState* XInputController::GetState()
 {
 	// Zeroise the state
 	ZeroMemory(&ControllerState, sizeof(XINPUT_STATE));
@@ -55,7 +55,7 @@ XInputGamepadState* X360Controller::GetState()
 }
 
 
-bool X360Controller::IsConnected()
+bool XInputController::IsConnected()
 {
 	// Zeroise the state
 	ZeroMemory(&ControllerState, sizeof(XINPUT_STATE));

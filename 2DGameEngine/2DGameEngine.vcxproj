@@ -92,7 +92,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
     <ClCompile Include="SceneLoader.cpp" />
-    <ClCompile Include="X360Controller.cpp" />
+    <ClCompile Include="XInputController.cpp" />
     <ClCompile Include="XInputReciever.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -126,7 +126,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneFactory.h" />
     <ClInclude Include="SceneLoader.h" />
-    <ClInclude Include="X360Controller.h" />
+    <ClInclude Include="XInputController.h" />
     <ClInclude Include="XInputReciever.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

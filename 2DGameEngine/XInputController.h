@@ -1,16 +1,16 @@
 #define MAX_VIBRATION_VALUE 65535
-#ifndef X360CONTROLLER_H
-#define X360CONTROLLER_H
+#ifndef XINPUTCONTROLLER_H
+#define XINPUTCONTROLLER_H
 
 #include "XInputGamepadState.h"
 #include <Windows.h>
 #include <Xinput.h>
 
-class X360Controller
+class XInputController
 {
 public:
-	X360Controller(int);
-	~X360Controller();
+	XInputController(int);
+	~XInputController();
 
 	/// <summary>
 	/// Returns the controller state with any buttons pressed.

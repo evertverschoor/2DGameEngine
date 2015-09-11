@@ -49,7 +49,7 @@ bool XInputReciever::HasGamepadsConnected()
 
 	for (int i = 0; i < MAX_GAMEPADS; ++i)
 	{
-		Gamepads[i] = new X360Controller(i);
+		Gamepads[i] = new XInputController(i);
 		if (Gamepads[i]->IsConnected())
 		{
 			++NumberOfGamepads;

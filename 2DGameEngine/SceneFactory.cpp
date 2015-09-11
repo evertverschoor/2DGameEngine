@@ -8,7 +8,6 @@ SceneFactory::SceneFactory(AssetManager* _assetmanager, GamepadInputReciever* _g
 {
 	ResourceManager = _assetmanager;
 	Loader = new SceneLoader(_gamepadreciever, _pcreciever);
-	Log = Logger::Instance();
 	NumberOfScenes = 0;
 }
 
@@ -16,19 +15,18 @@ SceneFactory::SceneFactory(AssetManager* _assetmanager, GamepadInputReciever* _g
 SceneFactory::~SceneFactory()
 {
 	delete Loader;
-	delete Log;
 	delete ResourceManager;
 }
 
 
 Scene* SceneFactory::CreateNewSceneFromFile(std::string _name)
 {
-	Log->Log("\n\nCreating new Scene from file: ");
-	Log->Log(_name);
+	Logger::Instance()->Log("\n\nCreating new Scene from file: ");
+	Logger::Instance()->Log(_name);
 
 	if (NumberOfScenes == MAX_SCENES)
 	{
-		Log->Log("\nCould not create another scene, too many scenes already exist.");
+		Logger::Instance()->Log("\nCould not create another scene, too many scenes already exist.");
 		return 0;
 	}
 
@@ -42,7 +40,7 @@ Scene* SceneFactory::CreateNewSceneFromFile(std::string _name)
 	// Load the assets that are required to draw the scene
 	ResourceManager->LoadScene(_newScene);
 
-	Log->Log("\nDone creating scene.");
+	Logger::Instance()->Log("\nDone creating scene.");
 
 	return _newScene;
 }

@@ -4,50 +4,50 @@
 
 DirectXAssetLoader::DirectXAssetLoader()
 {
-	pDecoder = NULL;
-	pSource = NULL;
-	pStream = NULL;
-	pConverter = NULL;
-	pScaler = NULL;
+	bitmapDecoder = NULL;
+	bitmapSource = NULL;
+	stream = NULL;
+	formatConverter = NULL;
+	bitmapScaler = NULL;
 
-	HRESULT hr = CoInitialize(ImagingFactory);
+	HRESULT hr = CoInitialize(imagingFactory);
 
 	hr = CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
-		IID_PPV_ARGS(&ImagingFactory));
+		IID_PPV_ARGS(&imagingFactory));
 }
 
 
 DirectXAssetLoader::~DirectXAssetLoader()
 {
-	ImagingFactory->Release();
-	delete ImagingFactory;
-	pDecoder->Release();
-	delete pDecoder;
-	pSource->Release();
-	delete pSource;
-	pStream->Release();
-	delete pStream;
-	pConverter->Release();
-	delete pConverter;
-	pScaler->Release();
-	delete pScaler;
+	imagingFactory->Release();
+	delete imagingFactory;
+	bitmapDecoder->Release();
+	delete bitmapDecoder;
+	bitmapSource->Release();
+	delete bitmapSource;
+	stream->Release();
+	delete stream;
+	formatConverter->Release();
+	delete formatConverter;
+	bitmapScaler->Release();
+	delete bitmapScaler;
 }
 
 
 int DirectXAssetLoader::LoadD2DBitmap(Entity* _entity, ID2D1Bitmap** _bitmap, ID2D1RenderTarget* _renderTarget)
 {
-	HRESULT hr = ImagingFactory->CreateDecoderFromFilename(
+	HRESULT hr = imagingFactory->CreateDecoderFromFilename(
 		_entity->GetAssetURI().c_str(),
 		NULL,
 		GENERIC_READ,
 		WICDecodeMetadataCacheOnLoad,
-		&pDecoder
+		&bitmapDecoder
 	);
 
 	if (SUCCEEDED(hr))
 	{
 		// Create the initial frame.
-		hr = pDecoder->GetFrame(0, &pSource);
+		hr = bitmapDecoder->GetFrame(0, &bitmapSource);
 	}
 	else
 	{
@@ -59,7 +59,7 @@ int DirectXAssetLoader::LoadD2DBitmap(Entity* _entity, ID2D1Bitmap** _bitmap, ID
 
 		// Convert the image format to 32bppPBGRA
 		// (DXGI_FORMAT_B8G8R8A8_UNORM + D2D1_ALPHA_MODE_PREMULTIPLIED).
-		hr = ImagingFactory->CreateFormatConverter(&pConverter);
+		hr = imagingFactory->CreateFormatConverter(&formatConverter);
 
 	}
 	else
@@ -69,8 +69,8 @@ int DirectXAssetLoader::LoadD2DBitmap(Entity* _entity, ID2D1Bitmap** _bitmap, ID
 
 	if (SUCCEEDED(hr))
 	{
-		hr = pConverter->Initialize(
-			pSource,
+		hr = formatConverter->Initialize(
+			bitmapSource,
 			GUID_WICPixelFormat32bppPBGRA,
 			WICBitmapDitherTypeNone,
 			NULL,
@@ -88,7 +88,7 @@ int DirectXAssetLoader::LoadD2DBitmap(Entity* _entity, ID2D1Bitmap** _bitmap, ID
 
 		// Create a Direct2D bitmap from the WIC bitmap.
 		hr = _renderTarget->CreateBitmapFromWicBitmap(
-			pConverter,
+			formatConverter,
 			NULL,
 			_bitmap
 			);

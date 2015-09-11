@@ -4,7 +4,7 @@
 #include "PcInputHandler.h"
 #include "GFXController.h"
 
-#define PI       3.14159265358979323846
+#define PI 3.14159265358979323846
 
 class MotionBlurTestClass : public PcInputHandler
 {

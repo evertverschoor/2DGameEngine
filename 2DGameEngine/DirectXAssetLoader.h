@@ -22,12 +22,12 @@ public:
 	/// </summary>
 	int LoadD2DBitmap(Entity*, ID2D1Bitmap**, ID2D1RenderTarget*);
 private:
-	IWICImagingFactory* ImagingFactory;
-	IWICBitmapDecoder *pDecoder;
-	IWICBitmapFrameDecode *pSource;
-	IWICStream *pStream;
-	IWICFormatConverter *pConverter;
-	IWICBitmapScaler *pScaler;
+	IWICImagingFactory* imagingFactory;
+	IWICBitmapDecoder* bitmapDecoder;
+	IWICBitmapFrameDecode* bitmapSource;
+	IWICStream* stream;
+	IWICFormatConverter* formatConverter;
+	IWICBitmapScaler* bitmapScaler;
 };
 
 #endif

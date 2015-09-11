@@ -44,3 +44,33 @@ StringConverter* StringConverter::Instance()
 	}
 	return c_instance;
 }
+
+Position* StringConverter::StringToPosition(std::string _string)
+{
+	int _positions[3];
+	std::string _delimiter = ",";
+
+	int i = 0;
+	size_t pos = 0;
+	std::string token;
+	while ((pos = _string.find(_delimiter)) != std::string::npos) {
+		token = _string.substr(0, pos);
+		_positions[i] = std::stoi(token);
+		++i;
+		_string.erase(0, pos + _delimiter.length());
+	}
+
+	return new Position(_positions[0], _positions[1], _positions[2]);
+}
+
+
+bool StringConverter::StringToBoolean(std::string _string)
+{
+	return (_string == "1") ? true : false;
+}
+
+
+int StringConverter::StringToInt(std::string _string)
+{
+	return std::stoi(_string);
+}
