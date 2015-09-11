@@ -47,6 +47,7 @@ StringConverter* StringConverter::Instance()
 
 Position* StringConverter::StringToPosition(std::string _string)
 {
+	_string += ",";
 	int _positions[3];
 	std::string _delimiter = ",";
 

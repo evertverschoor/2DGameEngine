@@ -57,6 +57,8 @@ int ControllableEntity::HandleKeyboardInput(KeyboardState* _state)
 	if (_state->IsKeyPressed(KEY_S)) JumpTo(GetPosition().X, GetPosition().Y + 3);
 	if (_state->IsKeyPressed(KEY_A)) JumpTo(GetPosition().X - 3, GetPosition().Y);
 	if (_state->IsKeyPressed(KEY_D)) JumpTo(GetPosition().X + 3, GetPosition().Y);
+	if (_state->IsKeyPressed(KEY_PLUS)) SetZindex(GetPosition().Z + 3);
+	if (_state->IsKeyPressed(KEY_DASH)) SetZindex(GetPosition().Z - 3);
 	return 1;
 }
 
