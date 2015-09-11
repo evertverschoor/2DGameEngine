@@ -2,7 +2,6 @@
 #define ENTITY_H
 
 #include "Position.h"
-#include "Windows.h"
 #include <string>
 
 /// <summary>
@@ -40,18 +39,30 @@ public:
 	/// </summary>
 	std::wstring GetAssetURI();
 
+	/// <summary>
+	/// Get the direction the entity is facing, from 0-360. (degrees)
+	/// </summary>
 	int GetDirection();
 
+	/// <summary>
+	/// Set the direction for the entity, from 0-360. (degrees)
+	/// </summary>
 	int SetDirection(int);
 
+	/// <summary>
+	/// Get the speed the entity moves at.
+	/// </summary>
 	int GetSpeed();
 
+	/// <summary>
+	/// Set the speed the entity will move at.
+	/// </summary>
 	int SetSpeed(int);
 private:
-	Position EntityPosition;
-	std::string AssetURI;
-	int Direction;
-	int Speed;
+	Position entityPosition;
+	std::string assetURI;
+	int direction;
+	int speed;
 };
 
 #endif

@@ -1,11 +1,14 @@
+#define PI 3.14159265358979323846
+
 #ifndef MOTIONBLURTESTCLASS_H
 #define MOTIONBLURTESTCLASS_H
 
 #include "PcInputHandler.h"
 #include "GFXController.h"
 
-#define PI 3.14159265358979323846
-
+/// <summary>
+/// The motion blur test class will apply motion blur every time the mouse moves.
+/// </summary>
 class MotionBlurTestClass : public PcInputHandler
 {
 public:
@@ -15,8 +18,8 @@ public:
 	int HandleKeyboardInput(KeyboardState*);
 	int HandleMouseInput(MouseState*);
 private:
-	GFXController* Gfx;
-	int LastMouseX, LastMouseY;
+	GFXController* gfx;
+	int lastMouseX, lastMouseY;
 };
 
 #endif

@@ -3,6 +3,9 @@
 
 #include "Renderer.h"
 
+/// <summary>
+/// The Gfx Controller can be used to activate certain postprocessing effects.
+/// </summary>
 class GFXController
 {
 public:
@@ -16,7 +19,7 @@ public:
 	/// </summary>
 	int SetMotionBlur(float, float);
 private:
-	Renderer* GameRenderer;
+	Renderer* gameRenderer;
 };
 
 #endif

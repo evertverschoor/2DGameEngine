@@ -1,17 +1,16 @@
 #include "XInputController.h"
-#include <Windows.h>
 
 
 XInputController::XInputController(int _gamepadno)
 {
-	ControllerNumber = _gamepadno;
-	AbstractState = new XInputGamepadState();
+	controllerNumber = _gamepadno;
+	abstractState = new XInputGamepadState();
 }
 
 
 XInputController::~XInputController()
 {
-	delete AbstractState;
+	delete abstractState;
 }
 
 
@@ -43,27 +42,27 @@ int XInputController::Vibrate(int _left, int _right)
 XInputGamepadState* XInputController::GetState()
 {
 	// Zeroise the state
-	ZeroMemory(&ControllerState, sizeof(XINPUT_STATE));
+	ZeroMemory(&controllerState, sizeof(XINPUT_STATE));
 
 	// Get the state
-	XInputGetState(ControllerNumber, &ControllerState);
+	XInputGetState(controllerNumber, &controllerState);
 
 	// Update the abstract Gamepad state
-	AbstractState->UpdateGamepadStateFromXinput(ControllerState);
+	abstractState->UpdateGamepadStateFromXinput(controllerState);
 
-	return AbstractState;
+	return abstractState;
 }
 
 
 bool XInputController::IsConnected()
 {
 	// Zeroise the state
-	ZeroMemory(&ControllerState, sizeof(XINPUT_STATE));
+	ZeroMemory(&controllerState, sizeof(XINPUT_STATE));
 
 	// Get the state
-	DWORD Result = XInputGetState(ControllerNumber, &ControllerState);
+	DWORD _result = XInputGetState(controllerNumber, &controllerState);
 
-	if (Result == ERROR_SUCCESS)
+	if (_result == ERROR_SUCCESS)
 	{
 		return true;
 	}

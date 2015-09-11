@@ -1,9 +1,10 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
+#include "Windows.h"
 #include <string>
 #include <time.h>
-#include "Windows.h"
+#include <fstream>
 
 /// <summary>
 /// The Logger can write anything to the log file.
@@ -36,6 +37,9 @@ public:
 
 	int Log(clock_t);
 
+	/// <summary>
+	/// Get the instance of the logger using a static call.
+	/// </summary>
 	static Logger* Instance();
 private:
 	Logger() {};

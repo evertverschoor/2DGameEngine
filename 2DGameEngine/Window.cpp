@@ -1,6 +1,4 @@
 #include "Window.h"
-#include "Windows.h"
-#include "MouseState.h"
 
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
@@ -8,19 +6,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
 
 Window::Window(LPCWSTR _name, HINSTANCE* _hInstance, PcInputReciever* _reciever)
 {
-	Name = _name;
+	name = _name;
 	hInstance = _hInstance;
-	WindowIsUp = false;
-	PcReciever = _reciever;
+	windowIsUp = false;
+	pcReciever = _reciever;
 }
 
 
 Window::~Window()
 {
-	delete Settings;
-	delete Name;
+	delete settings;
+	delete name;
 	delete hInstance;
-	delete PcReciever;
+	delete pcReciever;
 }
 
 
@@ -41,14 +39,14 @@ int Window::Launch()
 
 	RegisterClass(&wc);
 
-	if (Settings->Fullscreen)
+	if (settings->fullscreen)
 	{
-		Handle = CreateWindowEx(NULL,
+		handle = CreateWindowEx(NULL,
 			L"MainWindow",
-			Name,
+			name,
 			WS_EX_TOPMOST | WS_POPUP,
 			0, 0,
-			Settings->MonitorRes->Width, Settings->MonitorRes->Height,
+			settings->monitorRes->width, settings->monitorRes->height,
 			NULL,
 			NULL,
 			*hInstance,
@@ -56,13 +54,13 @@ int Window::Launch()
 	}
 	else
 	{
-		Handle = CreateWindow(L"MainWindow", Name, WS_OVERLAPPEDWINDOW, 150, 150, Settings->ScreenRes->Width, Settings->ScreenRes->Height, NULL, NULL, *hInstance, NULL);
+		handle = CreateWindow(L"MainWindow", name, WS_OVERLAPPEDWINDOW, 150, 150, settings->screenRes->width, settings->screenRes->height, NULL, NULL, *hInstance, NULL);
 	}
 
-	ShowWindow(Handle, 5);
-	UpdateWindow(Handle);
+	ShowWindow(handle, 5);
+	UpdateWindow(handle);
 
-	WindowIsUp = true;
+	windowIsUp = true;
 
 	// Enter the message loop to send keyboard and mouse input to the Pc Input Reciever
 	MSG msg;
@@ -74,15 +72,15 @@ int Window::Launch()
 		{
 			switch (msg.message)
 			{
-				case WM_KEYDOWN : PcReciever->KeyPressed(msg.wParam); break;
-				case WM_KEYUP : PcReciever->KeyReleased(msg.wParam); break;
-				case WM_MOUSEMOVE: PcReciever->MouseMoved(msg.lParam); break;
-				case WM_LBUTTONDOWN: PcReciever->MouseButtonPressed(MOUSE_LBUTTON); break;
-				case WM_RBUTTONDOWN: PcReciever->MouseButtonPressed(MOUSE_RBUTTON); break;
-				case WM_MBUTTONDOWN: PcReciever->MouseButtonPressed(MOUSE_MBUTTON); break;
-				case WM_LBUTTONUP: PcReciever->MouseButtonReleased(MOUSE_LBUTTON); break;
-				case WM_RBUTTONUP: PcReciever->MouseButtonReleased(MOUSE_RBUTTON); break;
-				case WM_MBUTTONUP: PcReciever->MouseButtonReleased(MOUSE_MBUTTON); break;
+				case WM_KEYDOWN : pcReciever->KeyPressed(msg.wParam); break;
+				case WM_KEYUP : pcReciever->KeyReleased(msg.wParam); break;
+				case WM_MOUSEMOVE: pcReciever->MouseMoved(msg.lParam); break;
+				case WM_LBUTTONDOWN: pcReciever->MouseButtonPressed(MOUSE_LBUTTON); break;
+				case WM_RBUTTONDOWN: pcReciever->MouseButtonPressed(MOUSE_RBUTTON); break;
+				case WM_MBUTTONDOWN: pcReciever->MouseButtonPressed(MOUSE_MBUTTON); break;
+				case WM_LBUTTONUP: pcReciever->MouseButtonReleased(MOUSE_LBUTTON); break;
+				case WM_RBUTTONUP: pcReciever->MouseButtonReleased(MOUSE_RBUTTON); break;
+				case WM_MBUTTONUP: pcReciever->MouseButtonReleased(MOUSE_MBUTTON); break;
 				default:
 					TranslateMessage(&msg);
 					DispatchMessage(&msg);
@@ -92,7 +90,7 @@ int Window::Launch()
 
 	UnregisterClass(L"MainWindow", wc.hInstance);
 
-	WindowIsUp = false;
+	windowIsUp = false;
 
 	return 1;
 }
@@ -100,14 +98,14 @@ int Window::Launch()
 
 int Window::SetVideoSettings(VideoSettings* _settings)
 {
-	Settings = _settings;
+	settings = _settings;
 	return 1;
 }
 
 
 bool Window::IsUp()
 {
-	return WindowIsUp;
+	return windowIsUp;
 }
 
 

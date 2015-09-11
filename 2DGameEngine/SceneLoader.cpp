@@ -1,24 +1,17 @@
 #include "SceneLoader.h"
-#include "FileReader.h"
-#include "Logger.h"
-#include "Entity.h"
-#include "ControllableEntity.h"
-#include "Windows.h"
-#include "Position.h"
-#include <string>
 
 
 SceneLoader::SceneLoader(GamepadInputReciever* _gamepadreciever, PcInputReciever* _pcreciever)
 {
-	GamepadReciever = _gamepadreciever;
-	PcReciever = _pcreciever;
+	gamepadReciever = _gamepadreciever;
+	pcReciever = _pcreciever;
 }
 
 
 SceneLoader::~SceneLoader()
 {
-	delete GamepadReciever;
-	delete PcReciever;
+	delete gamepadReciever;
+	delete pcReciever;
 }
 
 
@@ -60,10 +53,10 @@ int SceneLoader::LoadEntity(std::string _entityName, Position* _position, Scene*
 		ControllableEntity* _entity = new ControllableEntity(_assetURI, _gamepadno - 1);
 
 		// Add the entity as a gamepad reciever if there is a gamepad and the entity's gamepad number is not 0
-		if ((GamepadReciever) && _gamepadno != 0) GamepadReciever->AddGamepadHandler(_entity);
+		if ((gamepadReciever) && _gamepadno != 0) gamepadReciever->AddGamepadHandler(_entity);
 
 		// Add it as a pc reciever always
-		PcReciever->AddPcHandler(_entity);
+		pcReciever->AddPcHandler(_entity);
 
 		_entity->JumpTo(_position->X, _position->Y);
 		_entity->SetZindex(_position->Z);

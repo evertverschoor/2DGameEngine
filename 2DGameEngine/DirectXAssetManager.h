@@ -28,9 +28,9 @@ public:
 	/// </summary>
 	ID2D1Bitmap* GetD2D1Bitmap(Entity*);
 private:
-	DirectXAssetLoader* Loader;
-	ID2D1RenderTarget* RenderTarget;
-	std::map<Entity*, ID2D1Bitmap*> AssetList;
+	DirectXAssetLoader* loader;
+	ID2D1RenderTarget* renderTarget;
+	std::map<Entity*, ID2D1Bitmap*> assetList;
 };
 
 #endif

@@ -3,8 +3,8 @@
 
 Dimension::Dimension(int _width, int _height)
 {
-	Width = _width;
-	Height = _height;
+	width = _width;
+	height = _height;
 }
 
 

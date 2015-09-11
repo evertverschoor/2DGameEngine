@@ -1,16 +1,14 @@
 #include "DirectXRenderer.h"
-#include "Logger.h"
-#include "StringConverter.h"
 
 
 DirectXRenderer::DirectXRenderer(DirectXAssetManager* _assetmanager)
 {
-	ResourceManager = _assetmanager;
-	Factory = NULL;
-	RenderTarget = NULL;
+	resourceManager = _assetmanager;
+	factory = NULL;
+	renderTarget = NULL;
 
-	MotionBlurAngle = 0.0f;
-	MotionBlurAmount = 0.0f;
+	motionBlurAngle = 0.0f;
+	motionBlurAmount = 0.0f;
 
 	SetVirtualResolution(new Dimension(1920, 1080));
 }
@@ -18,11 +16,11 @@ DirectXRenderer::DirectXRenderer(DirectXAssetManager* _assetmanager)
 
 DirectXRenderer::~DirectXRenderer()
 {
-	if (Factory) Factory->Release();
-	if (RenderTarget) RenderTarget->Release();
+	if (factory) factory->Release();
+	if (renderTarget) renderTarget->Release();
 
-	delete Factory;
-	delete RenderTarget;
+	delete factory;
+	delete renderTarget;
 }
 
 
@@ -58,38 +56,38 @@ int DirectXRenderer::PostProcess(ID2D1Bitmap* _bitmap)
 {
 	ID2D1Image* _finalImage = _bitmap; // Put the bitmap into an image
 
-	DeviceContext->BeginDraw();
+	deviceContext->BeginDraw();
 
 	// Apply motion blur if turned on
-	if (Settings->MotionBlur && MotionBlurAmount > 0.0f)
+	if (settings->motionBlur && motionBlurAmount > 0.0f)
 	{
-		MotionBlur->SetInput(0, _finalImage);
-		MotionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_ANGLE, MotionBlurAngle);
-		MotionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_STANDARD_DEVIATION, MotionBlurAmount);
-		MotionBlur->GetOutput(&_finalImage);
+		motionBlur->SetInput(0, _finalImage);
+		motionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_ANGLE, motionBlurAngle);
+		motionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_STANDARD_DEVIATION, motionBlurAmount);
+		motionBlur->GetOutput(&_finalImage);
 	}
 
 	// Apply saturation if turned on
-	if (Settings->Saturation)
+	if (settings->saturation)
 	{
-		Saturation->SetInput(0, _finalImage);
-		Saturation.Get()->GetOutput(&_finalImage);
+		saturation->SetInput(0, _finalImage);
+		saturation.Get()->GetOutput(&_finalImage);
 	}
 
 	// Apply sharpening if turned on
-	if (Settings->Sharpen)
+	if (settings->sharpen)
 	{
-		Sharpen->SetInput(0, _finalImage);
-		Sharpen.Get()->GetOutput(&_finalImage);
+		sharpen->SetInput(0, _finalImage);
+		sharpen.Get()->GetOutput(&_finalImage);
 	}
 	
 	// Draw the processsed image to the backbuffer
-	DeviceContext->DrawImage(_finalImage);
+	deviceContext->DrawImage(_finalImage);
 
 	// Draw FPS on the screen if turned on
-	if (Settings->TrackFramerate) DrawFPS();
+	if (settings->trackFramerate) DrawFPS();
 	
-	DeviceContext->EndDraw();
+	deviceContext->EndDraw();
 
 	return 1;
 }
@@ -105,7 +103,7 @@ int DirectXRenderer::WipeScreen(float _red, float _green, float _blue)
 int DirectXRenderer::DrawEntity(Entity* _entity)
 {
 	// Define the entity's bitmap to draw
-	ID2D1Bitmap* _bitmap = ResourceManager->GetD2D1Bitmap(_entity);
+	ID2D1Bitmap* _bitmap = resourceManager->GetD2D1Bitmap(_entity);
 
 	// Set the rotation for the bitmap, if necessary
 	if (_entity->GetDirection() != 0)
@@ -126,12 +124,12 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 
 	// Draw the bitmap
 	bitmapRenderTarget->DrawBitmap(
-		ResourceManager->GetD2D1Bitmap(_entity),
+		resourceManager->GetD2D1Bitmap(_entity),
 		D2D1::RectF(
 		_actualEntityPosition->X,
 		_actualEntityPosition->Y,
-		_actualEntityPosition->X + _actualEntitySize->Width,
-		_actualEntityPosition->Y + _actualEntitySize->Height
+		_actualEntityPosition->X + _actualEntitySize->width,
+		_actualEntityPosition->Y + _actualEntitySize->height
 		)
 		);
 
@@ -147,17 +145,17 @@ int DirectXRenderer::WriteText(std::string _text, Position* _position)
 {
 	Position* _actualTextPosition = GetActualDrawPosition(_position);
 
-	RenderTarget->DrawTextW(
+	renderTarget->DrawTextW(
 		StringConverter::Instance()->StringToWstring(_text).c_str(),
 		_text.length(),
-		DefaultTextFormat,
+		defaultTextFormat,
 		D2D1::RectF(
 		_actualTextPosition->X,
 		_actualTextPosition->Y,
-		_actualTextPosition->X + Settings->ScreenRes->Width,
-		_actualTextPosition->Y + Settings->ScreenRes->Height
+		_actualTextPosition->X + settings->screenRes->width,
+		_actualTextPosition->Y + settings->screenRes->height
 		),
-		DefaultTextBrush,
+		defaultTextBrush,
 		D2D1_DRAW_TEXT_OPTIONS_CLIP,
 		DWRITE_MEASURING_MODE_NATURAL
 		);
@@ -169,10 +167,11 @@ int DirectXRenderer::WriteText(std::string _text, Position* _position)
 int DirectXRenderer::Init(HWND* _windowhandle)
 {
 	// Create D2D factory
-	HRESULT _result = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &Factory);
+	HRESULT _result = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &factory);
 
 	if (FAILED(_result))
 	{
+		Logger::Instance()->Log("\nFailed to create D2D1Factory");
 		return -1;
 	}
 
@@ -180,11 +179,12 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 	_result = DWriteCreateFactory(
 		DWRITE_FACTORY_TYPE_SHARED,
 		__uuidof(IDWriteFactory),
-		reinterpret_cast<IUnknown**>(&DWriteFactory)
+		reinterpret_cast<IUnknown**>(&dWriteFactory)
 		);
 
 	if (FAILED(_result))
 	{
+		Logger::Instance()->Log("\nFailed to create IDWriteFactory");
 		return -2;
 	}
 
@@ -192,29 +192,31 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 	GetClientRect(*_windowhandle, &_rect);
 
 	// Create the render target
-	_result = Factory->CreateHwndRenderTarget(
+	_result = factory->CreateHwndRenderTarget(
 		D2D1::RenderTargetProperties(),
-		D2D1::HwndRenderTargetProperties(*_windowhandle, D2D1::SizeU(Settings->ScreenRes->Width, Settings->ScreenRes->Height), Settings->Vsync ? D2D1_PRESENT_OPTIONS_NONE : D2D1_PRESENT_OPTIONS_IMMEDIATELY),
-		&RenderTarget
+		D2D1::HwndRenderTargetProperties(*_windowhandle, D2D1::SizeU(settings->screenRes->width, settings->screenRes->height), settings->vsync ? D2D1_PRESENT_OPTIONS_NONE : D2D1_PRESENT_OPTIONS_IMMEDIATELY),
+		&renderTarget
 		);
 
 	if (FAILED(_result))
 	{
-		return -10;
+		Logger::Instance()->Log("\nFailed to create HwndRenderTarget");
+		return -3;
 	}
 
 	// Create bitmapRenderTarget
-	_result = RenderTarget->CreateCompatibleRenderTarget(&bitmapRenderTarget);
+	_result = renderTarget->CreateCompatibleRenderTarget(&bitmapRenderTarget);
 
 	if (FAILED(_result))
 	{
-		return -10;
+		Logger::Instance()->Log("\nFailed to create BitmapRenderTarget");
+		return -4;
 	}
 
 	SetDefaultTextFormat("Arial", 72.0f, RED, 1.0f);
 
 	// Set the font family and size for the in-engine text
-	_result = DWriteFactory->CreateTextFormat(
+	_result = dWriteFactory->CreateTextFormat(
 		L"Consolas",
 		NULL,
 		DWRITE_FONT_WEIGHT_REGULAR,
@@ -222,59 +224,61 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 		DWRITE_FONT_STRETCH_NORMAL,
 		GetActualFontSize(40.0f),
 		L"en-us",
-		&EngineTextFormat
+		&engineTextFormat
 		);
 
 	if (FAILED(_result))
 	{
-		return -20;
+		Logger::Instance()->Log("\nFailed to create IDWriteTextFormat");
+		return -5;
 	}
 
 	// Set the font color for the in-engine text
-	_result = RenderTarget->CreateSolidColorBrush(
+	_result = renderTarget->CreateSolidColorBrush(
 		D2D1::ColorF(D2D1::ColorF::Yellow, 1.0f),
-		&EngineTextBrush
+		&engineTextBrush
 		);
 
 	if (FAILED(_result))
 	{
-		return -3;
+		Logger::Instance()->Log("\nFailed to create ID2D1SolidColorBrush");
+		return -6;
 	}
 
 	// Get the device context from the rendertarget
-	RenderTarget->QueryInterface(&DeviceContext);
+	renderTarget->QueryInterface(&deviceContext);
 
 	// Set up the motion blur effect
-	if (Settings->MotionBlur)
+	if (settings->motionBlur)
 	{
-		DeviceContext->CreateEffect(CLSID_D2D1DirectionalBlur, &MotionBlur);
+		deviceContext->CreateEffect(CLSID_D2D1DirectionalBlur, &motionBlur);
 	}
 
 	// Set up the sharpen effect
-	if (Settings->Sharpen)
+	if (settings->sharpen)
 	{
-		DeviceContext->CreateEffect(CLSID_D2D1ConvolveMatrix, &Sharpen);
+		deviceContext->CreateEffect(CLSID_D2D1ConvolveMatrix, &sharpen);
 
 		// Screen resolution around 720p
-		if (Settings->ScreenRes->Height < 1000)
+		if (settings->screenRes->height < 1000)
 		{
-			float matrix[9] =
+			float _matrix[9] =
 			{
 				-1, 0, -1,
 				0, 10, 0,
 				-1, 0, -1
 			};
 
-			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_MATRIX, matrix);
-			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_X, 3);
-			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_Y, 3);
-			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_DIVISOR, 7.0f);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_MATRIX, _matrix);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_X, 3);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_Y, 3);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_DIVISOR, 7.0f);
 		}
 
 		// Screen resolution around 1080p/1440p
-		else if (Settings->ScreenRes->Height > 1000 && Settings->ScreenRes->Height < 2000)
+		else if (settings->screenRes->height > 1000 && settings->screenRes->height < 2000)
 		{
-			float matrix[25] =
+			float _matrix[25] =
 			{
 				-1, 0, 0, 0, -1,
 				0, -1, 0, -1, 0,
@@ -284,16 +288,16 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 
 			};
 
-			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_MATRIX, matrix);
-			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_X, 5);
-			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_Y, 5);
-			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_DIVISOR, 8.0f);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_MATRIX, _matrix);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_X, 5);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_Y, 5);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_DIVISOR, 8.0f);
 		}
 
 		// Screen resolution around 4k or higher
 		else
 		{
-			float matrix[25] =
+			float _matrix[25] =
 			{
 				-2, 0, 0, 0, -2,
 				0, -2, 0, -2, 0,
@@ -303,23 +307,23 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 
 			};
 
-			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_MATRIX, matrix);
-			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_X, 5);
-			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_Y, 5);
-			Sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_DIVISOR, 13.0f);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_MATRIX, _matrix);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_X, 5);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_Y, 5);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_DIVISOR, 13.0f);
 		}
 	}
 
 	// Set up the saturation effect
-	if (Settings->Saturation)
+	if (settings->saturation)
 	{
-		DeviceContext->CreateEffect(CLSID_D2D1Saturation, &Saturation);
-		Saturation->SetValue(D2D1_SATURATION_PROP_SATURATION, 1.8f);
+		deviceContext->CreateEffect(CLSID_D2D1Saturation, &saturation);
+		saturation->SetValue(D2D1_SATURATION_PROP_SATURATION, 1.8f);
 	}
 
-	PositionForFPS = GetActualDrawPosition(new Position(5, 5, 5));
+	positionForFPS = GetActualDrawPosition(new Position(5, 5, 5));
 
-	ResourceManager->SetRenderTarget(RenderTarget);
+	resourceManager->SetRenderTarget(renderTarget);
 
 	return 1;
 }
@@ -327,24 +331,24 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 
 int DirectXRenderer::SetVideoSettings(VideoSettings* _settings)
 {
-	Settings = _settings;
+	settings = _settings;
 	return 1;
 }
 
 int DirectXRenderer::SetMotionBlur(float _angle, float _amount)
 {
 	// Set the angle
-	if (_angle > 0.0f && _angle < 360.0f) MotionBlurAngle = _angle;
+	if (_angle > 0.0f && _angle < 360.0f) motionBlurAngle = _angle;
 	else
 	{
-		MotionBlurAngle = 0.0f;
+		motionBlurAngle = 0.0f;
 	}
 
 	// Set the amount
-	if (_amount > 0.0f) MotionBlurAmount = _amount;
+	if (_amount > 0.0f) motionBlurAmount = _amount;
 	else
 	{
-		MotionBlurAmount = 0.0f;
+		motionBlurAmount = 0.0f;
 	}
 
 	return 1;
@@ -353,7 +357,7 @@ int DirectXRenderer::SetMotionBlur(float _angle, float _amount)
 int DirectXRenderer::SetDefaultTextFormat(std::string _fontname, float _fontsize, Color _color, float _transparency)
 {
 	// Set the font family and size.
-	HRESULT _result = DWriteFactory->CreateTextFormat(
+	HRESULT _result = dWriteFactory->CreateTextFormat(
 		StringConverter::Instance()->StringToWstring(_fontname).c_str(),
 		NULL,
 		DWRITE_FONT_WEIGHT_REGULAR,
@@ -361,11 +365,12 @@ int DirectXRenderer::SetDefaultTextFormat(std::string _fontname, float _fontsize
 		DWRITE_FONT_STRETCH_NORMAL,
 		GetActualFontSize(_fontsize),
 		L"en-us",
-		&DefaultTextFormat
+		&defaultTextFormat
 		);
 
 	if (FAILED(_result))
 	{
+		Logger::Instance()->Log("\nFailed to create Default Text Format");
 		return -1;
 	}
 
@@ -373,44 +378,45 @@ int DirectXRenderer::SetDefaultTextFormat(std::string _fontname, float _fontsize
 	switch (_color)
 	{
 	case BLACK:
-		_result = RenderTarget->CreateSolidColorBrush(
+		_result = renderTarget->CreateSolidColorBrush(
 			D2D1::ColorF(D2D1::ColorF::Black, _transparency),
-			&DefaultTextBrush
+			&defaultTextBrush
 			); break;
 
 	case WHITE:
-		_result = RenderTarget->CreateSolidColorBrush(
+		_result = renderTarget->CreateSolidColorBrush(
 			D2D1::ColorF(D2D1::ColorF::White, _transparency),
-			&DefaultTextBrush
+			&defaultTextBrush
 			); break;
 
 	case GRAY:
-		_result = RenderTarget->CreateSolidColorBrush(
+		_result = renderTarget->CreateSolidColorBrush(
 			D2D1::ColorF(D2D1::ColorF::Gray, _transparency),
-			&DefaultTextBrush
+			&defaultTextBrush
 			); break;
 
 	case RED:
-		_result = RenderTarget->CreateSolidColorBrush(
+		_result = renderTarget->CreateSolidColorBrush(
 			D2D1::ColorF(D2D1::ColorF::Red, _transparency),
-			&DefaultTextBrush
+			&defaultTextBrush
 			); break;
 
 	case GREEN:
-		_result = RenderTarget->CreateSolidColorBrush(
+		_result = renderTarget->CreateSolidColorBrush(
 			D2D1::ColorF(D2D1::ColorF::Green, _transparency),
-			&DefaultTextBrush
+			&defaultTextBrush
 			); break;
 
 	case BLUE:
-		_result = RenderTarget->CreateSolidColorBrush(
+		_result = renderTarget->CreateSolidColorBrush(
 			D2D1::ColorF(D2D1::ColorF::Blue, _transparency),
-			&DefaultTextBrush
+			&defaultTextBrush
 			); break;
 	}
 
 	if (FAILED(_result))
 	{
+		Logger::Instance()->Log("\nFailed to create Default Text Brush");
 		return -2;
 	}
 
@@ -419,21 +425,21 @@ int DirectXRenderer::SetDefaultTextFormat(std::string _fontname, float _fontsize
 
 int DirectXRenderer::SetVirtualResolution(Dimension* _resolution)
 {
-	VirtualResolution = _resolution;
+	virtualResolution = _resolution;
 	return 1;
 }
 
 Position* DirectXRenderer::GetActualDrawPosition(Position* _position)
 {
 	// If the virtual resolution and actual resolution are the same, this doesnt need to happen.
-	if (VirtualResolution->Height == Settings->ScreenRes->Height && VirtualResolution->Width == Settings->ScreenRes->Width)
+	if (virtualResolution->height == settings->screenRes->height && virtualResolution->width == settings->screenRes->width)
 	{
 		return _position;
 	}
 	else
 	{
-		_position->X = (_position->X * Settings->ScreenRes->Width) / VirtualResolution->Width;
-		_position->Y = (_position->Y * Settings->ScreenRes->Height) / VirtualResolution->Height;
+		_position->X = (_position->X * settings->screenRes->width) / virtualResolution->width;
+		_position->Y = (_position->Y * settings->screenRes->height) / virtualResolution->height;
 
 		return _position;
 	}
@@ -442,14 +448,14 @@ Position* DirectXRenderer::GetActualDrawPosition(Position* _position)
 Dimension* DirectXRenderer::GetActualDrawSize(Dimension* _size)
 {
 	// If the virtual resolution and actual resolution are the same, this doesnt need to happen.
-	if (VirtualResolution->Height == Settings->ScreenRes->Height && VirtualResolution->Width == Settings->ScreenRes->Width)
+	if (virtualResolution->height == settings->screenRes->height && virtualResolution->width == settings->screenRes->width)
 	{
 		return _size;
 	}
 	else
 	{
-		_size->Width = (_size->Width * Settings->ScreenRes->Width) / VirtualResolution->Width;
-		_size->Height = (_size->Height * Settings->ScreenRes->Height) / VirtualResolution->Height;
+		_size->width = (_size->width * settings->screenRes->width) / virtualResolution->width;
+		_size->height = (_size->height * settings->screenRes->height) / virtualResolution->height;
 		return _size;
 	}
 }
@@ -457,36 +463,36 @@ Dimension* DirectXRenderer::GetActualDrawSize(Dimension* _size)
 float DirectXRenderer::GetActualFontSize(float _size)
 {
 	// If the virtual resolution and actual resolution are the same, this doesnt need to happen.
-	if (VirtualResolution->Height == Settings->ScreenRes->Height && VirtualResolution->Width == Settings->ScreenRes->Width)
+	if (virtualResolution->height == settings->screenRes->height && virtualResolution->width == settings->screenRes->width)
 	{
 		return _size;
 	}
 	else
 	{
-		_size = (_size * Settings->ScreenRes->Width) / VirtualResolution->Width;
+		_size = (_size * settings->screenRes->width) / virtualResolution->width;
 		return _size;
 	}
 }
 
 int DirectXRenderer::SetFPSToDraw(int _framerate)
 {
-	Framerate = _framerate;
+	framerate = _framerate;
 	return 1;
 }
 
 int DirectXRenderer::DrawFPS()
 {
-	DeviceContext->DrawTextW(
-		StringConverter::Instance()->IntToWString(Framerate).c_str(),
-		StringConverter::Instance()->IntToWString(Framerate).length(),
-		EngineTextFormat,
+	deviceContext->DrawTextW(
+		StringConverter::Instance()->IntToWString(framerate).c_str(),
+		StringConverter::Instance()->IntToWString(framerate).length(),
+		engineTextFormat,
 		D2D1::RectF(
-		PositionForFPS->X,
-		PositionForFPS->Y,
-		PositionForFPS->X + Settings->ScreenRes->Width,
-		PositionForFPS->Y + Settings->ScreenRes->Height
+		positionForFPS->X,
+		positionForFPS->Y,
+		positionForFPS->X + settings->screenRes->width,
+		positionForFPS->Y + settings->screenRes->height
 		),
-		EngineTextBrush,
+		engineTextBrush,
 		D2D1_DRAW_TEXT_OPTIONS_CLIP,
 		DWRITE_MEASURING_MODE_NATURAL
 		);

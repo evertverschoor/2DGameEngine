@@ -1,11 +1,4 @@
 #include "Logger.h"
-#include "Windows.h"
-#include <string>
-#include <fstream>
-#include <iostream>
-#include <iomanip>
-#include <ctime>
-#include <stddef.h>
 
 
 Logger* Logger::l_instance = NULL;

@@ -60,14 +60,22 @@
 
 #include <map>
 
+/// <summary>
+/// The generic keyboard state format to be read as user input.
+/// </summary>
 class KeyboardState
 {
 public:
 	KeyboardState(std::map<int, bool>);
 	~KeyboardState();
+
+	/// <summary>
+	/// Returns if a certain key is currently pressed.
+	/// @param The key that should be checked, use the KEY macros. (example; KEY_A)
+	/// </summary>
 	bool IsKeyPressed(int);
 private:
-	std::map<int, bool> FinalKeyboardMap;
+	std::map<int, bool> finalKeyboardMap;
 };
 
 #endif

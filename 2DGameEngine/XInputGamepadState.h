@@ -5,6 +5,9 @@
 #include <Windows.h>
 #include <Xinput.h>
 
+/// <summary>
+/// XInput realization of the gamepad state.
+/// </summary>
 class XInputGamepadState : public GamepadState
 {
 public:
@@ -32,7 +35,7 @@ public:
 	/// </summary>
 	int UpdateGamepadStateFromXinput(XINPUT_STATE);
 private:
-	XINPUT_STATE ActualState;
+	XINPUT_STATE actualState;
 };
 
 #endif

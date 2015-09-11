@@ -1,6 +1,4 @@
 #include "FileReader.h"
-#include <iostream>
-#include <fstream>
 
 
 FileReader* FileReader::r_instance = NULL;

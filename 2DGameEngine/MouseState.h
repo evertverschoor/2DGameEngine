@@ -9,16 +9,23 @@
 #include "ConstantMouseState.h"
 #include <map>
 
+/// <summary>
+/// The generic mouse state format to be read as user input.
+/// </summary>
 class MouseState
 {
 public:
 	MouseState(ConstantMouseState*);
 	~MouseState();
+
+	/// <summary>
+	/// Get the current cursos position relative to the window. (0,0 is top left)
+	/// </summary>
 	Position* GetCursorPosition();
 	bool IsMouseButtonPressed(int);
 private:
-	Position* MousePosition;
-	std::map<int, bool> MouseButtonMap;
+	Position* mousePosition;
+	std::map<int, bool> mouseButtonMap;
 	int SetProperties(ConstantMouseState*);
 };
 

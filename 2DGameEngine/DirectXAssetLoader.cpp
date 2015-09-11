@@ -1,5 +1,4 @@
 #include "DirectXAssetLoader.h"
-#include "Logger.h"
 
 
 DirectXAssetLoader::DirectXAssetLoader()

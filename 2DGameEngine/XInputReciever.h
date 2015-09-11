@@ -7,9 +7,11 @@
 #include "GamepadInputReciever.h"
 #include "GamepadInputHandler.h"
 #include "XInputController.h"
-#include <Windows.h>
-#include <Xinput.h>
+#include "Logger.h"
 
+/// <summary>
+/// XInput-realization of the gamepad input reciever.
+/// </summary>
 class XInputReciever : public GamepadInputReciever
 {
 public:
@@ -20,11 +22,11 @@ public:
 	bool HasGamepadsConnected();
 	int ReadInput();
 private:
-	GamepadInputHandler* HandlerList[MAX_HANDLERS];
-	XInputController* Gamepads[MAX_GAMEPADS];
+	GamepadInputHandler* handlerList[MAX_HANDLERS];
+	XInputController* gamepads[MAX_GAMEPADS];
 
-	int NumberOfHandlers;
-	int NumberOfGamepads;
+	int numberOfHandlers;
+	int numberOfGamepads;
 };
 
 #endif

@@ -6,8 +6,11 @@
 #include "PcInputReciever.h"
 #include "Position.h"
 #include "Scene.h"
+#include "FileReader.h"
+#include "Logger.h"
+#include "Entity.h"
+#include "ControllableEntity.h"
 #include "StringConverter.h"
-#include <string>
 
 /// <summary>
 /// The Scene Loader is used by the scene Factory to load scene files and read them.
@@ -29,8 +32,8 @@ private:
 	/// </summary>
 	int LoadEntity(std::string, Position*, Scene*);
 
-	GamepadInputReciever* GamepadReciever;
-	PcInputReciever* PcReciever;
+	GamepadInputReciever* gamepadReciever;
+	PcInputReciever* pcReciever;
 };
 
 #endif

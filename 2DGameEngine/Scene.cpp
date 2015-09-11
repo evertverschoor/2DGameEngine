@@ -3,8 +3,8 @@
 
 Scene::Scene(std::string _name)
 {
-	Name = _name;
-	NumberOfEntities = 0;
+	name = _name;
+	numberOfEntities = 0;
 }
 
 
@@ -16,7 +16,7 @@ int Scene::OnGameUpdate()
 {
 	for (int i = 0; i < EntityCount(); ++i)
 	{
-		InhabitingEntities[i]->Act();
+		inhabitingEntities[i]->Act();
 	}
 	return 1;
 }
@@ -24,9 +24,9 @@ int Scene::OnGameUpdate()
 
 int Scene::AddEntity(Entity* _entity)
 {
-	if (NumberOfEntities == MAX_ENTITIES) return 0;
-	InhabitingEntities[NumberOfEntities] = _entity;
-	++NumberOfEntities;
+	if (numberOfEntities == MAX_ENTITIES) return 0;
+	inhabitingEntities[numberOfEntities] = _entity;
+	++numberOfEntities;
 	return 1;
 }
 
@@ -34,17 +34,17 @@ int Scene::AddEntity(Entity* _entity)
 Entity* Scene::GetEntity(int _index)
 {
 	if (_index == MAX_ENTITIES) return 0;
-	return InhabitingEntities[_index];
+	return inhabitingEntities[_index];
 }
 
 
 int Scene::EntityCount()
 {
-	return NumberOfEntities;
+	return numberOfEntities;
 }
 
 
 std::string Scene::GetName()
 {
-	return Name;
+	return name;
 }

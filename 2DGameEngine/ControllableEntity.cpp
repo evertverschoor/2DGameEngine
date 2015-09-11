@@ -1,12 +1,9 @@
 #include "ControllableEntity.h"
-#include "Logger.h"
-#include <Windows.h>
-#include <Xinput.h>
 
 
 ControllableEntity::ControllableEntity()
 {
-	GamepadNumber = 0;
+	gamepadNumber = 0;
 }
 
 
@@ -80,5 +77,5 @@ int ControllableEntity::HandleMouseInput(MouseState* _state)
 
 int ControllableEntity::GetGamepadNumber()
 {
-	return GamepadNumber;
+	return gamepadNumber;
 }

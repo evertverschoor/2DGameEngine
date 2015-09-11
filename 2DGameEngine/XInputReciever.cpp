@@ -1,13 +1,10 @@
 #include "XInputReciever.h"
-#include "Logger.h"
-#include <Windows.h>
-#include <Xinput.h>
 
 
 XInputReciever::XInputReciever()
 {
-	NumberOfHandlers = 0;
-	NumberOfGamepads = 0;
+	numberOfHandlers = 0;
+	numberOfGamepads = 0;
 }
 
 
@@ -18,9 +15,9 @@ XInputReciever::~XInputReciever()
 
 int XInputReciever::AddGamepadHandler(GamepadInputHandler* _handler)
 {
-	if (NumberOfHandlers == MAX_HANDLERS) return 0;
-	HandlerList[NumberOfHandlers] = _handler;
-	++NumberOfHandlers;
+	if (numberOfHandlers == MAX_HANDLERS) return 0;
+	handlerList[numberOfHandlers] = _handler;
+	++numberOfHandlers;
 	return 1;
 }
 
@@ -28,14 +25,14 @@ int XInputReciever::AddGamepadHandler(GamepadInputHandler* _handler)
 int XInputReciever::ReadInput()
 {
 	// Read Gamepad states
-	for (int i = 0; i < NumberOfHandlers; ++i)
+	for (int i = 0; i < numberOfHandlers; ++i)
 	{
-		switch (HandlerList[i]->HandleGamepadInput(Gamepads[HandlerList[i]->GetGamepadNumber()]->GetState()))
+		switch (handlerList[i]->HandleGamepadInput(gamepads[handlerList[i]->GetGamepadNumber()]->GetState()))
 		{
-			case 0: Gamepads[HandlerList[i]->GetGamepadNumber()]->Vibrate(0, 0); break;
-			case 1: Gamepads[HandlerList[i]->GetGamepadNumber()]->Vibrate(MAX_VIBRATION_VALUE, 0); break;
-			case 2: Gamepads[HandlerList[i]->GetGamepadNumber()]->Vibrate(0, MAX_VIBRATION_VALUE); break;
-			case 3: Gamepads[HandlerList[i]->GetGamepadNumber()]->Vibrate(MAX_VIBRATION_VALUE, MAX_VIBRATION_VALUE); break;
+			case 0: gamepads[handlerList[i]->GetGamepadNumber()]->Vibrate(0, 0); break;
+			case 1: gamepads[handlerList[i]->GetGamepadNumber()]->Vibrate(MAX_VIBRATION_VALUE, 0); break;
+			case 2: gamepads[handlerList[i]->GetGamepadNumber()]->Vibrate(0, MAX_VIBRATION_VALUE); break;
+			case 3: gamepads[handlerList[i]->GetGamepadNumber()]->Vibrate(MAX_VIBRATION_VALUE, MAX_VIBRATION_VALUE); break;
 		}
 	}
 
@@ -49,19 +46,19 @@ bool XInputReciever::HasGamepadsConnected()
 
 	for (int i = 0; i < MAX_GAMEPADS; ++i)
 	{
-		Gamepads[i] = new XInputController(i);
-		if (Gamepads[i]->IsConnected())
+		gamepads[i] = new XInputController(i);
+		if (gamepads[i]->IsConnected())
 		{
-			++NumberOfGamepads;
+			++numberOfGamepads;
 		}
 		else
 		{
-			delete Gamepads[i];
+			delete gamepads[i];
 		}
 	}
 
 	Logger::Instance()->Log("\nDone. Number of Gamepads detected: ");
-	Logger::Instance()->Log(NumberOfGamepads);
+	Logger::Instance()->Log(numberOfGamepads);
 
-	return NumberOfGamepads > 0;
+	return numberOfGamepads > 0;
 }

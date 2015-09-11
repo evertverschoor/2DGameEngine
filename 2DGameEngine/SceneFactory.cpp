@@ -1,21 +1,18 @@
 #include "SceneFactory.h"
-#include "Scene.h"
-#include "Entity.h"
-#include "Logger.h"
 
 
 SceneFactory::SceneFactory(AssetManager* _assetmanager, GamepadInputReciever* _gamepadreciever, PcInputReciever* _pcreciever)
 {
-	ResourceManager = _assetmanager;
-	Loader = new SceneLoader(_gamepadreciever, _pcreciever);
-	NumberOfScenes = 0;
+	resourceManager = _assetmanager;
+	loader = new SceneLoader(_gamepadreciever, _pcreciever);
+	numberOfScenes = 0;
 }
 
 
 SceneFactory::~SceneFactory()
 {
-	delete Loader;
-	delete ResourceManager;
+	delete loader;
+	delete resourceManager;
 }
 
 
@@ -24,21 +21,21 @@ Scene* SceneFactory::CreateNewSceneFromFile(std::string _name)
 	Logger::Instance()->Log("\n\nCreating new Scene from file: ");
 	Logger::Instance()->Log(_name);
 
-	if (NumberOfScenes == MAX_SCENES)
+	if (numberOfScenes == MAX_SCENES)
 	{
 		Logger::Instance()->Log("\nCould not create another scene, too many scenes already exist.");
 		return 0;
 	}
 
 	Scene* _newScene = new Scene(_name);
-	CreatedScenes[NumberOfScenes] = _newScene;
-	++NumberOfScenes;
+	createdScenes[numberOfScenes] = _newScene;
+	++numberOfScenes;
 
 	// Put the entities in the scene
-	Loader->LoadScene(_newScene);
+	loader->LoadScene(_newScene);
 
 	// Load the assets that are required to draw the scene
-	ResourceManager->LoadScene(_newScene);
+	resourceManager->LoadScene(_newScene);
 
 	Logger::Instance()->Log("\nDone creating scene.");
 
@@ -48,6 +45,6 @@ Scene* SceneFactory::CreateNewSceneFromFile(std::string _name)
 
 Scene* SceneFactory::GetScene(int _index)
 {
-	if (_index == NumberOfScenes) return 0;
-	return CreatedScenes[_index];
+	if (_index == numberOfScenes) return 0;
+	return createdScenes[_index];
 }

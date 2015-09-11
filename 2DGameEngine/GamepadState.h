@@ -9,6 +9,9 @@
 #ifndef GAMEPADSTATE_H
 #define GAMEPADSTATE_H
 
+/// <summary>
+/// The gamepad state is a generic format for stored gamepad input.
+/// </summary>
 class GamepadState
 {
 public:
@@ -76,19 +79,19 @@ public:
 
 	/// <summary>
 	/// Has the dpad been pressed in this direction?
-	/// Use the GAMEPAD macros.
+	/// Use the GAMEPAD macros. (example; GAMEPADSTATE_UP)
 	/// </summary>
 	virtual bool DPadDirection(int) = 0;
 
 	/// <summary>
 	/// Has the stick been tilted in this direction?
-	/// Use the GAMEPAD macros.
+	/// Use the GAMEPAD macros. (example; GAMEPADSTATE_UP)
 	/// </summary>
 	virtual bool LeftStickDirection(int) = 0;
 
 	/// <summary>
 	/// Has the stick been tilted in this direction?
-	/// Use the GAMEPAD macros.
+	/// Use the GAMEPAD macros. (example; GAMEPADSTATE_UP)
 	/// </summary>
 	virtual bool RightStickDirection(int) = 0;
 };

@@ -9,8 +9,16 @@ class Dimension
 public:
 	Dimension(int, int);
 	~Dimension();
-	int Width;
-	int Height;
+
+	/// <summary>
+	/// The width of the dimension.
+	/// </summary>
+	int width;
+
+	/// <summary>
+	/// The height of the dimension.
+	/// </summary>
+	int height;
 };
 
 #endif

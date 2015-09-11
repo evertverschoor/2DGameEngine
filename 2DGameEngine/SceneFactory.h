@@ -8,7 +8,6 @@
 #include "GamepadInputReciever.h"
 #include "PcInputReciever.h"
 #include "Logger.h"
-#include <string>
 
 /// <summary>
 /// The Scene Factory is called upon whenever a new scene needs to be created and loaded for use.
@@ -29,10 +28,10 @@ public:
 	/// </summary>
 	Scene* GetScene(int);
 private:
-	AssetManager* ResourceManager;
-	SceneLoader* Loader;
-	Scene* CreatedScenes[MAX_SCENES];
-	int NumberOfScenes;
+	AssetManager* resourceManager;
+	SceneLoader* loader;
+	Scene* createdScenes[MAX_SCENES];
+	int numberOfScenes;
 };
 
 #endif

@@ -3,17 +3,17 @@
 
 KeyboardState::KeyboardState(std::map<int, bool> _map)
 {
-	FinalKeyboardMap = _map;
+	finalKeyboardMap = _map;
 }
 
 
 KeyboardState::~KeyboardState()
 {
-	FinalKeyboardMap.clear();
+	finalKeyboardMap.clear();
 }
 
 
 bool KeyboardState::IsKeyPressed(int _key)
 {
-	return FinalKeyboardMap[_key];
+	return finalKeyboardMap[_key];
 }

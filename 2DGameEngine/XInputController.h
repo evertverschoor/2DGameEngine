@@ -3,12 +3,17 @@
 #define XINPUTCONTROLLER_H
 
 #include "XInputGamepadState.h"
-#include <Windows.h>
 #include <Xinput.h>
 
+/// <summary>
+/// An XInput-based controller (Xbox 360/Xbox one controllers, or any input reciever from third-party apps like DS4Windows)
+/// </summary>
 class XInputController
 {
 public:
+	/// <summary>
+	/// @param The gamepad number.
+	/// </summary>
 	XInputController(int);
 	~XInputController();
 
@@ -29,9 +34,9 @@ public:
 	/// </summary>
 	int Vibrate(int, int);
 private:
-	int ControllerNumber;
-	XINPUT_STATE ControllerState;
-	XInputGamepadState* AbstractState;
+	int controllerNumber;
+	XINPUT_STATE controllerState;
+	XInputGamepadState* abstractState;
 };
 
 #endif

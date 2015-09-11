@@ -39,10 +39,13 @@ public:
 	/// </summary>
 	int OnGameUpdate();
 protected:
-	Entity* InhabitingEntities[MAX_ENTITIES];
+	/// <summary>
+	/// A list of all the entities that are in the scene.
+	/// </summary>
+	Entity* inhabitingEntities[MAX_ENTITIES];
 private:
-	int NumberOfEntities;
-	std::string Name;
+	int numberOfEntities;
+	std::string name;
 };
 
 #endif

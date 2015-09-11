@@ -18,15 +18,17 @@ COULD HAVES:
 
 CHANGELOG:
 
-Sept. 11, 2015
+Sept. 10, 2015
 
 -> Added Sharpening and Motion Blur postprocessing effects, and a class to test motion blur through moving the mouse.
 
-Sept. 12, 2015
+Sept. 11, 2015
 
 -> Added Saturation effect and support for multiple postprocessing effects to work at the same time.
 
 -> Bit of refactoring and renaming some classes to more proper names, stable build before majoring refactoring that might break stuff.
+
+-> Fixed code convention for class variable names, added more documentation where needed and removed obsolete includes.
 
 BENCHMARKS:
 
@@ -34,10 +36,10 @@ BENCHMARKS:
 	Running on weaker card without vsync(so the framerate isnt capped at 60)
 	Specs: A10-5750M with Radeon HD 8650G, Windows 10
 
-Sept. 11, 2015
+Sept. 10, 2015
 
 -> avg 50-60fps during heavy motion blur
 
-Sept. 12, 2015
+Sept. 11, 2015
 
 -> avg 60+fps during heavy motion blur

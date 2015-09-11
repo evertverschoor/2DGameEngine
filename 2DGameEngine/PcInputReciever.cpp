@@ -1,28 +1,26 @@
 #include "PcInputReciever.h"
-#include <Windowsx.h>
-#include "Logger.h"
 
 
 PcInputReciever::PcInputReciever()
 {
-	NumberOfHandlers = 0;
-	PresentableKeyboardState = new KeyboardState(CurrentKeyboardMap);
-	CurrentMouseMap = new ConstantMouseState();
+	numberOfHandlers = 0;
+	presentableKeyboardState = new KeyboardState(currentKeyboardMap);
+	currentMouseMap = new ConstantMouseState();
 }
 
 
 PcInputReciever::~PcInputReciever()
 {
-	CurrentKeyboardMap.clear();
-	delete PresentableKeyboardState;
+	currentKeyboardMap.clear();
+	delete presentableKeyboardState;
 }
 
 
 int PcInputReciever::AddPcHandler(PcInputHandler* _handler)
 {
-	if (NumberOfHandlers == MAX_HANDLERS) return 0;
-	HandlerList[NumberOfHandlers] = _handler;
-	++NumberOfHandlers;
+	if (numberOfHandlers == MAX_HANDLERS) return 0;
+	handlerList[numberOfHandlers] = _handler;
+	++numberOfHandlers;
 	return 1;
 }
 
@@ -32,10 +30,10 @@ int PcInputReciever::ReadInput()
 	ClearKeyboardState();
 	ClearMouseState();
 
-	for (int i = 0; i < NumberOfHandlers; ++i)
+	for (int i = 0; i < numberOfHandlers; ++i)
 	{
-		HandlerList[i]->HandleKeyboardInput(PresentableKeyboardState);
-		HandlerList[i]->HandleMouseInput(PresentableMouseState);
+		handlerList[i]->HandleKeyboardInput(presentableKeyboardState);
+		handlerList[i]->HandleMouseInput(presentableMouseState);
 	}
 
 	return 1;
@@ -44,49 +42,49 @@ int PcInputReciever::ReadInput()
 
 int PcInputReciever::KeyPressed(WPARAM _key)
 {
-	CurrentKeyboardMap[_key] = true;
+	currentKeyboardMap[_key] = true;
 	return 1;
 }
 
 
 int PcInputReciever::KeyReleased(WPARAM _key)
 {
-	CurrentKeyboardMap[_key] = false;
+	currentKeyboardMap[_key] = false;
 	return 1;
 }
 
 
 int PcInputReciever::MouseMoved(LPARAM _mouse)
 {
-	CurrentMouseMap->SetCursorPosition(GET_X_LPARAM(_mouse), GET_Y_LPARAM(_mouse));
+	currentMouseMap->SetCursorPosition(GET_X_LPARAM(_mouse), GET_Y_LPARAM(_mouse));
 	return 1;
 }
 
 
 int PcInputReciever::MouseButtonPressed(int _button)
 {
-	CurrentMouseMap->SetButtonPressed(_button, true);
+	currentMouseMap->SetButtonPressed(_button, true);
 	return 1;
 }
 
 
 int PcInputReciever::MouseButtonReleased(int _button)
 {
-	CurrentMouseMap->SetButtonPressed(_button, false);
+	currentMouseMap->SetButtonPressed(_button, false);
 	return 1;
 }
 
 
 int PcInputReciever::ClearKeyboardState()
 {
-	delete PresentableKeyboardState;
-	PresentableKeyboardState = new KeyboardState(CurrentKeyboardMap);
+	delete presentableKeyboardState;
+	presentableKeyboardState = new KeyboardState(currentKeyboardMap);
 	return 1;
 }
 
 int PcInputReciever::ClearMouseState()
 {
-	delete PresentableMouseState;
-	PresentableMouseState = new MouseState(CurrentMouseMap);
+	delete presentableMouseState;
+	presentableMouseState = new MouseState(currentMouseMap);
 	return 1;
 }

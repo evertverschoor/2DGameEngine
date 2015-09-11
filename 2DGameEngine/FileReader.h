@@ -2,9 +2,10 @@
 #define FILEREADER_H
 
 #include <iostream>
+#include <fstream>
 
 /// <summary>
-/// Reads any ASCII-based file.
+/// Reads any text-based file.
 /// </summary>
 class FileReader
 {

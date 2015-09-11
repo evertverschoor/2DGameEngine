@@ -37,13 +37,13 @@ public:
 	/// <summary>
 	/// The actual C++ window handle.
 	/// </summary>
-	HWND Handle;
+	HWND handle;
 
 private:
-	VideoSettings* Settings;
-	PcInputReciever* PcReciever;
-	bool WindowIsUp;
-	LPCWSTR Name;
+	VideoSettings* settings;
+	PcInputReciever* pcReciever;
+	bool windowIsUp;
+	LPCWSTR name;
 	HINSTANCE* hInstance;
 };
 

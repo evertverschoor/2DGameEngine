@@ -1,16 +1,15 @@
 #include "DirectXAssetManager.h"
-#include "Logger.h"
 
 
 DirectXAssetManager::DirectXAssetManager()
 {
-	Loader = new DirectXAssetLoader();
+	loader = new DirectXAssetLoader();
 }
 
 
 DirectXAssetManager::~DirectXAssetManager()
 {
-	delete Loader;
+	delete loader;
 }
 
 
@@ -21,8 +20,8 @@ int DirectXAssetManager::LoadScene(Scene* _scene)
 	{
 		Entity* _entity = _scene->GetEntity(i);
 		ID2D1Bitmap* _bitmap;
-		int _result = Loader->LoadD2DBitmap(_entity, &_bitmap, RenderTarget);
-		AssetList[_entity] = _bitmap;
+		int _result = loader->LoadD2DBitmap(_entity, &_bitmap, renderTarget);
+		assetList[_entity] = _bitmap;
 	}
 
 	return 1;
@@ -31,12 +30,12 @@ int DirectXAssetManager::LoadScene(Scene* _scene)
 
 int DirectXAssetManager::SetRenderTarget(ID2D1RenderTarget* _target)
 {
-	RenderTarget = _target;
+	renderTarget = _target;
 	return 1;
 }
 
 
 ID2D1Bitmap* DirectXAssetManager::GetD2D1Bitmap(Entity* _entity)
 {
-	return AssetList[_entity];
+	return assetList[_entity];
 }

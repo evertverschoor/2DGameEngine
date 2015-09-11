@@ -1,77 +1,66 @@
 #include "Kernel.h"
-#include "Window.h"
-#include "Renderer.h"
-#include "DirectXRenderer.h"
-#include "Logger.h"
-#include "DirectXAssetManager.h"
-#include "XInputReciever.h"
-#include <iostream>
-#include <thread>
-#include "Color.h"
-#include "StringConverter.h"
-#include "MotionBlurTestClass.h"
 
 
 Kernel::Kernel(HINSTANCE* _hInstance)
 {
-	Log = Logger::Instance();
+	log = Logger::Instance();
 	LogNewSession();
 
 	// Set the hInstance
 	hInstance = _hInstance;
 
 	// Create the Gamepad Input Reciever as Xinput, if there are gamepads connected
-	GamepadReciever = new XInputReciever();
-	if (!GamepadReciever->HasGamepadsConnected()) GamepadReciever = NULL;
+	gamepadReciever = new XInputReciever();
+	if (!gamepadReciever->HasGamepadsConnected()) gamepadReciever = NULL;
 
 	// Create the Pc Input Reciever
-	PcReciever = new PcInputReciever();
+	pcReciever = new PcInputReciever();
 
 	// Initialize the main window
-	MainWindow = new Window(L"2D ENGINE", hInstance, PcReciever);
+	mainWindow = new Window(L"2D ENGINE", hInstance, pcReciever);
 
 	// Create a DirectX Asset Manager
 	DirectXAssetManager* _dx = new DirectXAssetManager();
 
 	// Assign it as the system's asset manager
-	ResourceManager = _dx;
+	resourceManager = _dx;
 
 	// Pass it along to the scene factory...
-	SceneManager = new SceneFactory(ResourceManager, GamepadReciever, PcReciever);
+	sceneManager = new SceneFactory(resourceManager, gamepadReciever, pcReciever);
 
 	// ...and to the renderer, which is also a DirectX renderer
-	GameRenderer = new DirectXRenderer(_dx);
+	gameRenderer = new DirectXRenderer(_dx);
 
-	VSettings = new VideoSettings();
+	vSettings = new VideoSettings();
 
-	Gfx = new GFXController(GameRenderer);
+	gfx = new GFXController(gameRenderer);
 
-	LastFrameTime = NULL;
-	NumberOfFramesMeasured = 0;
+	lastFrameTime = NULL;
+	numberOfFramesMeasured = 0;
 }
 
 
 Kernel::~Kernel()
 {
 	delete hInstance;
-	delete MainWindow;
-	delete GamepadReciever;
-	delete PcReciever;
-	delete ResourceManager;
-	delete SceneManager;
-	delete GameRenderer;
-	delete Log;
-	delete VSettings;
+	delete mainWindow;
+	delete gamepadReciever;
+	delete pcReciever;
+	delete resourceManager;
+	delete sceneManager;
+	delete gameRenderer;
+	delete log;
+	delete vSettings;
 }
 
 
 int Kernel::SetupDemoScene()
 {
-	SetActiveScene(SceneManager->CreateNewSceneFromFile("Data/Scenes/SAMPLE.scene"));
-	GameRenderer->SetDefaultTextFormat("Arial", 50.0f, RED, 1.0f);
+	SetActiveScene(sceneManager->CreateNewSceneFromFile("Data/Scenes/SAMPLE.scene"));
+	gameRenderer->SetDefaultTextFormat("Arial", 50.0f, RED, 1.0f);
 
-	MotionBlurTestClass* _test = new MotionBlurTestClass(Gfx);
-	PcReciever->AddPcHandler(_test);
+	MotionBlurTestClass* _test = new MotionBlurTestClass(gfx);
+	pcReciever->AddPcHandler(_test);
 
 	return 1;
 }
@@ -87,22 +76,22 @@ int CreateNewWindow(Window* _window)
 int Kernel::Run()
 {
 	// Load the video settings before doing anything video-related
-	VSettings->ImportVideoSettings();
+	vSettings->ImportVideoSettings();
 
 	// Pass the video settings to the window and the renderer
-	MainWindow->SetVideoSettings(VSettings);
-	GameRenderer->SetVideoSettings(VSettings);
+	mainWindow->SetVideoSettings(vSettings);
+	gameRenderer->SetVideoSettings(vSettings);
 
 	// Create a new window in a thread, so that the rest runs asynchronously
-	std::thread t1(CreateNewWindow, MainWindow);
+	std::thread t1(CreateNewWindow, mainWindow);
 
-	while (!MainWindow->IsUp())
+	while (!mainWindow->IsUp())
 	{
 		// Wait until the window is finished
 	}
 
 	// Initialize the renderer
-	int _result = GameRenderer->Init(&MainWindow->Handle);
+	int _result = gameRenderer->Init(&mainWindow->handle);
 
 	SetupDemoScene();
 
@@ -121,17 +110,17 @@ int Kernel::Run()
 int Kernel::OnGameUpdate()
 {
 	// Read input if available
-	if(GamepadReciever) GamepadReciever->ReadInput();
-	if(PcReciever) PcReciever->ReadInput();
+	if(gamepadReciever) gamepadReciever->ReadInput();
+	if(pcReciever) pcReciever->ReadInput();
 
 	// Call Act() on all entities in the active scene
-	ActiveScene->OnGameUpdate();
+	activeScene->OnGameUpdate();
 
 	// Draw the next frame
-	GameRenderer->Render(ActiveScene);
+	gameRenderer->Render(activeScene);
 
 	// Calculate the framerate
-	if (VSettings->TrackFramerate) CalculateCurrentFramerate();
+	if (vSettings->trackFramerate) CalculateCurrentFramerate();
 
 	return 1;
 }
@@ -139,9 +128,9 @@ int Kernel::OnGameUpdate()
 
 int Kernel::LogNewSession()
 {
-	Log->Log("\n-------------------------------\n");
-	Log->Log("NEW ENGINE SESSION STARTED HERE\n");
-	Log->Log("-------------------------------\n");
+	log->Log("\n-------------------------------\n");
+	log->Log("NEW ENGINE SESSION STARTED HERE\n");
+	log->Log("-------------------------------\n");
 
 	return 1;
 }
@@ -149,15 +138,15 @@ int Kernel::LogNewSession()
 
 bool Kernel::Running()
 {
-	return MainWindow->IsUp();
+	return mainWindow->IsUp();
 }
 
 
 int Kernel::SetActiveScene(Scene* _scene)
 {
-	ActiveScene = _scene;
-	Log->Log("\n\nSetting the active scene to: ");
-	Log->Log(_scene->GetName());
+	activeScene = _scene;
+	log->Log("\n\nSetting the active scene to: ");
+	log->Log(_scene->GetName());
 	return 1;
 }
 
@@ -165,28 +154,28 @@ int Kernel::CalculateCurrentFramerate()
 {
 	clock_t _currentTime = clock();
 
-	if (LastFrameTime == NULL) LastFrameTime = _currentTime;
+	if (lastFrameTime == NULL) lastFrameTime = _currentTime;
 
-	float _frameElapsedTime = ((float)_currentTime - LastFrameTime) / CLOCKS_PER_SEC;
-	LastFrameTime = _currentTime;
+	float _frameElapsedTime = ((float)_currentTime - lastFrameTime) / CLOCKS_PER_SEC;
+	lastFrameTime = _currentTime;
 
-	FrametimeList[NumberOfFramesMeasured] = _frameElapsedTime;
-	++NumberOfFramesMeasured;
+	frametimeList[numberOfFramesMeasured] = _frameElapsedTime;
+	++numberOfFramesMeasured;
 
-	if (NumberOfFramesMeasured == FRAMES_MEASURED)
+	if (numberOfFramesMeasured == FRAMES_MEASURED)
 	{
 		float _frametimeBatch = 0;
 
 		for (int i = 0; i < FRAMES_MEASURED; ++i)
 		{
-			_frametimeBatch += FrametimeList[i];
-			FrametimeList[i] = NULL;
+			_frametimeBatch += frametimeList[i];
+			frametimeList[i] = NULL;
 		}
 
 		float _avgFrametime = _frametimeBatch / FRAMES_MEASURED;
 		float _framerate = 1 / _frameElapsedTime;
-		GameRenderer->SetFPSToDraw(std::round(_framerate));
-		NumberOfFramesMeasured = 0;
+		gameRenderer->SetFPSToDraw(std::round(_framerate));
+		numberOfFramesMeasured = 0;
 	}
 
 	return 1;

@@ -1,10 +1,4 @@
 #include "VideoSettings.h"
-#include "Logger.h"
-#include "FileReader.h"
-#include "Logger.h"
-#include "wtypes.h"
-#include <iostream>
-
 
 
 VideoSettings::VideoSettings()
@@ -14,8 +8,8 @@ VideoSettings::VideoSettings()
 
 VideoSettings::~VideoSettings()
 {
-	delete ScreenRes;
-	delete MonitorRes;
+	delete screenRes;
+	delete monitorRes;
 }
 
 
@@ -52,42 +46,42 @@ int VideoSettings::SetVideoSettingsFromString(std::string _string)
 		if (_strings[i].find("Fullscreen") != std::string::npos)
 		{
 			std::string _fullscreenString = _strings[i].substr(11, _strings[i].find(";") - 11);
-			Fullscreen = (_fullscreenString == "1") ? true : false;
+			fullscreen = (_fullscreenString == "1") ? true : false;
 		}
 
 		// Check the vsync setting
 		else if (_strings[i].find("Vsync") != std::string::npos)
 		{
 			std::string _vsyncString = _strings[i].substr(6, _strings[i].find(";") - 6);
-			Vsync = (_vsyncString == "1") ? true : false;
+			vsync = (_vsyncString == "1") ? true : false;
 		}
 
 		// Check the track fps setting
 		else if (_strings[i].find("TrackFPS") != std::string::npos)
 		{
 			std::string _framerateString = _strings[i].substr(9, _strings[i].find(";") - 9);
-			TrackFramerate = (_framerateString == "1") ? true : false;
+			trackFramerate = (_framerateString == "1") ? true : false;
 		}
 
 		// Check the motion blur setting
 		else if (_strings[i].find("Motion") != std::string::npos)
 		{
 			std::string _blurString = _strings[i].substr(11, _strings[i].find(";") - 11);
-			MotionBlur = (_blurString == "1") ? true : false;
+			motionBlur = (_blurString == "1") ? true : false;
 		}
 
 		// Check the sharpen setting
 		else if (_strings[i].find("Sharpen") != std::string::npos)
 		{
 			std::string _sharpString = _strings[i].substr(8, _strings[i].find(";") - 8);
-			Sharpen = (_sharpString == "1") ? true : false;
+			sharpen = (_sharpString == "1") ? true : false;
 		}
 
 		// Check the saturation setting
 		else if (_strings[i].find("Saturation") != std::string::npos)
 		{
 			std::string _saturateString = _strings[i].substr(11, _strings[i].find(";") - 11);
-			Saturation = (_saturateString == "1") ? true : false;
+			saturation = (_saturateString == "1") ? true : false;
 		}
 
 		// Check the width setting
@@ -111,18 +105,18 @@ int VideoSettings::SetVideoSettingsFromString(std::string _string)
 	}
 
 	// Put it in a screen resolution object
-	ScreenRes = new Dimension(_width, _height);
+	screenRes = new Dimension(_width, _height);
 
 	// Log the results
 	Logger::Instance()->Log("\n\nImported these Video Settings:");
 	Logger::Instance()->Log("\nFull Screen: ");
-	Logger::Instance()->Log(Fullscreen);
+	Logger::Instance()->Log(fullscreen);
 	Logger::Instance()->Log("\nVsync: ");
-	Logger::Instance()->Log(Vsync);
+	Logger::Instance()->Log(vsync);
 	Logger::Instance()->Log("\nTrack FPS: ");
-	Logger::Instance()->Log(TrackFramerate);
+	Logger::Instance()->Log(trackFramerate);
 	Logger::Instance()->Log("\nMotion Blur: ");
-	Logger::Instance()->Log(MotionBlur);
+	Logger::Instance()->Log(motionBlur);
 	Logger::Instance()->Log("\nRender Resolution: ");
 	Logger::Instance()->Log(_width);
 	Logger::Instance()->Log("x");
@@ -138,12 +132,12 @@ int VideoSettings::DetectMonitorResolution()
 	const HWND hDesktop = GetDesktopWindow();
 	GetWindowRect(hDesktop, &desktop);
 
-	MonitorRes = new Dimension(desktop.right, desktop.bottom);
+	monitorRes = new Dimension(desktop.right, desktop.bottom);
 
 	Logger::Instance()->Log("\n\nDetected Monitor Resolution: ");
-	Logger::Instance()->Log(MonitorRes->Width);
+	Logger::Instance()->Log(monitorRes->width);
 	Logger::Instance()->Log("x");
-	Logger::Instance()->Log(MonitorRes->Height);
+	Logger::Instance()->Log(monitorRes->height);
 
 	return 1;
 }
