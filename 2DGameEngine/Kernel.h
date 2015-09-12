@@ -20,6 +20,11 @@
 #include "DirectXRenderer.h"
 #include "DirectXAssetManager.h"
 #include "XInputReciever.h"
+#include "AudioEngine.h"
+#include "AudioPlayer.h"
+#include "AudioManager.h"
+#include "XAudio2Player.h"
+#include "XAudio2Manager.h"
 #include <thread>
 
 /// <summary>
@@ -43,11 +48,18 @@ public:
 private:
 	Window* mainWindow;
 	Renderer* gameRenderer;
+
 	GamepadInputReciever* gamepadReciever;
 	PcInputReciever* pcReciever;
+
 	SceneFactory* sceneManager;
 	AssetManager* resourceManager;
 	Scene* activeScene;
+
+	AudioEngine* audioEngine;
+	AudioPlayer* audioPlayer;
+	AudioManager* audioManager;
+
 	VideoSettings* vSettings;
 	Logger* log;
 	GFXController* gfx;

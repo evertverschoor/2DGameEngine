@@ -1,10 +1,8 @@
 # 2DGameEngine
 
-PLANNED WORK:
+## Planned Work
 
 -> Support for more than one asset per entity (animations?)
-
--> Sound (XAudio probably)
 
 -> Implement proper way of making entities move (not a certain distance every frame)
 
@@ -12,17 +10,17 @@ PLANNED WORK:
 
 -> Support for actually being able to use this as a library
 
-COULD HAVES:
+## Could Haves
 
 -> OpenGL Renderer for Mac and Linux support (also xinput alternative?)
 
-CHANGELOG:
+## Changelog
 
-Sept. 10, 2015
+### Sept. 10, 2015
 
 -> Added Sharpening and Motion Blur postprocessing effects, and a class to test motion blur through moving the mouse.
 
-Sept. 11, 2015
+### Sept. 11, 2015
 
 -> Added Saturation effect and support for multiple postprocessing effects to work at the same time.
 
@@ -30,16 +28,20 @@ Sept. 11, 2015
 
 -> Fixed code convention for class variable names, added more documentation where needed and removed obsolete includes.
 
-BENCHMARKS:
+### Sept. 12, 2015
+
+-> Added sound engine using XAudio2, can now load and unload sounds and play them.
+
+## Benchmarks
 
 	Always 1080p, maxed out everything there is at the time.
 	Running on weaker card without vsync(so the framerate isnt capped at 60)
 	Specs: A10-5750M with Radeon HD 8650G, Windows 10
 
-Sept. 10, 2015
+### Sept. 10, 2015
 
 -> avg 50-60fps during heavy motion blur
 
-Sept. 11, 2015
+### Sept. 11, 2015
 
 -> avg 60+fps during heavy motion blur

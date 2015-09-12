@@ -9,6 +9,18 @@ Kernel::Kernel(HINSTANCE* _hInstance)
 	// Set the hInstance
 	hInstance = _hInstance;
 
+	// Create the XAudio2 Manager
+	XAudio2Manager* _xa = new XAudio2Manager();
+
+	// Initialize the audio manager as it
+	audioManager = _xa;
+
+	// Initialize the Audio player as XAudio2 and pass the XAudio2 manager along
+	audioPlayer = new XAudio2Player(_xa);
+
+	// Initialize the Audio Engine with the Audio Player
+	audioEngine = new AudioEngine(audioPlayer, audioManager);
+
 	// Create the Gamepad Input Reciever as Xinput, if there are gamepads connected
 	gamepadReciever = new XInputReciever();
 	if (!gamepadReciever->HasGamepadsConnected()) gamepadReciever = NULL;
@@ -33,6 +45,7 @@ Kernel::Kernel(HINSTANCE* _hInstance)
 
 	vSettings = new VideoSettings();
 
+	// Initialize the GFX Controller, passing the renderer along
 	gfx = new GFXController(gameRenderer);
 
 	lastFrameTime = NULL;
@@ -56,11 +69,14 @@ Kernel::~Kernel()
 
 int Kernel::SetupDemoScene()
 {
-	SetActiveScene(sceneManager->CreateNewSceneFromFile("Data/Scenes/SAMPLE.scene"));
+	SetActiveScene(sceneManager->CreateNewSceneFromFile("Data/Scenes/KNIGHT.scene"));
 	gameRenderer->SetDefaultTextFormat("Arial", 50.0f, RED, 1.0f);
 
 	MotionBlurTestClass* _test = new MotionBlurTestClass(gfx);
 	pcReciever->AddPcHandler(_test);
+
+	AudioEngine::Instance()->GetAudioManager()->LoadAudioPiece("Audio/Music/arkham_knight.wav");
+	AudioEngine::Instance()->GetAudioPlayer()->PlayAudioPiece("Audio/Music/arkham_knight.wav");
 
 	return 1;
 }

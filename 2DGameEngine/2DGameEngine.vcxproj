@@ -50,7 +50,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>d2d1.lib;dxguid.lib;dwrite.lib;XInput.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d2d1.lib;dxguid.lib;dwrite.lib;XInput.lib;Xaudio2.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -69,6 +69,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="2DGameEngine.cpp" />
+    <ClCompile Include="AudioEngine.cpp" />
     <ClCompile Include="ConstantMouseState.cpp" />
     <ClCompile Include="ControllableEntity.cpp" />
     <ClCompile Include="DirectXAssetLoader.cpp" />
@@ -80,6 +81,8 @@
     <ClCompile Include="MotionBlurTestClass.cpp" />
     <ClCompile Include="PcInputReciever.cpp" />
     <ClCompile Include="StringConverter.cpp" />
+    <ClCompile Include="XAudio2Manager.cpp" />
+    <ClCompile Include="XAudio2Player.cpp" />
     <ClCompile Include="XInputGamepadState.cpp" />
     <ClCompile Include="Kernel.cpp" />
     <ClCompile Include="KeyboardState.cpp" />
@@ -97,6 +100,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="AudioEngine.h" />
+    <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantMouseState.h" />
     <ClInclude Include="ControllableEntity.h" />
@@ -110,6 +116,8 @@
     <ClInclude Include="MotionBlurTestClass.h" />
     <ClInclude Include="PcInputReciever.h" />
     <ClInclude Include="StringConverter.h" />
+    <ClInclude Include="XAudio2Manager.h" />
+    <ClInclude Include="XAudio2Player.h" />
     <ClInclude Include="XInputGamepadState.h" />
     <ClInclude Include="GamepadInputHandler.h" />
     <ClInclude Include="GamepadInputReciever.h" />
