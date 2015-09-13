@@ -117,8 +117,8 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 			D2D1::Matrix3x2F::Rotation(
 			_entity->GetDirection(),
 			D2D1::Point2F(
-			_entity->GetPosition().X + (_bitmap->GetSize().width / 2),
-			_entity->GetPosition().Y + (_bitmap->GetSize().height / 2)
+			_entity->GetPosition().X + (_bitmap->GetSize().width / 2) - camera->GetPosition()->X,
+			_entity->GetPosition().Y + (_bitmap->GetSize().height / 2) - camera->GetPosition()->Y
 			)
 			)
 			);
@@ -142,6 +142,8 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 	bitmapRenderTarget->SetTransform(
 		D2D1::Matrix3x2F::Identity()
 		);
+
+	delete _actualEntitySize;
 
 	return 1;
 }
@@ -442,6 +444,7 @@ int DirectXRenderer::SetVirtualResolution(Dimension* _resolution)
 
 Position* DirectXRenderer::GetActualDrawPosition(Position* _position)
 {
+	// subtract the camera coordinates
 	_position->X -= camera->GetPosition()->X;
 	_position->Y -= camera->GetPosition()->Y;
 

@@ -43,6 +43,10 @@
 
 -> Added a camera with working mouse movement mode, hid the cursor
 
+-> Fixed visual bug where rotated entities would display at a wrong location after moving the camera
+
+-> Fixed visual bug where motion blur would keep going even after reaching the border of the scene
+
 
 ## Benchmarks
 

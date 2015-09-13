@@ -60,7 +60,7 @@ Kernel::Kernel(HINSTANCE* _hInstance)
 	gameRenderer->SetGFXController(gfx);
 
 	// Initialize the camera
-	camera = new Camera(1, &virtualResolution, gfx, vSettings);
+	camera = new Camera(0, &virtualResolution, gfx, vSettings);
 
 	// Make pc reciever
 	pcReciever->AddPcHandler(camera);

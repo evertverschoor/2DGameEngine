@@ -28,8 +28,17 @@ public:
 
 	/// <summary>
 	/// Jump the camera to new X and Y coordinates.
+	/// Using this function never makes motion blur happen.
 	/// </summary>
 	int JumpTo(int, int);
+
+	/// <summary>
+	/// Move the camera certain values in X and Y direction.
+	/// Using this function makes motion blur happen.
+	/// @param1 How far the camera moves in direction X.
+	/// @param2 How far the camera moves in direction Y.
+	/// </summary>
+	int Move(int, int);
 
 	/// <summary>
 	/// Returns the current camera position.
@@ -73,7 +82,7 @@ private:
 	/// <summary>
 	/// Move the camera using the mouse move method.
 	/// </summary>
-	int MoveCameraMouseMove(int, int);
+	int MoveCameraNormal(int, int);
 
 	/// <summary>
 	/// Calculate the motion blur from two deltas

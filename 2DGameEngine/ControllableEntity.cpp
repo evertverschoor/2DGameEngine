@@ -36,12 +36,12 @@ int ControllableEntity::HandleGamepadInput(GamepadState* _state)
 		JumpTo(GetPosition().X + 3, GetPosition().Y);
 		++_vibrate;
 	}
-	if (_state->RightStickDirection(GAMEPADSTATE_RIGHT))
+	if (_state->RightBumper())
 	{
 		SetDirection(GetDirection() + 3);
 		++_vibrate;
 	}
-	if (_state->RightStickDirection(GAMEPADSTATE_LEFT))
+	if (_state->LeftBumper())
 	{
 		SetDirection(GetDirection() - 3);
 		++_vibrate;

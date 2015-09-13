@@ -12,7 +12,7 @@ Camera::Camera(int _gamepadno, Dimension* _virtualResolution, GFXController* _gf
 	cameraPosition.Y = 0;
 
 	// Default camera movement mode is MOUSE_MOVE
-	SetCameraMovement(CameraMovement::MOUSE_MOVE);
+	SetCameraMovement(CameraMovement::NORMAL);
 
 	lastMouseX = NULL;
 	lastMouseY = NULL;
@@ -37,8 +37,32 @@ Camera::~Camera()
 
 int Camera::JumpTo(int _x, int _y)
 {
-	if (_x >= 0 && _x <= sceneSize->width - virtualResolution->width) cameraPosition.X = _x;
-	if (_y >= 0 && _y <= sceneSize->height - virtualResolution->height) cameraPosition.Y = _y;
+	cameraPosition.X = _x;
+	cameraPosition.Y = _y;
+
+	return 1;
+}
+
+
+int Camera::Move(int _x, int _y)
+{
+	// Calculate the new position
+	int _newPosX = cameraPosition.X + _x;
+	int _newPosY = cameraPosition.Y + _y;
+
+	// Validate the new position for values below 0
+	if (0 > _newPosX) _newPosX = 0;
+	if (0 > _newPosY) _newPosY = 0;
+
+	// Validate the new position for values above the scene size
+	if (sceneSize->width < _newPosX) _newPosX = sceneSize->width;
+	if (sceneSize->height < _newPosY) _newPosY = sceneSize->height;
+
+	// Calculate motion blur based on x and y move values, if turned on
+	if (settings->motionBlur) CalculateMotionBlur(_newPosX - cameraPosition.X, _newPosY - cameraPosition.Y);
+
+	// Make the jump
+	JumpTo(_newPosX, _newPosY);
 
 	return 1;
 }
@@ -72,7 +96,30 @@ int Camera::GetGamepadNumber()
 
 int Camera::HandleGamepadInput(GamepadState* _state)
 {
-	return 1;
+	// Initialize the move amounts, depending on what direction(s) the stick is facing
+	int _moveX = 0;
+	int _moveY = 0;
+
+	if (_state->RightStickDirection(GAMEPADSTATE_RIGHT))
+	{
+		_moveX += 50;
+	}
+	if (_state->RightStickDirection(GAMEPADSTATE_LEFT))
+	{
+		_moveX -= 50;
+	}
+	if (_state->RightStickDirection(GAMEPADSTATE_UP))
+	{
+		_moveY -= 50;
+	}
+	if (_state->RightStickDirection(GAMEPADSTATE_DOWN))
+	{
+		_moveY += 50;
+	}
+
+	Move(_moveX, _moveY);
+
+	return 0;
 }
 
 
@@ -98,8 +145,8 @@ int Camera::HandleMouseInput(MouseState*_state )
 	// See if the camera needs to be moved based on the movement method
 	switch (movement)
 	{
-		case MOUSE_MOVE: 
-			MoveCameraMouseMove(_mouseX, _mouseY); 
+		case NORMAL: 
+			MoveCameraNormal(_mouseX, _mouseY); 
 			break;
 		case EDGE_PAN: 
 			MoveCameraEdgePan(_mouseX, _mouseY); 
@@ -114,7 +161,7 @@ int Camera::HandleMouseInput(MouseState*_state )
 }
 
 
-int Camera::MoveCameraMouseMove(int _mouseX, int _mouseY)
+int Camera::MoveCameraNormal(int _mouseX, int _mouseY)
 {
 	// If the mouse is located at the center, it means this is the call from SetCursorPos at the bottom of this function, ignore it
 	if (_mouseX == windowCenterX && _mouseY == windowCenterY) return 0;
@@ -138,16 +185,8 @@ int Camera::MoveCameraMouseMove(int _mouseX, int _mouseY)
 		_deltaY = _mouseY - windowCenterY;
 	}
 
-	/*Logger::Instance()->Log("\nMouseX: ");
-	Logger::Instance()->Log(_mouseX);
-	Logger::Instance()->Log("\nMouseY: ");
-	Logger::Instance()->Log(_mouseY);*/
-
-	// Replace the camera based on that distance
-	JumpTo(cameraPosition.X + _deltaX, cameraPosition.Y + _deltaY);
-
-	// Calculate motion blur based on this information, if turned on
-	if (settings->motionBlur) CalculateMotionBlur(_deltaX, _deltaY);
+	// Move the camera in deltaX and deltaY direction
+	Move(_deltaX, _deltaY);
 
 	// Return the cursor to the center of the screen
 	SetCursorPos(monitorCenterX, monitorCenterY);
