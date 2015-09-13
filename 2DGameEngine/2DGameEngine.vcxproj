@@ -70,6 +70,7 @@
   <ItemGroup>
     <ClCompile Include="2DGameEngine.cpp" />
     <ClCompile Include="AudioEngine.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConstantMouseState.cpp" />
     <ClCompile Include="ControllableEntity.cpp" />
     <ClCompile Include="DirectXAssetLoader.cpp" />
@@ -78,7 +79,6 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="GFXController.cpp" />
-    <ClCompile Include="MotionBlurTestClass.cpp" />
     <ClCompile Include="PcInputReciever.cpp" />
     <ClCompile Include="StringConverter.cpp" />
     <ClCompile Include="XAudio2Manager.cpp" />
@@ -103,6 +103,8 @@
     <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="AudioPlayer.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraMovement.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantMouseState.h" />
     <ClInclude Include="ControllableEntity.h" />
@@ -113,7 +115,6 @@
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="GamepadState.h" />
     <ClInclude Include="GFXController.h" />
-    <ClInclude Include="MotionBlurTestClass.h" />
     <ClInclude Include="PcInputReciever.h" />
     <ClInclude Include="StringConverter.h" />
     <ClInclude Include="XAudio2Manager.h" />

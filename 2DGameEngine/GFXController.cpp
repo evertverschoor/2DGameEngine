@@ -1,9 +1,10 @@
 #include "GFXController.h"
 
 
-GFXController::GFXController(Renderer* _renderer)
+GFXController::GFXController()
 {
-	gameRenderer = _renderer;
+	motionBlurAmount = 0.0f;
+	motionBlurAngle = 0.0f;
 }
 
 
@@ -13,6 +14,20 @@ GFXController::~GFXController()
 
 int GFXController::SetMotionBlur(float _angle, float _amount)
 {
-	gameRenderer->SetMotionBlur(_angle, _amount);
+	motionBlurAngle = _angle;
+	motionBlurAmount = _amount;
+
 	return 1;
+}
+
+
+float GFXController::GetMotionBlurAmount()
+{
+	return motionBlurAmount;
+}
+
+
+float GFXController::GetMotionBlurAngle()
+{
+	return motionBlurAngle;
 }

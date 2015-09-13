@@ -6,6 +6,8 @@
 #include "VideoSettings.h"
 #include "Dimension.h"
 #include "Color.h"
+#include "Camera.h"
+#include "GFXController.h"
 
 /// <summary>
 /// The renderer is an interface that will be realized by a DirectX Renderer.
@@ -55,11 +57,14 @@ public:
 	virtual int SetFPSToDraw(int) = 0;
 
 	/// <summary>
-	/// Set the current motion blur angle and amount, put 0.0f on amount for no motion blur.
-	/// @param1 The motion blur angle, between 0 and 360.
-	/// @param2 The motion blur amount.
+	/// Set the camera the renderer will use to determine what portion of the active scene to draw.
 	/// </summary>
-	virtual int SetMotionBlur(float, float) = 0;
+	virtual int SetCamera(Camera*) = 0;
+
+	/// <summary>
+	/// Set the GFX Controller the renderer uses to get postprocessing information from.
+	/// </summary>
+	virtual int SetGFXController(GFXController*) = 0;
 };
 
 #endif

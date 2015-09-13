@@ -6,11 +6,6 @@ DirectXRenderer::DirectXRenderer(DirectXAssetManager* _assetmanager)
 	resourceManager = _assetmanager;
 	factory = NULL;
 	renderTarget = NULL;
-
-	motionBlurAngle = 0.0f;
-	motionBlurAmount = 0.0f;
-
-	SetVirtualResolution(new Dimension(1920, 1080));
 }
 
 
@@ -66,12 +61,15 @@ int DirectXRenderer::PostProcess(ID2D1Bitmap* _bitmap)
 	}
 
 	// Apply motion blur if turned on
-	if (settings->motionBlur && motionBlurAmount > 0.0f)
+	if (settings->motionBlur && gfx->GetMotionBlurAmount() > 0.0f)
 	{
 		motionBlur->SetInput(0, _finalImage);
-		motionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_ANGLE, motionBlurAngle);
-		motionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_STANDARD_DEVIATION, motionBlurAmount);
+		motionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_ANGLE, gfx->GetMotionBlurAngle());
+		motionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_STANDARD_DEVIATION, gfx->GetMotionBlurAmount());
 		motionBlur->GetOutput(&_finalImage);
+
+		// Reset the motion blur data after we're done
+		gfx->SetMotionBlur(0.0f, 0.0f);
 	}
 
 	// Apply sharpening if turned on
@@ -352,24 +350,20 @@ int DirectXRenderer::SetVideoSettings(VideoSettings* _settings)
 	return 1;
 }
 
-int DirectXRenderer::SetMotionBlur(float _angle, float _amount)
+
+int DirectXRenderer::SetCamera(Camera* _camera)
 {
-	// Set the angle
-	if (_angle > 0.0f && _angle < 360.0f) motionBlurAngle = _angle;
-	else
-	{
-		motionBlurAngle = 0.0f;
-	}
-
-	// Set the amount
-	if (_amount > 0.0f) motionBlurAmount = _amount;
-	else
-	{
-		motionBlurAmount = 0.0f;
-	}
-
+	camera = _camera;
 	return 1;
 }
+
+
+int DirectXRenderer::SetGFXController(GFXController* _gfx)
+{
+	gfx = _gfx;
+	return 1;
+}
+
 
 int DirectXRenderer::SetDefaultTextFormat(std::string _fontname, float _fontsize, Color _color, float _transparency)
 {
@@ -448,6 +442,9 @@ int DirectXRenderer::SetVirtualResolution(Dimension* _resolution)
 
 Position* DirectXRenderer::GetActualDrawPosition(Position* _position)
 {
+	_position->X -= camera->GetPosition()->X;
+	_position->Y -= camera->GetPosition()->Y;
+
 	// If the virtual resolution and actual resolution are the same, this doesnt need to happen.
 	if (virtualResolution->height == settings->screenRes->height && virtualResolution->width == settings->screenRes->width)
 	{

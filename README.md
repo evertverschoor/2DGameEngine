@@ -36,7 +36,12 @@
 
 -> Added sound engine using XAudio2, can now load and unload sounds and play them.
 
--> Split VideoSettings and GraphicsSettings into two files, added Brighten effect, fixed Sharpen visual bug
+-> Split VideoSettings and GraphicsSettings into two files, added Brighten effect, fixed Sharpen visual bug.
+
+
+### Sept. 13, 2015
+
+-> Added a camera with working mouse movement mode, hid the cursor
 
 
 ## Benchmarks

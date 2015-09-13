@@ -84,9 +84,6 @@
     <ClCompile Include="Dimension.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MotionBlurTestClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GFXController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -100,6 +97,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="XAudio2Manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -191,9 +191,6 @@
     <ClInclude Include="Dimension.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MotionBlurTestClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GFXController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -213,6 +210,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="XAudio2Manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraMovement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

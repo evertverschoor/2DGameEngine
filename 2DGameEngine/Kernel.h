@@ -16,7 +16,6 @@
 #include "GamepadInputReciever.h"
 #include "PcInputReciever.h"
 #include "GFXController.h"
-#include "MotionBlurTestClass.h"
 #include "DirectXRenderer.h"
 #include "DirectXAssetManager.h"
 #include "XInputReciever.h"
@@ -25,7 +24,11 @@
 #include "AudioManager.h"
 #include "XAudio2Player.h"
 #include "XAudio2Manager.h"
+#include "Camera.h"
 #include <thread>
+
+#define VIRTUAL_RESOLUTION_WIDTH 1920
+#define VIRTUAL_RESOLUTION_HEIGHT 1080
 
 /// <summary>
 /// The kernel is the starting point for the engine.
@@ -48,6 +51,7 @@ public:
 private:
 	Window* mainWindow;
 	Renderer* gameRenderer;
+	Camera* camera;
 
 	GamepadInputReciever* gamepadReciever;
 	PcInputReciever* pcReciever;
@@ -64,6 +68,8 @@ private:
 	Logger* log;
 	GFXController* gfx;
 	HINSTANCE* hInstance;
+
+	Dimension virtualResolution;
 
 	// Objects for measuring the framerate.
 	clock_t lastFrameTime;

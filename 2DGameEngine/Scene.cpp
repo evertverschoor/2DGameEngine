@@ -1,9 +1,10 @@
 #include "Scene.h"
 
 
-Scene::Scene(std::string _name)
+Scene::Scene(std::string _name, Dimension* _size)
 {
 	name = _name;
+	size = _size;
 	numberOfEntities = 0;
 }
 
@@ -47,4 +48,10 @@ int Scene::EntityCount()
 std::string Scene::GetName()
 {
 	return name;
+}
+
+
+Dimension* Scene::GetSize()
+{
+	return size;
 }

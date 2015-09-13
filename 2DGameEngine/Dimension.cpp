@@ -8,6 +8,12 @@ Dimension::Dimension(int _width, int _height)
 }
 
 
+Dimension::Dimension()
+{
+}
+
+
+
 Dimension::~Dimension()
 {
 }

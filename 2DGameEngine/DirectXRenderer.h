@@ -34,7 +34,8 @@ public:
 	int SetDefaultTextFormat(std::string, float, Color, float);
 	int SetVirtualResolution(Dimension*);
 	int SetFPSToDraw(int);
-	int SetMotionBlur(float, float);
+	int SetCamera(Camera*);
+	int SetGFXController(GFXController*);
 private:
 	// DirectX objects
 	ID2D1Factory* factory;
@@ -43,10 +44,8 @@ private:
 	ID2D1BitmapRenderTarget* bitmapRenderTarget;
 	ID2D1DeviceContext* deviceContext;
 
-	// Postproccessing objects
+	// Postproccessing effects
 	Microsoft::WRL::ComPtr<ID2D1Effect> motionBlur;
-	float motionBlurAngle, motionBlurAmount;
-
 	Microsoft::WRL::ComPtr<ID2D1Effect> sharpen;
 	Microsoft::WRL::ComPtr<ID2D1Effect> saturate;
 	Microsoft::WRL::ComPtr<ID2D1Effect> brighten;
@@ -64,6 +63,8 @@ private:
 	VideoSettings* settings;
 	DirectXAssetManager* resourceManager;
 	Dimension* virtualResolution;
+	Camera* camera;
+	GFXController* gfx;
 	int framerate;
 	
 	/// <summary>

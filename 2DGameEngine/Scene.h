@@ -3,6 +3,7 @@
 #define SCENE_H
 
 #include "Entity.h"
+#include "Dimension.h"
 #include <string>
 
 /// <summary>
@@ -11,7 +12,11 @@
 class Scene
 {
 public:
-	Scene(std::string);
+	/// <summary>
+	/// @param1 The scene name.
+	/// @param2 The size of the scene in pixels (according to the virtual resolution).
+	/// </summary>
+	Scene(std::string, Dimension*);
 	~Scene();
 
 	/// <summary>
@@ -35,6 +40,11 @@ public:
 	std::string GetName();
 
 	/// <summary>
+	/// Returns the scene size.
+	/// </summary>
+	Dimension* GetSize();
+
+	/// <summary>
 	/// Call Act() on all entities in the scene.
 	/// </summary>
 	int OnGameUpdate();
@@ -46,6 +56,7 @@ protected:
 private:
 	int numberOfEntities;
 	std::string name;
+	Dimension* size;
 };
 
 #endif

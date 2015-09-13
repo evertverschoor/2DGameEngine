@@ -2,9 +2,6 @@
 #define XAUDIO2MANAGER_H
 
 #include "AudioManager.h"
-
-// TODO: Check these after for obsolete includes
-#include <windows.h>
 #include <xaudio2.h>
 #include <fstream>
 #include <map>

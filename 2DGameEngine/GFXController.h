@@ -1,15 +1,13 @@
 #ifndef GFXCONTROLLER_H
 #define GFXCONTROLLER_H
 
-#include "Renderer.h"
-
 /// <summary>
 /// The Gfx Controller can be used to activate certain postprocessing effects.
 /// </summary>
 class GFXController
 {
 public:
-	GFXController(Renderer*);
+	GFXController();
 	~GFXController();
 
 	/// <summary>
@@ -18,8 +16,18 @@ public:
 	/// @param2 The motion blur amount.
 	/// </summary>
 	int SetMotionBlur(float, float);
+
+	/// <summary>
+	/// Get the motion blur amount.
+	/// </summary>
+	float GetMotionBlurAmount();
+
+	/// <summary>
+	/// Get the motion blur angle.
+	/// </summary>
+	float GetMotionBlurAngle();
 private:
-	Renderer* gameRenderer;
+	float motionBlurAmount, motionBlurAngle;
 };
 
 #endif

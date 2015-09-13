@@ -3,6 +3,7 @@
 
 Kernel::Kernel(HINSTANCE* _hInstance)
 {
+	// Get a copy of the logger and mark a new session in the log file
 	log = Logger::Instance();
 	LogNewSession();
 
@@ -43,12 +44,40 @@ Kernel::Kernel(HINSTANCE* _hInstance)
 	// ...and to the renderer, which is also a DirectX renderer
 	gameRenderer = new DirectXRenderer(_dx);
 
+	// Initialize the video settings
 	vSettings = new VideoSettings();
 
-	// Initialize the GFX Controller, passing the renderer along
-	gfx = new GFXController(gameRenderer);
+	// Import the video and graphics settings
+	vSettings->ImportVideoSettings();
+	vSettings->ImportGraphicsSettings();
 
+	// Set the virtual resolution
+	virtualResolution.width = VIRTUAL_RESOLUTION_WIDTH;
+	virtualResolution.height = VIRTUAL_RESOLUTION_HEIGHT;
+
+	// Initialize the GFX Controller and pass it to the renderer (and camera later)
+	gfx = new GFXController();
+	gameRenderer->SetGFXController(gfx);
+
+	// Initialize the camera
+	camera = new Camera(1, &virtualResolution, gfx, vSettings);
+
+	// Make pc reciever
+	pcReciever->AddPcHandler(camera);
+
+	// Make gamepad reciever too if ther are gamepads
+	if(!gamepadReciever == NULL) gamepadReciever->AddGamepadHandler(camera);
+
+	// Pass the camera to the renderer
+	gameRenderer->SetCamera(camera);
+	
+	// Pass the virtual resolution to the camera and renderer
+	gameRenderer->SetVirtualResolution(&virtualResolution);
+
+	// Last frame time is never, but we say now since it will only mess up the first frame and we don't care
 	lastFrameTime = clock();
+
+	// 0 frames measured as of now
 	numberOfFramesMeasured = 0;
 }
 
@@ -72,9 +101,6 @@ int Kernel::SetupDemoScene()
 	SetActiveScene(sceneManager->CreateNewSceneFromFile("Data/Scenes/SAMPLE.scene"));
 	gameRenderer->SetDefaultTextFormat("Arial", 50.0f, RED, 1.0f);
 
-	MotionBlurTestClass* _test = new MotionBlurTestClass(gfx);
-	pcReciever->AddPcHandler(_test);
-
 	return 1;
 }
 
@@ -88,10 +114,6 @@ int CreateNewWindow(Window* _window)
 
 int Kernel::Run()
 {
-	// Load the video- and graphics settings before doing anything video-related
-	vSettings->ImportVideoSettings();
-	vSettings->ImportGraphicsSettings();
-
 	// Pass the video settings to the window and the renderer
 	mainWindow->SetVideoSettings(vSettings);
 	gameRenderer->SetVideoSettings(vSettings);
@@ -159,8 +181,11 @@ bool Kernel::Running()
 int Kernel::SetActiveScene(Scene* _scene)
 {
 	activeScene = _scene;
+	camera->SetActiveSceneSize(_scene->GetSize());
+
 	log->Log("\n\nSetting the active scene to: ");
 	log->Log(_scene->GetName());
+
 	return 1;
 }
 

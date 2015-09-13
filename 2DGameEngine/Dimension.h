@@ -8,6 +8,7 @@ class Dimension
 {
 public:
 	Dimension(int, int);
+	Dimension();
 	~Dimension();
 
 	/// <summary>

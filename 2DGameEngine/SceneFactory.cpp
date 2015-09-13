@@ -27,7 +27,7 @@ Scene* SceneFactory::CreateNewSceneFromFile(std::string _name)
 		return 0;
 	}
 
-	Scene* _newScene = new Scene(_name);
+	Scene* _newScene = new Scene(_name, new Dimension(3840,2160));
 	createdScenes[numberOfScenes] = _newScene;
 	++numberOfScenes;
 

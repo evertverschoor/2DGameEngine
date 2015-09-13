@@ -50,17 +50,46 @@ int Window::Launch()
 			NULL,
 			NULL,
 			*hInstance,
-			NULL);
+			NULL
+			);
 	}
 	else
 	{
-		handle = CreateWindow(L"MainWindow", name, WS_OVERLAPPEDWINDOW, 150, 150, settings->screenRes->width, settings->screenRes->height, NULL, NULL, *hInstance, NULL);
+		// Get the X and Y position the render field should be
+		int _posX = (settings->monitorRes->width - settings->screenRes->width) / 2;
+		int _posY = (settings->monitorRes->height - settings->screenRes->height) / 2;
+
+		// Put it in a rectangle
+		RECT _desiredSize;
+		_desiredSize.left = _posX;
+		_desiredSize.top = _posY;
+		_desiredSize.right = settings->screenRes->width;
+		_desiredSize.bottom = settings->screenRes->height;
+
+		// Adjust the rectangle so the render field is the size it should be
+		AdjustWindowRect(&_desiredSize, WS_CAPTION, FALSE);
+
+		handle = CreateWindow(
+			L"MainWindow", 
+			name, 
+			WS_CAPTION, 
+			_desiredSize.left, _desiredSize.top,
+			_desiredSize.right,
+			_desiredSize.bottom,
+			NULL, 
+			NULL, 
+			*hInstance, 
+			NULL
+			);
 	}
 
 	ShowWindow(handle, 5);
 	UpdateWindow(handle);
 
 	windowIsUp = true;
+
+	// Hide the cursor
+	ShowCursor(FALSE);
 
 	// Enter the message loop to send keyboard and mouse input to the Pc Input Reciever
 	MSG msg;
