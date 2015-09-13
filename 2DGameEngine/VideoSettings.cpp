@@ -22,6 +22,14 @@ int VideoSettings::ImportVideoSettings()
 }
 
 
+int VideoSettings::ImportGraphicsSettings()
+{
+	std::string _graphicsSettings = FileReader::Instance()->ReadFile("Data/GraphicsSettings.ini");
+	SetGraphicsSettingsFromString(_graphicsSettings);
+	return 1;
+}
+
+
 int VideoSettings::SetVideoSettingsFromString(std::string _string)
 {
 	std::string _strings[80];
@@ -63,27 +71,6 @@ int VideoSettings::SetVideoSettingsFromString(std::string _string)
 			trackFramerate = (_framerateString == "1") ? true : false;
 		}
 
-		// Check the motion blur setting
-		else if (_strings[i].find("Motion") != std::string::npos)
-		{
-			std::string _blurString = _strings[i].substr(11, _strings[i].find(";") - 11);
-			motionBlur = (_blurString == "1") ? true : false;
-		}
-
-		// Check the sharpen setting
-		else if (_strings[i].find("Sharpen") != std::string::npos)
-		{
-			std::string _sharpString = _strings[i].substr(8, _strings[i].find(";") - 8);
-			sharpen = (_sharpString == "1") ? true : false;
-		}
-
-		// Check the saturation setting
-		else if (_strings[i].find("Saturation") != std::string::npos)
-		{
-			std::string _saturateString = _strings[i].substr(11, _strings[i].find(";") - 11);
-			saturation = (_saturateString == "1") ? true : false;
-		}
-
 		// Check the width setting
 		else if (_strings[i].find("DrawWidth") != std::string::npos)
 		{
@@ -115,12 +102,77 @@ int VideoSettings::SetVideoSettingsFromString(std::string _string)
 	Logger::Instance()->Log(vsync);
 	Logger::Instance()->Log("\nTrack FPS: ");
 	Logger::Instance()->Log(trackFramerate);
-	Logger::Instance()->Log("\nMotion Blur: ");
-	Logger::Instance()->Log(motionBlur);
 	Logger::Instance()->Log("\nRender Resolution: ");
 	Logger::Instance()->Log(_width);
 	Logger::Instance()->Log("x");
 	Logger::Instance()->Log(_height);
+
+	return 1;
+}
+
+
+int VideoSettings::SetGraphicsSettingsFromString(std::string _string)
+{
+	std::string _strings[80];
+	std::string delimiter = ";";
+
+	int i = 0;
+	size_t pos = 0;
+	std::string token;
+	while ((pos = _string.find(delimiter)) != std::string::npos) {
+		token = _string.substr(0, pos);
+		_strings[i] = token;
+		++i;
+		_string.erase(0, pos + delimiter.length());
+	}
+
+	// Iterate through each line read
+	for (int i = 0; i < _strings->length(); i++)
+	{
+		// Check the motion blur setting
+		if (_strings[i].find("Motion") != std::string::npos)
+		{
+			std::string _blurString = _strings[i].substr(11, _strings[i].find(";") - 11);
+			motionBlur = (_blurString == "1") ? true : false;
+		}
+
+		// Check the sharpen setting
+		else if (_strings[i].find("Sharpen") != std::string::npos)
+		{
+			std::string _sharpString = _strings[i].substr(8, _strings[i].find(";") - 8);
+			sharpen = (_sharpString == "1") ? true : false;
+		}
+
+		// Check the saturation setting
+		else if (_strings[i].find("Saturate") != std::string::npos)
+		{
+			std::string _saturateString = _strings[i].substr(9, _strings[i].find(";") - 9);
+			saturate = (_saturateString == "1") ? true : false;
+		}
+
+		// Check the brighten setting
+		else if (_strings[i].find("Brighten") != std::string::npos)
+		{
+			std::string _brightenString = _strings[i].substr(9, _strings[i].find(";") - 9);
+			brighten = (_brightenString == "1") ? true : false;
+		}
+
+		else
+		{
+			break;
+		}
+	}
+
+	// Log the results
+	Logger::Instance()->Log("\n\nImported these Graphics Settings:");
+	Logger::Instance()->Log("\nMotion Blur: ");
+	Logger::Instance()->Log(motionBlur);
+	Logger::Instance()->Log("\nSharpen: ");
+	Logger::Instance()->Log(sharpen);
+	Logger::Instance()->Log("\nSaturate: ");
+	Logger::Instance()->Log(saturate);
+	Logger::Instance()->Log("\nBrighten: ");
+	Logger::Instance()->Log(brighten);
 
 	return 1;
 }

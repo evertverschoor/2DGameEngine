@@ -6,8 +6,9 @@
 #include "FileReader.h"
 
 /// <summary>
-/// A simple model that contains the video settings for the window and renderer.
-/// ScreenRes is the render resolution, while MonitorRes is the monitor's native resolution.
+/// A simple model that contains the video settings for the window and renderer from VideoSettings.ini
+/// ScreenRes is the render resolution, while MonitorRes is the monitor's native resolution
+/// It also contains additional graphics settings from GraphicsSettings.ini
 /// </summary>
 class VideoSettings
 {
@@ -43,7 +44,12 @@ public:
 	/// <summary>
 	/// Increase the saturation of the image.
 	/// </summary>
-	bool saturation;
+	bool saturate;
+
+	/// <summary>
+	/// Increase the image shadows and highlights.
+	/// </summary>
+	bool brighten;
 
 	/// <summary>
 	/// Resolution the image will be drawn at, regardless of the actual window/screen size.
@@ -56,11 +62,17 @@ public:
 	Dimension* monitorRes;
 
 	/// <summary>
-	/// Load the video settings from the video settings file.
+	/// Load the video settings from VideoSettings.ini
 	/// </summary>
 	int ImportVideoSettings();
+
+	/// <summary>
+	/// Load the video settings from GraphicsSettings.ini
+	/// </summary>
+	int ImportGraphicsSettings();
 private:
 	int SetVideoSettingsFromString(std::string);
+	int SetGraphicsSettingsFromString(std::string);
 	int DetectMonitorResolution();
 };
 

@@ -58,6 +58,13 @@ int DirectXRenderer::PostProcess(ID2D1Bitmap* _bitmap)
 
 	deviceContext->BeginDraw();
 
+	// Apply saturation if turned on
+	if (settings->saturate)
+	{
+		saturate->SetInput(0, _finalImage);
+		saturate.Get()->GetOutput(&_finalImage);
+	}
+
 	// Apply motion blur if turned on
 	if (settings->motionBlur && motionBlurAmount > 0.0f)
 	{
@@ -67,20 +74,20 @@ int DirectXRenderer::PostProcess(ID2D1Bitmap* _bitmap)
 		motionBlur->GetOutput(&_finalImage);
 	}
 
-	// Apply saturation if turned on
-	if (settings->saturation)
-	{
-		saturation->SetInput(0, _finalImage);
-		saturation.Get()->GetOutput(&_finalImage);
-	}
-
 	// Apply sharpening if turned on
 	if (settings->sharpen)
 	{
 		sharpen->SetInput(0, _finalImage);
 		sharpen.Get()->GetOutput(&_finalImage);
 	}
-	
+
+	// Apply brightening if turned on
+	if (settings->brighten)
+	{
+		brighten->SetInput(0, _finalImage);
+		brighten.Get()->GetOutput(&_finalImage);
+	}
+
 	// Draw the processsed image to the backbuffer
 	deviceContext->DrawImage(_finalImage);
 
@@ -272,7 +279,8 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_MATRIX, _matrix);
 			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_X, 3);
 			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_Y, 3);
-			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_DIVISOR, 7.0f);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_DIVISOR, 6.0f);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_PRESERVE_ALPHA, TRUE);
 		}
 
 		// Screen resolution around 1080p/1440p
@@ -291,7 +299,8 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_MATRIX, _matrix);
 			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_X, 5);
 			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_Y, 5);
-			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_DIVISOR, 8.0f);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_DIVISOR, 7.0f);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_PRESERVE_ALPHA, TRUE);
 		}
 
 		// Screen resolution around 4k or higher
@@ -310,15 +319,23 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_MATRIX, _matrix);
 			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_X, 5);
 			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_KERNEL_SIZE_Y, 5);
-			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_DIVISOR, 13.0f);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_DIVISOR, 9.0f);
+			sharpen->SetValue(D2D1_CONVOLVEMATRIX_PROP_PRESERVE_ALPHA, TRUE);
 		}
 	}
 
 	// Set up the saturation effect
-	if (settings->saturation)
+	if (settings->saturate)
 	{
-		deviceContext->CreateEffect(CLSID_D2D1Saturation, &saturation);
-		saturation->SetValue(D2D1_SATURATION_PROP_SATURATION, 1.8f);
+		deviceContext->CreateEffect(CLSID_D2D1Saturation, &saturate);
+		saturate->SetValue(D2D1_SATURATION_PROP_SATURATION, 1.8f);
+	}
+
+	// Set up the brighten effect
+	if (settings->brighten)
+	{
+		deviceContext->CreateEffect(CLSID_D2D1Brightness, &brighten);
+		brighten->SetValue(D2D1_BRIGHTNESS_PROP_BLACK_POINT, D2D1::Vector2F(0.0f, 0.2f));
 	}
 
 	positionForFPS = GetActualDrawPosition(new Position(5, 5, 5));

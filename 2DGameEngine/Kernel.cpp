@@ -48,7 +48,7 @@ Kernel::Kernel(HINSTANCE* _hInstance)
 	// Initialize the GFX Controller, passing the renderer along
 	gfx = new GFXController(gameRenderer);
 
-	lastFrameTime = NULL;
+	lastFrameTime = clock();
 	numberOfFramesMeasured = 0;
 }
 
@@ -69,14 +69,11 @@ Kernel::~Kernel()
 
 int Kernel::SetupDemoScene()
 {
-	SetActiveScene(sceneManager->CreateNewSceneFromFile("Data/Scenes/KNIGHT.scene"));
+	SetActiveScene(sceneManager->CreateNewSceneFromFile("Data/Scenes/SAMPLE.scene"));
 	gameRenderer->SetDefaultTextFormat("Arial", 50.0f, RED, 1.0f);
 
 	MotionBlurTestClass* _test = new MotionBlurTestClass(gfx);
 	pcReciever->AddPcHandler(_test);
-
-	AudioEngine::Instance()->GetAudioManager()->LoadAudioPiece("Audio/Music/arkham_knight.wav");
-	AudioEngine::Instance()->GetAudioPlayer()->PlayAudioPiece("Audio/Music/arkham_knight.wav");
 
 	return 1;
 }
@@ -91,8 +88,9 @@ int CreateNewWindow(Window* _window)
 
 int Kernel::Run()
 {
-	// Load the video settings before doing anything video-related
+	// Load the video- and graphics settings before doing anything video-related
 	vSettings->ImportVideoSettings();
+	vSettings->ImportGraphicsSettings();
 
 	// Pass the video settings to the window and the renderer
 	mainWindow->SetVideoSettings(vSettings);
@@ -170,8 +168,6 @@ int Kernel::CalculateCurrentFramerate()
 {
 	clock_t _currentTime = clock();
 
-	if (lastFrameTime == NULL) lastFrameTime = _currentTime;
-
 	float _frameElapsedTime = ((float)_currentTime - lastFrameTime) / CLOCKS_PER_SEC;
 	lastFrameTime = _currentTime;
 
@@ -190,7 +186,8 @@ int Kernel::CalculateCurrentFramerate()
 
 		float _avgFrametime = _frametimeBatch / FRAMES_MEASURED;
 		float _framerate = 1 / _frameElapsedTime;
-		gameRenderer->SetFPSToDraw(std::round(_framerate));
+		//gameRenderer->SetFPSToDraw(std::round(_framerate));
+		gameRenderer->SetFPSToDraw(_framerate);
 		numberOfFramesMeasured = 0;
 	}
 
