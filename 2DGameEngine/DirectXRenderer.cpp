@@ -23,7 +23,7 @@ int DirectXRenderer::Render(Scene* _renderableScene)
 {
 	// Start drawing on a blank bitmap
 	bitmapRenderTarget->BeginDraw();
-	WipeScreen(0, 0, 1);
+	bitmapRenderTarget->Clear(D2D1::ColorF(0, 0, 1));
 
 	// Draw each entity in the scene
 	for (int i = 0; i < _renderableScene->EntityCount(); i++)
@@ -98,17 +98,14 @@ int DirectXRenderer::PostProcess(ID2D1Bitmap* _bitmap)
 }
 
 
-int DirectXRenderer::WipeScreen(float _red, float _green, float _blue)
-{
-	bitmapRenderTarget->Clear(D2D1::ColorF(_red, _green, _blue));
-	return 1;
-}
-
-
 int DirectXRenderer::DrawEntity(Entity* _entity)
 {
 	// Define the entity's bitmap to draw
-	ID2D1Bitmap* _bitmap = resourceManager->GetD2D1Bitmap(_entity);
+	ID2D1Bitmap* _bitmap = resourceManager->GetD2D1BitmapForEntity(_entity);
+
+	// calculate the actual entity size and position
+	Position* _actualEntityPosition = GetActualDrawPosition(&_entity->GetPosition());
+	Dimension* _actualEntitySize = GetActualDrawSize(new Dimension(_bitmap->GetSize().width, _bitmap->GetSize().height));
 
 	// Set the rotation for the bitmap, if necessary
 	if (_entity->GetDirection() != 0)
@@ -117,19 +114,16 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 			D2D1::Matrix3x2F::Rotation(
 			_entity->GetDirection(),
 			D2D1::Point2F(
-			_entity->GetPosition().X + (_bitmap->GetSize().width / 2) - camera->GetPosition()->X,
-			_entity->GetPosition().Y + (_bitmap->GetSize().height / 2) - camera->GetPosition()->Y
+			_actualEntityPosition->X + (_actualEntitySize->width / 2),
+			_actualEntityPosition->Y + (_actualEntitySize->height / 2)
 			)
 			)
 			);
 	}
 
-	Position* _actualEntityPosition = GetActualDrawPosition(&_entity->GetPosition());
-	Dimension* _actualEntitySize = GetActualDrawSize(new Dimension(_bitmap->GetSize().width, _bitmap->GetSize().height));
-
 	// Draw the bitmap
 	bitmapRenderTarget->DrawBitmap(
-		resourceManager->GetD2D1Bitmap(_entity),
+		resourceManager->GetD2D1BitmapForEntity(_entity),
 		D2D1::RectF(
 		_actualEntityPosition->X,
 		_actualEntityPosition->Y,
@@ -166,6 +160,41 @@ int DirectXRenderer::WriteText(std::string _text, Position* _position)
 		D2D1_DRAW_TEXT_OPTIONS_CLIP,
 		DWRITE_MEASURING_MODE_NATURAL
 		);
+
+	return 1;
+}
+
+
+int DirectXRenderer::DrawEngineSplash(float _red, float _green, float _blue)
+{
+	// Prep screen
+	renderTarget->BeginDraw();
+	renderTarget->Clear(D2D1::ColorF(_red, _green, _blue));
+
+	// Get the loaded splash screen bitmap
+	ID2D1Bitmap* _bitmap = resourceManager->GetSingleBitmap("Assets/Engine/splash_screen.png");
+
+	// Calculate the actual bitmap size
+	Dimension* _actualBitmapSize = GetActualDrawSize(new Dimension(_bitmap->GetSize().width, _bitmap->GetSize().height));
+
+	// Calculate the draw position, always draw at the center of the screen
+	int _posX = (settings->screenRes->width / 2) - (_actualBitmapSize->width / 2);
+	int _posY = (settings->screenRes->height / 2) - (_actualBitmapSize->height / 2);
+
+	// Draw the bitmap
+	renderTarget->DrawBitmap(
+		_bitmap,
+		D2D1::RectF(
+		_posX,
+		_posY,
+		_posX + _actualBitmapSize->width,
+		_posY + _actualBitmapSize->height
+		)
+		);
+
+	// Finalize
+	renderTarget->EndDraw();
+	delete _actualBitmapSize;
 
 	return 1;
 }
@@ -220,7 +249,7 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 		return -4;
 	}
 
-	SetDefaultTextFormat("Arial", 72.0f, RED, 1.0f);
+	SetDefaultTextFormat("Segoe UI", 244.0f, WHITE, 1.0f);
 
 	// Set the font family and size for the in-engine text
 	_result = dWriteFactory->CreateTextFormat(
@@ -448,47 +477,26 @@ Position* DirectXRenderer::GetActualDrawPosition(Position* _position)
 	_position->X -= camera->GetPosition()->X;
 	_position->Y -= camera->GetPosition()->Y;
 
-	// If the virtual resolution and actual resolution are the same, this doesnt need to happen.
-	if (virtualResolution->height == settings->screenRes->height && virtualResolution->width == settings->screenRes->width)
-	{
-		return _position;
-	}
-	else
-	{
-		_position->X = (_position->X * settings->screenRes->width) / virtualResolution->width;
-		_position->Y = (_position->Y * settings->screenRes->height) / virtualResolution->height;
+	// adjust the position to the actual resolution
+	_position->X = (_position->X * settings->screenRes->width) / virtualResolution->width;
+	_position->Y = (_position->Y * settings->screenRes->height) / virtualResolution->height;
 
-		return _position;
-	}
+	return _position;
 }
 
 Dimension* DirectXRenderer::GetActualDrawSize(Dimension* _size)
 {
-	// If the virtual resolution and actual resolution are the same, this doesnt need to happen.
-	if (virtualResolution->height == settings->screenRes->height && virtualResolution->width == settings->screenRes->width)
-	{
-		return _size;
-	}
-	else
-	{
-		_size->width = (_size->width * settings->screenRes->width) / virtualResolution->width;
-		_size->height = (_size->height * settings->screenRes->height) / virtualResolution->height;
-		return _size;
-	}
+	_size->width = (_size->width * settings->screenRes->width) / virtualResolution->width;
+	_size->height = (_size->height * settings->screenRes->height) / virtualResolution->height;
+
+	return _size;
 }
 
 float DirectXRenderer::GetActualFontSize(float _size)
 {
-	// If the virtual resolution and actual resolution are the same, this doesnt need to happen.
-	if (virtualResolution->height == settings->screenRes->height && virtualResolution->width == settings->screenRes->width)
-	{
-		return _size;
-	}
-	else
-	{
-		_size = (_size * settings->screenRes->width) / virtualResolution->width;
-		return _size;
-	}
+	_size = (_size * settings->screenRes->width) / virtualResolution->width;
+
+	return _size;
 }
 
 int DirectXRenderer::SetFPSToDraw(int _framerate)

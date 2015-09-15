@@ -57,12 +57,6 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SceneFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="KeyboardState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -100,6 +94,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Batman.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gotham.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -147,12 +147,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GamepadInputReciever.h">
@@ -216,6 +210,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CameraMovement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Batman.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Gotham.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

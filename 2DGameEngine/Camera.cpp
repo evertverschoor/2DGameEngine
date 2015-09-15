@@ -17,16 +17,13 @@ Camera::Camera(int _gamepadno, Dimension* _virtualResolution, GFXController* _gf
 	lastMouseX = NULL;
 	lastMouseY = NULL;
 
+	// Determine the monitor center
 	monitorCenterX = settings->monitorRes->width / 2;
 	monitorCenterY = settings->monitorRes->height / 2;
 
+	// Determine the window center
 	windowCenterX = settings->screenRes->width / 2;
 	windowCenterY = settings->screenRes->height / 2;
-
-	Logger::Instance()->Log("\nWindowCenterX: ");
-	Logger::Instance()->Log(windowCenterX);
-	Logger::Instance()->Log("\nWindowCenterY: ");
-	Logger::Instance()->Log(windowCenterY);
 }
 
 

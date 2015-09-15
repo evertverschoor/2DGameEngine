@@ -33,10 +33,10 @@ DirectXAssetLoader::~DirectXAssetLoader()
 }
 
 
-int DirectXAssetLoader::LoadD2DBitmap(Entity* _entity, ID2D1Bitmap** _bitmap, ID2D1RenderTarget* _renderTarget)
+int DirectXAssetLoader::LoadD2DBitmap(std::wstring _uri, ID2D1Bitmap** _bitmap, ID2D1RenderTarget* _renderTarget)
 {
 	HRESULT hr = imagingFactory->CreateDecoderFromFilename(
-		_entity->GetAssetURI().c_str(),
+		_uri.c_str(),
 		NULL,
 		GENERIC_READ,
 		WICDecodeMetadataCacheOnLoad,

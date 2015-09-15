@@ -12,11 +12,7 @@
 class Scene
 {
 public:
-	/// <summary>
-	/// @param1 The scene name.
-	/// @param2 The size of the scene in pixels (according to the virtual resolution).
-	/// </summary>
-	Scene(std::string, Dimension*);
+	Scene();
 	~Scene();
 
 	/// <summary>
@@ -53,6 +49,17 @@ protected:
 	/// A list of all the entities that are in the scene.
 	/// </summary>
 	Entity* inhabitingEntities[MAX_ENTITIES];
+
+	/// <summary>
+	/// Set the scene name.
+	/// </summary>
+	int SetName(std::string);
+
+	/// <summary>
+	/// Set the scene size in pixels
+	/// (keeping the virtual resolution in mind, so 2x the width of the virtual resolution is 2x the screen/window size)
+	/// </summary>
+	int SetSize(Dimension*);
 private:
 	int numberOfEntities;
 	std::string name;

@@ -3,12 +3,51 @@
 
 Kernel::Kernel(HINSTANCE* _hInstance)
 {
+	// Set the hInstance
+	hInstance = _hInstance;
+
+	// Set the virtual resolution to default values
+	virtualResolution.width = DEFAULT_VIRTUAL_RESOLUTION_WIDTH;
+	virtualResolution.height = DEFAULT_VIRTUAL_RESOLUTION_HEIGHT;
+}
+
+
+Kernel::Kernel(HINSTANCE* _hInstance, int _virtualResolutionWidth, int _virtualResolutionHeight)
+{
+	// Set the hInstance
+	hInstance = _hInstance;
+
+	// Set the virtual resolution
+	virtualResolution.width = _virtualResolutionWidth;
+	virtualResolution.height = _virtualResolutionHeight;
+}
+
+
+Kernel::~Kernel()
+{
+	delete hInstance;
+	delete mainWindow;
+	delete gamepadReciever;
+	delete pcReciever;
+	delete resourceManager;
+	delete gameRenderer;
+	delete log;
+	delete vSettings;
+}
+
+
+int CreateNewWindow(Window* _window)
+{
+	_window->Launch();
+	return 1;
+}
+
+
+int Kernel::Init(LPCWSTR _name)
+{
 	// Get a copy of the logger and mark a new session in the log file
 	log = Logger::Instance();
 	LogNewSession();
-
-	// Set the hInstance
-	hInstance = _hInstance;
 
 	// Create the XAudio2 Manager
 	XAudio2Manager* _xa = new XAudio2Manager();
@@ -29,17 +68,14 @@ Kernel::Kernel(HINSTANCE* _hInstance)
 	// Create the Pc Input Reciever
 	pcReciever = new PcInputReciever();
 
-	// Initialize the main window
-	mainWindow = new Window(L"2D ENGINE", hInstance, pcReciever);
+	// Initialize the main window with the appropriate name
+	mainWindow = new Window(_name, hInstance, pcReciever);
 
 	// Create a DirectX Asset Manager
 	DirectXAssetManager* _dx = new DirectXAssetManager();
 
 	// Assign it as the system's asset manager
 	resourceManager = _dx;
-
-	// Pass it along to the scene factory...
-	sceneManager = new SceneFactory(resourceManager, gamepadReciever, pcReciever);
 
 	// ...and to the renderer, which is also a DirectX renderer
 	gameRenderer = new DirectXRenderer(_dx);
@@ -51,10 +87,6 @@ Kernel::Kernel(HINSTANCE* _hInstance)
 	vSettings->ImportVideoSettings();
 	vSettings->ImportGraphicsSettings();
 
-	// Set the virtual resolution
-	virtualResolution.width = VIRTUAL_RESOLUTION_WIDTH;
-	virtualResolution.height = VIRTUAL_RESOLUTION_HEIGHT;
-
 	// Initialize the GFX Controller and pass it to the renderer (and camera later)
 	gfx = new GFXController();
 	gameRenderer->SetGFXController(gfx);
@@ -65,12 +97,12 @@ Kernel::Kernel(HINSTANCE* _hInstance)
 	// Make pc reciever
 	pcReciever->AddPcHandler(camera);
 
-	// Make gamepad reciever too if ther are gamepads
-	if(!gamepadReciever == NULL) gamepadReciever->AddGamepadHandler(camera);
+	// Make gamepad reciever too if there are gamepads
+	if (!gamepadReciever == NULL) gamepadReciever->AddGamepadHandler(camera);
 
 	// Pass the camera to the renderer
 	gameRenderer->SetCamera(camera);
-	
+
 	// Pass the virtual resolution to the camera and renderer
 	gameRenderer->SetVirtualResolution(&virtualResolution);
 
@@ -79,47 +111,67 @@ Kernel::Kernel(HINSTANCE* _hInstance)
 
 	// 0 frames measured as of now
 	numberOfFramesMeasured = 0;
-}
 
+	// Pass the video settings to the window and the renderer
+	mainWindow->SetVideoSettings(vSettings);
+	gameRenderer->SetVideoSettings(vSettings);
 
-Kernel::~Kernel()
-{
-	delete hInstance;
-	delete mainWindow;
-	delete gamepadReciever;
-	delete pcReciever;
-	delete resourceManager;
-	delete sceneManager;
-	delete gameRenderer;
-	delete log;
-	delete vSettings;
-}
+	// No active scene yet
+	activeScene = NULL;
 
-
-int Kernel::SetupDemoScene()
-{
-	SetActiveScene(sceneManager->CreateNewSceneFromFile("Data/Scenes/SAMPLE.scene"));
-	gameRenderer->SetDefaultTextFormat("Arial", 50.0f, RED, 1.0f);
+	// Not ready to be used yet
+	ready = FALSE;
 
 	return 1;
 }
 
 
-int CreateNewWindow(Window* _window)
+int Kernel::SetCameraMovement(CameraMovement _value)
 {
-	_window->Launch();
+	camera->SetCameraMovement(_value);
 	return 1;
+}
+
+
+AssetManager* Kernel::GetAssetManager()
+{
+	return resourceManager;
+}
+
+
+PcInputReciever* Kernel::GetPcInputReciever()
+{
+	return pcReciever;
+}
+
+
+GamepadInputReciever* Kernel::GetGamepadInputReciever()
+{
+	return gamepadReciever;
+}
+
+
+int Kernel::StartScene(Scene* _scene)
+{
+	camera->SetActiveSceneSize(_scene->GetSize());
+	activeScene = _scene;
+
+	log->Log("\n\nStarting Scene: ");
+	log->Log(_scene->GetName());
+
+	return 1;
+}
+
+
+bool Kernel::Ready()
+{
+	return ready;
 }
 
 
 int Kernel::Run()
 {
-	// Pass the video settings to the window and the renderer
-	mainWindow->SetVideoSettings(vSettings);
-	gameRenderer->SetVideoSettings(vSettings);
-
-	// Create a new window in a thread, so that the rest runs asynchronously
-	std::thread t1(CreateNewWindow, mainWindow);
+	std::thread _windowThread(CreateNewWindow, mainWindow);
 
 	while (!mainWindow->IsUp())
 	{
@@ -127,17 +179,26 @@ int Kernel::Run()
 	}
 
 	// Initialize the renderer
-	int _result = gameRenderer->Init(&mainWindow->handle);
+	gameRenderer->Init(&mainWindow->handle);
 
-	SetupDemoScene();
+	// Load in the splash screen image for showing when the engine is ready
+	resourceManager->LoadSingleBitmap("Assets/Engine/splash_screen.png");
+
+	// Signal that the engine is ready to be used
+	ready = TRUE;
 
 	// Enter the game loop
 	while (Running())
 	{
-		OnGameUpdate();
+		if(activeScene) OnGameUpdate();
+		else
+		{
+			ShowEngineSplash();
+		}
 	}
 
-	t1.join();
+	// End the window thread (killing the window)
+	_windowThread.join();
 
 	return 1;
 }
@@ -177,18 +238,6 @@ bool Kernel::Running()
 	return mainWindow->IsUp();
 }
 
-
-int Kernel::SetActiveScene(Scene* _scene)
-{
-	activeScene = _scene;
-	camera->SetActiveSceneSize(_scene->GetSize());
-
-	log->Log("\n\nSetting the active scene to: ");
-	log->Log(_scene->GetName());
-
-	return 1;
-}
-
 int Kernel::CalculateCurrentFramerate()
 {
 	clock_t _currentTime = clock();
@@ -211,7 +260,6 @@ int Kernel::CalculateCurrentFramerate()
 
 		float _avgFrametime = _frametimeBatch / FRAMES_MEASURED;
 		float _framerate = 1 / _frameElapsedTime;
-		//gameRenderer->SetFPSToDraw(std::round(_framerate));
 		gameRenderer->SetFPSToDraw(_framerate);
 		numberOfFramesMeasured = 0;
 	}
@@ -220,8 +268,8 @@ int Kernel::CalculateCurrentFramerate()
 }
 
 
-int WindowThread(Window* _window)
+int Kernel::ShowEngineSplash()
 {
-	_window->Launch();
+	gameRenderer->DrawEngineSplash(1, 1, 1);
 	return 1;
 }

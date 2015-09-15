@@ -28,6 +28,12 @@ public:
 	virtual int WriteText(std::string, Position*) = 0;
 
 	/// <summary>
+	/// Draw the engine splash screen and show it immediately.
+	/// @params The RGB color values of the background.
+	/// </summary>
+	virtual int DrawEngineSplash(float, float, float) = 0;
+
+	/// <summary>
 	/// Set a custom text format.
 	/// @param1 The name of the font family;
 	/// @param2 The size of the font.

@@ -29,6 +29,7 @@ public:
 	int Render(Scene*);
 	int Init(HWND*);
 	int WriteText(std::string, Position*);
+	int DrawEngineSplash(float, float, float);
 
 	int SetVideoSettings(VideoSettings*);
 	int SetDefaultTextFormat(std::string, float, Color, float);
@@ -71,11 +72,6 @@ private:
 	/// Execute any post process effects and draw the image to the screen.
 	/// </summary>
 	int PostProcess(ID2D1Bitmap*);
-
-	/// <summary>
-	/// Wipe the screen empty to a specified RGB colour.
-	/// </summary>
-	int WipeScreen(float, float, float);
 
 	/// <summary>
 	/// Draw an entity to the screen.

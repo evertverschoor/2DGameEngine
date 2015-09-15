@@ -53,6 +53,13 @@ std::wstring Entity::GetAssetURI()
 }
 
 
+int Entity::SetAsssetURI(std::string _value)
+{
+	assetURI = _value;
+	return 1;
+}
+
+
 int Entity::GetDirection()
 {
 	return direction;

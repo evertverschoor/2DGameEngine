@@ -70,6 +70,7 @@
   <ItemGroup>
     <ClCompile Include="2DGameEngine.cpp" />
     <ClCompile Include="AudioEngine.cpp" />
+    <ClCompile Include="Batman.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConstantMouseState.cpp" />
     <ClCompile Include="ControllableEntity.cpp" />
@@ -79,6 +80,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="GFXController.cpp" />
+    <ClCompile Include="Gotham.cpp" />
     <ClCompile Include="PcInputReciever.cpp" />
     <ClCompile Include="StringConverter.cpp" />
     <ClCompile Include="XAudio2Manager.cpp" />
@@ -93,8 +95,6 @@
     <ClCompile Include="VideoSettings.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneFactory.cpp" />
-    <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="XInputController.cpp" />
     <ClCompile Include="XInputReciever.cpp" />
   </ItemGroup>
@@ -103,6 +103,7 @@
     <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="AudioPlayer.h" />
+    <ClInclude Include="Batman.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraMovement.h" />
     <ClInclude Include="Color.h" />
@@ -115,6 +116,7 @@
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="GamepadState.h" />
     <ClInclude Include="GFXController.h" />
+    <ClInclude Include="Gotham.h" />
     <ClInclude Include="PcInputReciever.h" />
     <ClInclude Include="StringConverter.h" />
     <ClInclude Include="XAudio2Manager.h" />
@@ -133,8 +135,6 @@
     <ClInclude Include="VideoSettings.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneFactory.h" />
-    <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="XInputController.h" />
     <ClInclude Include="XInputReciever.h" />
   </ItemGroup>

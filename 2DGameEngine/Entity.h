@@ -58,6 +58,10 @@ public:
 	/// Set the speed the entity will move at.
 	/// </summary>
 	int SetSpeed(int);
+
+protected:
+	int SetAsssetURI(std::string);
+
 private:
 	Position entityPosition;
 	std::string assetURI;

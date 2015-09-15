@@ -1,11 +1,8 @@
 #include "Scene.h"
 
 
-Scene::Scene(std::string _name, Dimension* _size)
+Scene::Scene()
 {
-	name = _name;
-	size = _size;
-	numberOfEntities = 0;
 }
 
 
@@ -54,4 +51,18 @@ std::string Scene::GetName()
 Dimension* Scene::GetSize()
 {
 	return size;
+}
+
+
+int Scene::SetName(std::string _value)
+{
+	name = _value;
+	return 1;
+}
+
+
+int Scene::SetSize(Dimension* _value)
+{
+	size = _value;
+	return 1;
 }
