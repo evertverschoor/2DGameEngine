@@ -133,6 +133,15 @@ int Kernel::SetCameraMovement(CameraMovement _value)
 }
 
 
+int Kernel::SetCameraMovement(CameraMovement _value, Entity* _entity)
+{
+	SetCameraMovement(_value);
+	camera->SetChasableEntity(_entity);
+
+	return 1;
+}
+
+
 AssetManager* Kernel::GetAssetManager()
 {
 	return resourceManager;
@@ -184,17 +193,16 @@ int Kernel::Run()
 	// Load in the splash screen image for showing when the engine is ready
 	resourceManager->LoadSingleBitmap("Assets/Engine/splash_screen.png");
 
+	// Show the splash screen
+	ShowEngineSplash();
+
 	// Signal that the engine is ready to be used
 	ready = TRUE;
 
 	// Enter the game loop
 	while (Running())
 	{
-		if(activeScene) OnGameUpdate();
-		else
-		{
-			ShowEngineSplash();
-		}
+		if (activeScene) OnGameUpdate();
 	}
 
 	// End the window thread (killing the window)
@@ -210,7 +218,7 @@ int Kernel::OnGameUpdate()
 	if(gamepadReciever) gamepadReciever->ReadInput();
 	if(pcReciever) pcReciever->ReadInput();
 
-	// Call Act() on all entities in the active scene
+	// Call Act() on all entities in the active scene and on the camera
 	activeScene->OnGameUpdate();
 
 	// Draw the next frame

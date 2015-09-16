@@ -18,11 +18,21 @@ int DirectXAssetManager::LoadScene(Scene* _scene)
 	// Load the asset per entity in the scene
 	for (int i = 0; i < _scene->EntityCount(); i++)
 	{
-		Entity* _entity = _scene->GetEntity(i);
-		ID2D1Bitmap* _bitmap;
-		int _result = loader->LoadD2DBitmap(_entity->GetAssetURI(), &_bitmap, renderTarget);
-		assetList[_entity] = _bitmap;
+		std::wstring _assetURI = _scene->GetEntity(i)->GetAssetURI();
+		ID2D1Bitmap* _entityBitmap;
+		int _result = loader->LoadD2DBitmap(_assetURI, &_entityBitmap, renderTarget);
+
+		// Put NULL if bitmap loading failed
+		assetList[_assetURI] = (_result == 1) ? _entityBitmap : NULL;
 	}
+
+	// Load the scene background asset
+	std::wstring _sceneAssetURI = _scene->GetBackgroundAssetURI();
+	ID2D1Bitmap* _sceneBitmap;
+	int _result = loader->LoadD2DBitmap(_sceneAssetURI, &_sceneBitmap, renderTarget);
+
+	// Put NULL if bitmap loading failed
+	assetList[_sceneAssetURI] = (_result == 1) ? _sceneBitmap : NULL;
 
 	return 1;
 }
@@ -37,17 +47,20 @@ int DirectXAssetManager::SetRenderTarget(ID2D1RenderTarget* _target)
 
 ID2D1Bitmap* DirectXAssetManager::GetD2D1BitmapForEntity(Entity* _entity)
 {
-	return assetList[_entity];
+	return assetList[_entity->GetAssetURI()];
 }
 
 
 int DirectXAssetManager::LoadSingleBitmap(std::string _uri)
 {
+	std::wstring _actualURI = StringConverter::Instance()->StringToWstring(_uri);
+
 	ID2D1Bitmap* _bitmap;
 
-	loader->LoadD2DBitmap(StringConverter::Instance()->StringToWstring(_uri), &_bitmap, renderTarget);
+	int _result = loader->LoadD2DBitmap(_actualURI, &_bitmap, renderTarget);
 
-	singleBitmapList[_uri] = _bitmap;
+	// Put NULL if bitmap loading failed
+	assetList[_actualURI] = (_result == 1) ? _bitmap : NULL;
 
 	return 1;
 }
@@ -55,5 +68,11 @@ int DirectXAssetManager::LoadSingleBitmap(std::string _uri)
 
 ID2D1Bitmap* DirectXAssetManager::GetSingleBitmap(std::string _uri)
 {
-	return singleBitmapList[_uri];
+	return assetList[StringConverter::Instance()->StringToWstring(_uri)];
+}
+
+
+ID2D1Bitmap* DirectXAssetManager::GetSingleBitmap(std::wstring _uri)
+{
+	return assetList[_uri];
 }

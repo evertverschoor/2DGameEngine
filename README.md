@@ -2,23 +2,19 @@
 
 ## Planned Work
 
--> Optimization
-
--> Allow for normal alt-tabbing without the mouse getting stuck
-
--> Entity chase camera move mode
+-> Fix Z-index not doing anything
 
 -> Gravity
 
 -> Collision detection
 
--> Support for more than one asset per entity (animations?)
-
 -> Implement proper way of making entities move (not a certain distance every frame)
 
 -> Convert to DLL
 
--> Support for actually being able to use this as a library
+-> Allow for normal alt-tabbing without the mouse getting stuck on NORMAL camera move
+
+-> Add optimize function to the renderer (???) to resize bitmaps permanently during load time
 
 
 ## Could Haves
@@ -65,6 +61,21 @@
 -> Allowed for entities and scenes to be created outside the engine project and to be played by the engine
 
 -> Added a splash screen to show after the engine is ready to play and before it starts rendering a scene
+
+
+### Sept. 16, 2015
+
+-> Added ENTITY_CHASE camera mode, removed EDGE_PAN because it's probably not gonna be used
+
+-> Added hitbox property on entities
+
+-> Added background asset URI property to scenes, so you no longer need to use an entity as a background
+
+-> Fixed a bug where sometimes the display driver would crash during load time
+
+-> Added background PERSIST, MOVE and SLOW_MOVE options, making it behave differently as you move the camera
+
+-> Deleted ControllableEntity
 
 
 ## Benchmarks
@@ -131,16 +142,29 @@
 	// Create entity Batman
 	Batman* _batman = new Batman();
 	_batman->JumpTo(800, 300);
+	_batman->SetZindex(2);
 	_batman->SetDirection(0);
 
 	// Get the pc input reciever from the kernel
 	PcInputReciever* _pcInput = _kernel->GetPcInputReciever();
+	GamepadInputReciever* _gamepadInput = _kernel->GetGamepadInputReciever();
 
 	// Make Batman an input handler
 	_pcInput->AddPcHandler(_batman);
+	_gamepadInput->AddGamepadHandler(_batman);
 
 	// Put Batman in Gotham
 	_gotham->AddEntity(_batman);
+
+	// Set camera movement to ENTITY_CHASE and pass Batman along
+	_kernel->SetCameraMovement(ENTITY_CHASE, _batman);
+
+	// Create second entity Batman so we can tell if we're entity chasing
+	Batman* _batmanTwo = new Batman();
+	_batmanTwo->JumpTo(100, 300);
+	_batmanTwo->SetDirection(0);
+	_batmanTwo->SetZindex(1);
+	_gotham->AddEntity(_batmanTwo);
 
 	// Load the assets that belong to the scene
 	_kernel->GetAssetManager()->LoadScene(_gotham);
@@ -153,5 +177,33 @@
 
 	// Play the music
 	AudioEngine::Instance()->GetAudioPlayer()->PlayAudioPiece("Audio/Music/arkham_knight.wav");
-
+	
 	return 1;
+	
+	
+	
+	/************************
+	** Gotham.cpp Constructor
+	*************************/
+	
+	// Set name and size
+	SetName("Gotham");
+	SetSize(new Dimension(4000, 2000));
+
+	// Set background image and type
+	SetBackgroundAssetURI("Assets/Backgrounds/gotham_back.jpg");
+	SetBackgroundType(SLOW_MOVE);
+	
+	
+	
+	/************************
+	** Batman.cpp Constructor
+	*************************/
+	
+	// Set the asset URI and appropriate hitbox for this entity
+	SetAssetURI("Assets/UI/ArkhamKnight.jpg");
+	SetHitbox(960, 600);
+
+	// Set speed and phase property
+	SetSpeed(10);
+	SetPhaseState(false);

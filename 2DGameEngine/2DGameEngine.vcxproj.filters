@@ -51,9 +51,6 @@
     <ClCompile Include="XInputReciever.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ControllableEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -143,9 +140,6 @@
     <ClInclude Include="XInputReciever.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ControllableEntity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -216,6 +210,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Gotham.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BackgroundType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

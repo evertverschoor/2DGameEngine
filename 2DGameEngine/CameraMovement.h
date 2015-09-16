@@ -7,12 +7,7 @@
 enum CameraMovement
 {
 	/// <summary>
-	/// Move the mouse towards the edges of the screen to move the camera.
-	/// </summary>
-	EDGE_PAN,
-
-	/// <summary>
-	/// Move the mouse or the XInput left stick to move the camera.
+	/// Move the mouse or the XInput right stick to move the camera.
 	/// </summary>
 	NORMAL,
 

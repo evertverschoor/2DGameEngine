@@ -66,3 +66,30 @@ int Scene::SetSize(Dimension* _value)
 	size = _value;
 	return 1;
 }
+
+
+int Scene::SetBackgroundAssetURI(std::string _value)
+{
+	std::wstring _assetURI(_value.begin(), _value.end());
+	backgroundAssetURI = _assetURI;
+	return 1;
+}
+
+
+std::wstring Scene::GetBackgroundAssetURI()
+{
+	return backgroundAssetURI;
+}
+
+
+int Scene::SetBackgroundType(BackgroundType _value)
+{
+	backgroundType = _value;
+	return 1;
+}
+
+
+BackgroundType* Scene::GetBackgroundType()
+{
+	return &backgroundType;
+}

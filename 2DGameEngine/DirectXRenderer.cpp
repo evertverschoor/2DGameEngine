@@ -25,6 +25,9 @@ int DirectXRenderer::Render(Scene* _renderableScene)
 	bitmapRenderTarget->BeginDraw();
 	bitmapRenderTarget->Clear(D2D1::ColorF(0, 0, 1));
 
+	// Draw the scene background image
+	DrawSceneBackground(_renderableScene);
+
 	// Draw each entity in the scene
 	for (int i = 0; i < _renderableScene->EntityCount(); i++)
 	{
@@ -103,6 +106,9 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 	// Define the entity's bitmap to draw
 	ID2D1Bitmap* _bitmap = resourceManager->GetD2D1BitmapForEntity(_entity);
 
+	// No asset exists for the entity, return
+	if (NULL == _bitmap) return 0;
+
 	// calculate the actual entity size and position
 	Position* _actualEntityPosition = GetActualDrawPosition(&_entity->GetPosition());
 	Dimension* _actualEntitySize = GetActualDrawSize(new Dimension(_bitmap->GetSize().width, _bitmap->GetSize().height));
@@ -123,7 +129,7 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 
 	// Draw the bitmap
 	bitmapRenderTarget->DrawBitmap(
-		resourceManager->GetD2D1BitmapForEntity(_entity),
+		_bitmap,
 		D2D1::RectF(
 		_actualEntityPosition->X,
 		_actualEntityPosition->Y,
@@ -138,6 +144,55 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 		);
 
 	delete _actualEntitySize;
+
+	return 1;
+}
+
+
+int DirectXRenderer::DrawSceneBackground(Scene* _scene)
+{
+	// Define the entity's bitmap to draw
+	ID2D1Bitmap* _bitmap = resourceManager->GetSingleBitmap(_scene->GetBackgroundAssetURI());
+
+	// No background was defined for the scene, return.
+	if (NULL == _bitmap) return 0;
+
+	// calculate the actual background size
+	Dimension* _actualBackgroundSize = GetActualDrawSize(new Dimension(_bitmap->GetSize().width, _bitmap->GetSize().height));
+
+	Position* _actualBackgroundPosition;
+
+	// Determine where to draw the background based on the background type
+	switch (*_scene->GetBackgroundType())
+	{
+		case PERSIST:
+			_actualBackgroundPosition = new Position(0, 0, 0);
+			break;
+		case MOVE:
+			_actualBackgroundPosition = GetActualDrawPosition(new Position(0, 0, 0));
+			break;
+		case SLOW_MOVE:
+			_actualBackgroundPosition = GetActualDrawPosition(new Position(0, 0, 0));
+			_actualBackgroundPosition->X /= 2;
+			_actualBackgroundPosition->Y /= 2;
+			break;
+		default:
+			_actualBackgroundPosition = new Position(0, 0, 0);
+	}
+
+	// Draw the bitmap
+	bitmapRenderTarget->DrawBitmap(
+		_bitmap,
+		D2D1::RectF(
+		_actualBackgroundPosition->X,
+		_actualBackgroundPosition->Y,
+		_actualBackgroundPosition->X + _actualBackgroundSize->width,
+		_actualBackgroundPosition->Y + _actualBackgroundSize->height
+		)
+		);
+
+	delete _actualBackgroundSize;
+	delete _actualBackgroundPosition;
 
 	return 1;
 }
@@ -173,6 +228,9 @@ int DirectXRenderer::DrawEngineSplash(float _red, float _green, float _blue)
 
 	// Get the loaded splash screen bitmap
 	ID2D1Bitmap* _bitmap = resourceManager->GetSingleBitmap("Assets/Engine/splash_screen.png");
+
+	// Bitmap wasn't properly loaded or doesn't exist, return
+	if (NULL == _bitmap) return 0;
 
 	// Calculate the actual bitmap size
 	Dimension* _actualBitmapSize = GetActualDrawSize(new Dimension(_bitmap->GetSize().width, _bitmap->GetSize().height));

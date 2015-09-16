@@ -35,11 +35,12 @@ public:
 	/// </summary>
 	ID2D1Bitmap* GetSingleBitmap(std::string);
 
+	ID2D1Bitmap* GetSingleBitmap(std::wstring);
+
 private:
 	DirectXAssetLoader* loader;
 	ID2D1RenderTarget* renderTarget;
-	std::map<Entity*, ID2D1Bitmap*> assetList;
-	std::map<std::string, ID2D1Bitmap*> singleBitmapList;
+	std::map<std::wstring, ID2D1Bitmap*> assetList;
 };
 
 #endif

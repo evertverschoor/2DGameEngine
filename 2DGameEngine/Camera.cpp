@@ -14,8 +14,8 @@ Camera::Camera(int _gamepadno, Dimension* _virtualResolution, GFXController* _gf
 	// Default camera movement mode is MOUSE_MOVE
 	SetCameraMovement(CameraMovement::NORMAL);
 
-	lastMouseX = NULL;
-	lastMouseY = NULL;
+	// And no chasable entity yet
+	chasableEntity = NULL;
 
 	// Determine the monitor center
 	monitorCenterX = settings->monitorRes->width / 2;
@@ -24,6 +24,14 @@ Camera::Camera(int _gamepadno, Dimension* _virtualResolution, GFXController* _gf
 	// Determine the window center
 	windowCenterX = settings->screenRes->width / 2;
 	windowCenterY = settings->screenRes->height / 2;
+
+	// Determine the virtual resolution center
+	virtualCenterX = virtualResolution->width / 2;
+	virtualCenterY = virtualResolution->height / 2;
+
+	// Put a temporary entity center
+	entityCenterX = 100;
+	entityCenterY = 100;
 }
 
 
@@ -56,7 +64,7 @@ int Camera::Move(int _x, int _y)
 	if (sceneSize->height < _newPosY) _newPosY = sceneSize->height;
 
 	// Calculate motion blur based on x and y move values, if turned on
-	if (settings->motionBlur) CalculateMotionBlur(_newPosX - cameraPosition.X, _newPosY - cameraPosition.Y);
+	if (settings->motionBlur && movement == NORMAL) CalculateMotionBlur(_newPosX - cameraPosition.X, _newPosY - cameraPosition.Y);
 
 	// Make the jump
 	JumpTo(_newPosX, _newPosY);
@@ -67,6 +75,7 @@ int Camera::Move(int _x, int _y)
 
 Position* Camera::GetPosition()
 {
+	if (movement == ENTITY_CHASE && chasableEntity != NULL) ChaseEntity();
 	return &cameraPosition;
 }
 
@@ -74,6 +83,16 @@ Position* Camera::GetPosition()
 int Camera::SetCameraMovement(CameraMovement _value)
 {
 	movement = _value;
+	return 1;
+}
+
+
+int Camera::SetChasableEntity(Entity* _entity)
+{
+	chasableEntity = _entity;
+	entityCenterX = _entity->GetHitbox()->width / 2;
+	entityCenterY = _entity->GetHitbox()->height / 2;
+
 	return 1;
 }
 
@@ -93,6 +112,9 @@ int Camera::GetGamepadNumber()
 
 int Camera::HandleGamepadInput(GamepadState* _state)
 {
+	// Only move the camera if the camera movement is set to NORMAL
+	if (movement != NORMAL) return 0;
+
 	// Initialize the move amounts, depending on what direction(s) the stick is facing
 	int _moveX = 0;
 	int _moveY = 0;
@@ -128,38 +150,13 @@ int Camera::HandleKeyboardInput(KeyboardState* _state)
 
 int Camera::HandleMouseInput(MouseState*_state )
 {
+	// Only move the camera if the camera movement is set to NORMAL
+	if (movement != NORMAL) return 0;
+
 	// Save the current mouse positions
 	int _mouseX = _state->GetCursorPosition()->X;
 	int _mouseY = _state->GetCursorPosition()->Y;
 
-	// Set the last mouse positions for the first time
-	if (NULL == lastMouseX)
-	{
-		lastMouseX = _mouseX;
-		lastMouseY = _mouseY;
-	}
-
-	// See if the camera needs to be moved based on the movement method
-	switch (movement)
-	{
-		case NORMAL: 
-			MoveCameraNormal(_mouseX, _mouseY); 
-			break;
-		case EDGE_PAN: 
-			MoveCameraEdgePan(_mouseX, _mouseY); 
-			break;
-	}
-
-	// Update the last mouse positions with current ones
-	lastMouseX = _mouseX;
-	lastMouseY = _mouseY;
-
-	return 1;
-}
-
-
-int Camera::MoveCameraNormal(int _mouseX, int _mouseY)
-{
 	// If the mouse is located at the center, it means this is the call from SetCursorPos at the bottom of this function, ignore it
 	if (_mouseX == windowCenterX && _mouseY == windowCenterY) return 0;
 
@@ -192,12 +189,6 @@ int Camera::MoveCameraNormal(int _mouseX, int _mouseY)
 }
 
 
-int Camera::MoveCameraEdgePan(int _mouseX, int _mouseY)
-{
-	return 1;
-}
-
-
 int Camera::CalculateMotionBlur(float _deltaX, float _deltaY)
 {
 	// Calculate angle
@@ -206,5 +197,15 @@ int Camera::CalculateMotionBlur(float _deltaX, float _deltaY)
 	// Pass the information along, amount is the average of deltaX and deltaY
 	gfx->SetMotionBlur(_angle -90, fabs(_deltaX + _deltaY) / 2);
 
+	return 1;
+}
+
+
+int Camera::ChaseEntity()
+{
+	Move(
+		chasableEntity->GetPosition().X - virtualCenterX + entityCenterX - cameraPosition.X, 
+		chasableEntity->GetPosition().Y - virtualCenterY + entityCenterY - cameraPosition.Y
+	);
 	return 1;
 }

@@ -4,6 +4,7 @@
 
 #include "Entity.h"
 #include "Dimension.h"
+#include "BackgroundType.h"
 #include <string>
 
 /// <summary>
@@ -36,6 +37,16 @@ public:
 	std::string GetName();
 
 	/// <summary>
+	/// Returns the URI to the scene's background asset.
+	/// </summary>
+	std::wstring GetBackgroundAssetURI();
+
+	/// <summary>
+	/// Returns the background type of this scene.
+	/// </summary>
+	BackgroundType* GetBackgroundType();
+
+	/// <summary>
 	/// Returns the scene size.
 	/// </summary>
 	Dimension* GetSize();
@@ -60,10 +71,22 @@ protected:
 	/// (keeping the virtual resolution in mind, so 2x the width of the virtual resolution is 2x the screen/window size)
 	/// </summary>
 	int SetSize(Dimension*);
+
+	/// <summary>
+	/// Set the URI to the scene background asset.
+	/// </summary>
+	int SetBackgroundAssetURI(std::string);
+
+	/// <summary>
+	/// Set the way the background behaves.
+	/// </summary>
+	int SetBackgroundType(BackgroundType);
 private:
 	int numberOfEntities;
 	std::string name;
+	std::wstring backgroundAssetURI;
 	Dimension* size;
+	BackgroundType backgroundType;
 };
 
 #endif

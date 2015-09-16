@@ -1,27 +1,17 @@
 #include "Entity.h"
 
 
-Entity::Entity(std::string _uri)
+Entity::Entity()
 {
-	assetURI = _uri;
 	JumpTo(0, 0);
 	SetDirection(0);
 	SetSpeed(10);
-}
-
-
-Entity::Entity()
-{
+	SetHitbox(100, 100);
 }
 
 
 Entity::~Entity()
 {
-}
-
-int Entity::Act()
-{
-	return 1;
 }
 
 
@@ -48,14 +38,14 @@ int Entity::SetZindex(double _zindex)
 
 std::wstring Entity::GetAssetURI()
 {
-	std::wstring _returnValue(assetURI.begin(), assetURI.end());
-	return _returnValue;
+	return assetURI;
 }
 
 
-int Entity::SetAsssetURI(std::string _value)
+int Entity::SetAssetURI(std::string _value)
 {
-	assetURI = _value;
+	std::wstring _assetURI(_value.begin(), _value.end());
+	assetURI = _assetURI;
 	return 1;
 }
 
@@ -83,13 +73,43 @@ int Entity::SetDirection(int _value)
 	return direction;
 }
 
+
 int Entity::GetSpeed()
 {
 	return speed;
 }
 
+
 int Entity::SetSpeed(int _value)
 {
 	speed = _value >= 0 ? _value : speed;
+	return 1;
+}
+
+
+Dimension* Entity::GetHitbox()
+{
+	return &hitBox;
+}
+
+
+int Entity::SetHitbox(int _width, int _height)
+{
+	hitBox.width = _width;
+	hitBox.height = _height;
+
+	return 1;
+}
+
+
+bool Entity::IsPhased()
+{
+	return phased;
+}
+
+
+int Entity::SetPhaseState(bool _value)
+{
+	phased = _value;
 	return 1;
 }

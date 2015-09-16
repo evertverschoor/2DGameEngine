@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include "Position.h"
+#include "Dimension.h"
 #include <string>
 
 /// <summary>
@@ -10,14 +11,13 @@
 class Entity
 {
 public:
-	Entity(std::string);
 	Entity();
 	~Entity();
 
 	/// <summary>
 	/// Main function that is constantly called if this entity is in the active scene.
 	/// </summary>
-	int Act();
+	virtual int Act() = 0;
 
 	/// <summary>
 	/// Put the entity at a new x-y position.
@@ -40,14 +40,14 @@ public:
 	std::wstring GetAssetURI();
 
 	/// <summary>
-	/// Get the direction the entity is facing, from 0-360. (degrees)
-	/// </summary>
-	int GetDirection();
-
-	/// <summary>
 	/// Set the direction for the entity, from 0-360. (degrees)
 	/// </summary>
 	int SetDirection(int);
+
+	/// <summary>
+	/// Get the direction the entity is facing, from 0-360. (degrees)
+	/// </summary>
+	int GetDirection();
 
 	/// <summary>
 	/// Get the speed the entity moves at.
@@ -55,18 +55,44 @@ public:
 	int GetSpeed();
 
 	/// <summary>
+	/// Returns the entity's hitbox.
+	/// </summary>
+	Dimension* GetHitbox();
+
+	/// <summary>
+	/// Returns if the entity may phase through other entities.
+	/// </summary>
+	bool IsPhased();
+
+protected:
+	/// <summary>
 	/// Set the speed the entity will move at.
 	/// </summary>
 	int SetSpeed(int);
 
-protected:
-	int SetAsssetURI(std::string);
+	/// <summary>
+	/// Set the entity asset location.
+	/// </summary>
+	int SetAssetURI(std::string);
+
+	/// <summary>
+	/// Set the entity hitbox width and height.
+	/// </summary>
+	int SetHitbox(int, int);
+
+	/// <summary>
+	/// Can the entity phase through other objects?
+	/// </summary>
+	int SetPhaseState(bool);
 
 private:
 	Position entityPosition;
-	std::string assetURI;
+	Dimension hitBox;
+
+	std::wstring assetURI;
 	int direction;
 	int speed;
+	bool phased;
 };
 
 #endif

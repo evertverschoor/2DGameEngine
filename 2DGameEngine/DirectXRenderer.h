@@ -79,6 +79,11 @@ private:
 	int DrawEntity(Entity*);
 
 	/// <summary>
+	/// Draw the scene background.
+	/// </summary>
+	int DrawSceneBackground(Scene*);
+
+	/// <summary>
 	/// Calculates the actual draw position for an entity if the virtual resolution is different from the actual resolution.
 	/// </summary>
 	Position* GetActualDrawPosition(Position*);

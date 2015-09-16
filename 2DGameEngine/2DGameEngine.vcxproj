@@ -73,7 +73,6 @@
     <ClCompile Include="Batman.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConstantMouseState.cpp" />
-    <ClCompile Include="ControllableEntity.cpp" />
     <ClCompile Include="DirectXAssetLoader.cpp" />
     <ClCompile Include="DirectXAssetManager.cpp" />
     <ClCompile Include="DirectXRenderer.cpp" />
@@ -103,12 +102,12 @@
     <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="AudioPlayer.h" />
+    <ClInclude Include="BackgroundType.h" />
     <ClInclude Include="Batman.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraMovement.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantMouseState.h" />
-    <ClInclude Include="ControllableEntity.h" />
     <ClInclude Include="DirectXAssetLoader.h" />
     <ClInclude Include="DirectXAssetManager.h" />
     <ClInclude Include="DirectXRenderer.h" />
