@@ -7,6 +7,7 @@ Batman::Batman()
 	SetAssetURI("Assets/UI/ArkhamKnight.jpg");
 	SetHitbox(960, 600);
 
+	// Set speed and phase property
 	SetSpeed(10);
 	SetPhaseState(false);
 }

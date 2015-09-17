@@ -156,12 +156,14 @@ PcInputReciever* Kernel::GetPcInputReciever()
 
 GamepadInputReciever* Kernel::GetGamepadInputReciever()
 {
+	if (!gamepadReciever) return NULL;
 	return gamepadReciever;
 }
 
 
 int Kernel::StartScene(Scene* _scene)
 {
+	_scene->OrderByZIndex();
 	camera->SetActiveSceneSize(_scene->GetSize());
 	activeScene = _scene;
 
@@ -278,6 +280,6 @@ int Kernel::CalculateCurrentFramerate()
 
 int Kernel::ShowEngineSplash()
 {
-	gameRenderer->DrawEngineSplash(1, 1, 1);
+	gameRenderer->DrawEngineSplash(0, 0, 0);
 	return 1;
 }

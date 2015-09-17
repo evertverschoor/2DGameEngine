@@ -2,11 +2,11 @@
 
 ## Planned Work
 
--> Fix Z-index not doing anything
-
--> Gravity
+-> Let entities have multiple assets and they point to their current one that the renderer draws
 
 -> Collision detection
+
+-> Gravity
 
 -> Implement proper way of making entities move (not a certain distance every frame)
 
@@ -76,6 +76,8 @@
 -> Added background PERSIST, MOVE and SLOW_MOVE options, making it behave differently as you move the camera
 
 -> Deleted ControllableEntity
+
+-> StartScene() now orders the entities in a scene by z-index, so lower z-index is overlapped by higher z-indexes
 
 
 ## Benchmarks

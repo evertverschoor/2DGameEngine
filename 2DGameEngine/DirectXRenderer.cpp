@@ -28,7 +28,7 @@ int DirectXRenderer::Render(Scene* _renderableScene)
 	// Draw the scene background image
 	DrawSceneBackground(_renderableScene);
 
-	// Draw each entity in the scene
+	// For each entity in the scene
 	for (int i = 0; i < _renderableScene->EntityCount(); i++)
 	{
 		DrawEntity(_renderableScene->GetEntity(i));
@@ -154,10 +154,10 @@ int DirectXRenderer::DrawSceneBackground(Scene* _scene)
 	// Define the entity's bitmap to draw
 	ID2D1Bitmap* _bitmap = resourceManager->GetSingleBitmap(_scene->GetBackgroundAssetURI());
 
-	// No background was defined for the scene, return.
+	// If no background was defined for the scene, return.
 	if (NULL == _bitmap) return 0;
 
-	// calculate the actual background size
+	// Calculate the actual background size
 	Dimension* _actualBackgroundSize = GetActualDrawSize(new Dimension(_bitmap->GetSize().width, _bitmap->GetSize().height));
 
 	Position* _actualBackgroundPosition;

@@ -93,3 +93,34 @@ BackgroundType* Scene::GetBackgroundType()
 {
 	return &backgroundType;
 }
+
+
+int Scene::OrderByZIndex()
+{
+	Entity* _newList[MAX_ENTITIES];
+
+	for (int i = 0; i < numberOfEntities; ++i)
+	{
+		int _lowestZIndex = std::numeric_limits<int>::max();
+		int _winner = 0;
+
+		for (int j = 0; j < numberOfEntities; ++j)
+		{
+			if (inhabitingEntities[j] != NULL && inhabitingEntities[j]->GetPosition().Z < _lowestZIndex)
+			{
+				_winner = j;
+				_lowestZIndex = inhabitingEntities[j]->GetPosition().Z;
+			}
+		}
+
+		_newList[i] = inhabitingEntities[_winner];
+		inhabitingEntities[_winner] = NULL;
+	}
+
+	for (int i = 0; i < numberOfEntities; ++i)
+	{
+		inhabitingEntities[i] = _newList[i];
+	}
+
+	return 1;
+}

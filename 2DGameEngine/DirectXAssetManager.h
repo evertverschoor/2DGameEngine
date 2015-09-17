@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "DirectXAssetLoader.h"
 #include "StringConverter.h"
+#include "Logger.h"
 #include <d2d1.h>
 #include <map>
 

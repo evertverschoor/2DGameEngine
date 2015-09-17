@@ -6,6 +6,7 @@
 #include "Dimension.h"
 #include "BackgroundType.h"
 #include <string>
+#include <limits>
 
 /// <summary>
 /// A scene is a space in which entities exist, a scene is drawn to the screen by the renderer.
@@ -55,6 +56,11 @@ public:
 	/// Call Act() on all entities in the scene.
 	/// </summary>
 	int OnGameUpdate();
+
+	/// <summary>
+	/// Order the entity list by Z-Index, from lowest to highest.
+	/// </summary>
+	int OrderByZIndex();
 protected:
 	/// <summary>
 	/// A list of all the entities that are in the scene.
