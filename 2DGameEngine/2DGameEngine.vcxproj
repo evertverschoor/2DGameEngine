@@ -82,6 +82,7 @@
     <ClCompile Include="Gotham.cpp" />
     <ClCompile Include="PcInputReciever.cpp" />
     <ClCompile Include="StringConverter.cpp" />
+    <ClCompile Include="TimeController.cpp" />
     <ClCompile Include="XAudio2Manager.cpp" />
     <ClCompile Include="XAudio2Player.cpp" />
     <ClCompile Include="XInputGamepadState.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="Batman.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraMovement.h" />
+    <ClInclude Include="CollisionDetector.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantMouseState.h" />
     <ClInclude Include="DirectXAssetLoader.h" />
@@ -118,6 +120,7 @@
     <ClInclude Include="Gotham.h" />
     <ClInclude Include="PcInputReciever.h" />
     <ClInclude Include="StringConverter.h" />
+    <ClInclude Include="TimeController.h" />
     <ClInclude Include="XAudio2Manager.h" />
     <ClInclude Include="XAudio2Player.h" />
     <ClInclude Include="XInputGamepadState.h" />

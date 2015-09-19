@@ -3,7 +3,13 @@
 
 #include "Position.h"
 #include "Dimension.h"
+#include "TimeController.h"
+#include "StringConverter.h"
+#include "CollisionDetector.h"
 #include <string>
+#include <map>
+
+#define MAX_ASSETS 50
 
 /// <summary>
 /// An entity is an object that exists in a scene, entities are drawn one by one by the renderer.
@@ -22,27 +28,42 @@ public:
 	/// <summary>
 	/// Put the entity at a new x-y position.
 	/// </summary>
-	int JumpTo(double, double);
+	int JumpTo(int, int);
 
 	/// <summary>
 	/// Set the depth that the entity is located at.
 	/// </summary>
-	int SetZindex(double);
+	int SetZindex(int);
 
 	/// <summary>
 	/// Get the position of the entity as a Position object.
 	/// </summary>
-	Position GetPosition();
+	Position* GetPosition();
 
 	/// <summary>
-	/// Get the URI of the entity's asset for the asset loader.
+	/// Get the Uri of the asset that will currently be displayed.
 	/// </summary>
-	std::wstring GetAssetURI();
+	std::wstring GetCurrentAssetUri();
+
+	/// <summary>
+	/// Get the asset uri that belongs to this index.
+	/// </summary>
+	std::wstring GetAssetUriByIndex(int);
+
+	/// <summary>
+	/// Get the number of assets this entity has.
+	/// </summary>
+	int AssetCount();
 
 	/// <summary>
 	/// Set the direction for the entity, from 0-360. (degrees)
 	/// </summary>
 	int SetDirection(int);
+
+	/// <summary>
+	/// Adjust the direction of the entity by a value.
+	/// </summary>
+	int Rotate(int);
 
 	/// <summary>
 	/// Get the direction the entity is facing, from 0-360. (degrees)
@@ -64,16 +85,35 @@ public:
 	/// </summary>
 	bool IsPhased();
 
+	/// <summary>
+	/// Set the collision detector to use whenever moving.
+	/// </summary>
+	int SetCollisionDetector(CollisionDetector*);
+
 protected:
+	/// <summary>
+	/// Move a percentage of the speed into X and Y direction (so 1.0f is 100%)
+	/// Use this to move instead of JumpTo, for framerate-independent movespeed.
+	/// </summary>
+	int Move(float, float);
+
 	/// <summary>
 	/// Set the speed the entity will move at.
 	/// </summary>
 	int SetSpeed(int);
 
 	/// <summary>
-	/// Set the entity asset location.
+	/// Add a new asset.
+	/// @param1 The key for using the asset Uri during runtime.
+	/// @param2 The asset Uri.
 	/// </summary>
-	int SetAssetURI(std::string);
+	int AddAsset(std::string, std::string);
+
+	/// <summary>
+	/// Set a new asset to be drawn by the renderer.
+	/// @param The asset key.
+	/// </summary>
+	int SetCurrentAsset(std::string);
 
 	/// <summary>
 	/// Set the entity hitbox width and height.
@@ -86,10 +126,23 @@ protected:
 	int SetPhaseState(bool);
 
 private:
-	Position entityPosition;
-	Dimension hitBox;
+	Position position;
+	Dimension hitbox;
 
-	std::wstring assetURI;
+	CollisionDetector* collisionDetector;
+
+	// Asset Uri's are stored in a list here
+	std::wstring assetUriList[MAX_ASSETS];
+
+	// Each asset is given a key, value points to the index of the list above
+	std::map<std::string, int> assetMap;
+
+	// Number of assets is kept track of
+	int numberOfAssets;
+
+	// Current asset that is to be drawn by the renderer, points to the index of assetUriList[]
+	int currentAsset;
+
 	int direction;
 	int speed;
 	bool phased;

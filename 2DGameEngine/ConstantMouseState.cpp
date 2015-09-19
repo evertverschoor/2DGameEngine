@@ -23,6 +23,7 @@ int ConstantMouseState::SetCursorPosition(int _xPos, int _yPos)
 {
 	cursorPosition->X = _xPos;
 	cursorPosition->Y = _yPos;
+
 	return 1;
 }
 

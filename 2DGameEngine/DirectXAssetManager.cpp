@@ -15,19 +15,23 @@ DirectXAssetManager::~DirectXAssetManager()
 
 int DirectXAssetManager::LoadScene(Scene* _scene)
 {
-	// Load the asset per entity in the scene
+	// For each entity
 	for (int i = 0; i < _scene->EntityCount(); i++)
 	{
-		std::wstring _assetURI = _scene->GetEntity(i)->GetAssetURI();
+		// And for each asset the entity has
+		for (int j = 0; j < _scene->GetEntity(i)->AssetCount(); j++)
+		{
+			std::wstring _assetURI = _scene->GetEntity(i)->GetAssetUriByIndex(j);
 
-		// Skip this asset if it's already loaded in
-		if (assetList[_assetURI] != NULL) break;
+			// Skip this asset if it's already loaded in
+			if (assetList[_assetURI] != NULL) break;
 
-		ID2D1Bitmap* _entityBitmap;
-		int _result = loader->LoadD2DBitmap(_assetURI, &_entityBitmap, renderTarget);
+			ID2D1Bitmap* _entityBitmap;
+			int _result = loader->LoadD2DBitmap(_assetURI, &_entityBitmap, renderTarget);
 
-		// Put NULL if bitmap loading failed
-		assetList[_assetURI] = (_result == 1) ? _entityBitmap : NULL;
+			// Put NULL if bitmap loading failed
+			assetList[_assetURI] = (_result == 1) ? _entityBitmap : NULL;
+		}
 	}
 
 	// Load the scene background asset
@@ -55,7 +59,7 @@ int DirectXAssetManager::SetRenderTarget(ID2D1RenderTarget* _target)
 
 ID2D1Bitmap* DirectXAssetManager::GetD2D1BitmapForEntity(Entity* _entity)
 {
-	return assetList[_entity->GetAssetURI()];
+	return assetList[_entity->GetCurrentAssetUri()];
 }
 
 

@@ -21,6 +21,7 @@ int CreateDemoScene(Kernel* _kernel)
 
 	// Create entity Batman
 	Batman* _batman = new Batman();
+	_gotham->AddEntity(_batman);
 	_batman->JumpTo(800, 300);
 	_batman->SetZindex(4);
 	_batman->SetDirection(0);
@@ -33,18 +34,15 @@ int CreateDemoScene(Kernel* _kernel)
 	_pcInput->AddPcHandler(_batman);
 	if(_gamepadInput) _gamepadInput->AddGamepadHandler(_batman);
 
-	// Put Batman in Gotham
-	_gotham->AddEntity(_batman);
-
 	// Set camera movement to ENTITY_CHASE and pass Batman along
 	//_kernel->SetCameraMovement(ENTITY_CHASE, _batman);
 
-	// Create second entity Batman so we can tell if we're entity chasing
+	// Create second Batman
 	Batman* _batmanTwo = new Batman();
-	_batmanTwo->JumpTo(100, 300);
-	_batmanTwo->SetDirection(0);
-	_batmanTwo->SetZindex(3);
 	_gotham->AddEntity(_batmanTwo);
+	_batmanTwo->JumpTo(100, 500);
+	_batmanTwo->SetZindex(2);
+	_batmanTwo->SetDirection(0);
 
 	// Load the assets that belong to the scene
 	_kernel->GetAssetManager()->LoadScene(_gotham);

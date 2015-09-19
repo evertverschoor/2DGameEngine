@@ -110,8 +110,8 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 	if (NULL == _bitmap) return 0;
 
 	// calculate the actual entity size and position
-	Position* _actualEntityPosition = GetActualDrawPosition(&_entity->GetPosition());
-	Dimension* _actualEntitySize = GetActualDrawSize(new Dimension(_bitmap->GetSize().width, _bitmap->GetSize().height));
+	GetActualDrawPosition(_entity->GetPosition(), &actualEntityPositionDump);
+	GetActualDrawSize(_bitmap->GetSize().width, _bitmap->GetSize().height, &actualEntitySizeDump);
 
 	// Set the rotation for the bitmap, if necessary
 	if (_entity->GetDirection() != 0)
@@ -120,8 +120,8 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 			D2D1::Matrix3x2F::Rotation(
 			_entity->GetDirection(),
 			D2D1::Point2F(
-			_actualEntityPosition->X + (_actualEntitySize->width / 2),
-			_actualEntityPosition->Y + (_actualEntitySize->height / 2)
+			actualEntityPositionDump.X + (actualEntitySizeDump.width / 2),
+			actualEntityPositionDump.Y + (actualEntitySizeDump.height / 2)
 			)
 			)
 			);
@@ -131,10 +131,10 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 	bitmapRenderTarget->DrawBitmap(
 		_bitmap,
 		D2D1::RectF(
-		_actualEntityPosition->X,
-		_actualEntityPosition->Y,
-		_actualEntityPosition->X + _actualEntitySize->width,
-		_actualEntityPosition->Y + _actualEntitySize->height
+		actualEntityPositionDump.X,
+		actualEntityPositionDump.Y,
+		actualEntityPositionDump.X + actualEntitySizeDump.width,
+		actualEntityPositionDump.Y + actualEntitySizeDump.height
 		)
 		);
 
@@ -142,8 +142,6 @@ int DirectXRenderer::DrawEntity(Entity* _entity)
 	bitmapRenderTarget->SetTransform(
 		D2D1::Matrix3x2F::Identity()
 		);
-
-	delete _actualEntitySize;
 
 	return 1;
 }
@@ -158,58 +156,54 @@ int DirectXRenderer::DrawSceneBackground(Scene* _scene)
 	if (NULL == _bitmap) return 0;
 
 	// Calculate the actual background size
-	Dimension* _actualBackgroundSize = GetActualDrawSize(new Dimension(_bitmap->GetSize().width, _bitmap->GetSize().height));
-
-	Position* _actualBackgroundPosition;
+	GetActualDrawSize(_bitmap->GetSize().width, _bitmap->GetSize().height, &actualBackgroundSizeDump);
 
 	// Determine where to draw the background based on the background type
 	switch (*_scene->GetBackgroundType())
 	{
 		case PERSIST:
-			_actualBackgroundPosition = new Position(0, 0, 0);
+			actualBackgroundPositionDump = defaultBackgroundPosition;;
 			break;
 		case MOVE:
-			_actualBackgroundPosition = GetActualDrawPosition(new Position(0, 0, 0));
+			GetActualDrawPosition(&defaultBackgroundPosition, &actualBackgroundPositionDump);
 			break;
 		case SLOW_MOVE:
-			_actualBackgroundPosition = GetActualDrawPosition(new Position(0, 0, 0));
-			_actualBackgroundPosition->X /= 2;
-			_actualBackgroundPosition->Y /= 2;
+			GetActualDrawPosition(&defaultBackgroundPosition, &actualBackgroundPositionDump);
+			actualBackgroundPositionDump.X /= 2;
+			actualBackgroundPositionDump.Y /= 2;
 			break;
 		default:
-			_actualBackgroundPosition = new Position(0, 0, 0);
+			actualBackgroundPositionDump = defaultBackgroundPosition;
+			break;
 	}
 
 	// Draw the bitmap
 	bitmapRenderTarget->DrawBitmap(
 		_bitmap,
 		D2D1::RectF(
-		_actualBackgroundPosition->X,
-		_actualBackgroundPosition->Y,
-		_actualBackgroundPosition->X + _actualBackgroundSize->width,
-		_actualBackgroundPosition->Y + _actualBackgroundSize->height
+		actualBackgroundPositionDump.X,
+		actualBackgroundPositionDump.Y,
+		actualBackgroundPositionDump.X + actualBackgroundSizeDump.width,
+		actualBackgroundPositionDump.Y + actualBackgroundSizeDump.height
 		)
 		);
-
-	delete _actualBackgroundSize;
-	delete _actualBackgroundPosition;
 
 	return 1;
 }
 
 int DirectXRenderer::WriteText(std::string _text, Position* _position)
 {
-	Position* _actualTextPosition = GetActualDrawPosition(_position);
+	GetActualDrawPosition(_position, &actualTextPositionDump);
 
 	renderTarget->DrawTextW(
 		StringConverter::Instance()->StringToWstring(_text).c_str(),
 		_text.length(),
 		defaultTextFormat,
 		D2D1::RectF(
-		_actualTextPosition->X,
-		_actualTextPosition->Y,
-		_actualTextPosition->X + settings->screenRes->width,
-		_actualTextPosition->Y + settings->screenRes->height
+		actualTextPositionDump.X,
+		actualTextPositionDump.Y,
+		actualTextPositionDump.X + settings->screenRes->width,
+		actualTextPositionDump.Y + settings->screenRes->height
 		),
 		defaultTextBrush,
 		D2D1_DRAW_TEXT_OPTIONS_CLIP,
@@ -232,12 +226,12 @@ int DirectXRenderer::DrawEngineSplash(float _red, float _green, float _blue)
 	// Bitmap wasn't properly loaded or doesn't exist, return
 	if (NULL == _bitmap) return 0;
 
-	// Calculate the actual bitmap size
-	Dimension* _actualBitmapSize = GetActualDrawSize(new Dimension(_bitmap->GetSize().width, _bitmap->GetSize().height));
+	// Calculate the actual bitmap size, we'll just use the entity size dump
+	GetActualDrawSize(_bitmap->GetSize().width, _bitmap->GetSize().height, &actualEntitySizeDump);
 
 	// Calculate the draw position, always draw at the center of the screen
-	int _posX = (settings->screenRes->width / 2) - (_actualBitmapSize->width / 2);
-	int _posY = (settings->screenRes->height / 2) - (_actualBitmapSize->height / 2);
+	int _posX = (settings->screenRes->width / 2) - (actualEntitySizeDump.width / 2);
+	int _posY = (settings->screenRes->height / 2) - (actualEntitySizeDump.height / 2);
 
 	// Draw the bitmap
 	renderTarget->DrawBitmap(
@@ -245,14 +239,13 @@ int DirectXRenderer::DrawEngineSplash(float _red, float _green, float _blue)
 		D2D1::RectF(
 		_posX,
 		_posY,
-		_posX + _actualBitmapSize->width,
-		_posY + _actualBitmapSize->height
+		_posX + actualEntitySizeDump.width,
+		_posY + actualEntitySizeDump.height
 		)
 		);
 
 	// Finalize
 	renderTarget->EndDraw();
-	delete _actualBitmapSize;
 
 	return 1;
 }
@@ -425,7 +418,11 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 		brighten->SetValue(D2D1_BRIGHTNESS_PROP_BLACK_POINT, D2D1::Vector2F(0.0f, 0.2f));
 	}
 
-	positionForFPS = GetActualDrawPosition(new Position(5, 5, 5));
+	Position* _fpsPos = new Position(5, 5, 5);
+
+	GetActualDrawPosition(_fpsPos, &positionForFPS);
+
+	delete _fpsPos;
 
 	resourceManager->SetRenderTarget(renderTarget);
 
@@ -529,25 +526,25 @@ int DirectXRenderer::SetVirtualResolution(Dimension* _resolution)
 	return 1;
 }
 
-Position* DirectXRenderer::GetActualDrawPosition(Position* _position)
+int DirectXRenderer::GetActualDrawPosition(Position* _position, Position* _dump)
 {
 	// subtract the camera coordinates
-	_position->X -= camera->GetPosition()->X;
-	_position->Y -= camera->GetPosition()->Y;
+	_dump->X = _position->X - camera->GetPosition()->X;
+	_dump->Y = _position->Y - camera->GetPosition()->Y;
 
 	// adjust the position to the actual resolution
-	_position->X = (_position->X * settings->screenRes->width) / virtualResolution->width;
-	_position->Y = (_position->Y * settings->screenRes->height) / virtualResolution->height;
+	_dump->X = (_dump->X * settings->screenRes->width) / virtualResolution->width;
+	_dump->Y = (_dump->Y * settings->screenRes->height) / virtualResolution->height;
 
-	return _position;
+	return 1;
 }
 
-Dimension* DirectXRenderer::GetActualDrawSize(Dimension* _size)
+int DirectXRenderer::GetActualDrawSize(int _width, int _height, Dimension* _dump)
 {
-	_size->width = (_size->width * settings->screenRes->width) / virtualResolution->width;
-	_size->height = (_size->height * settings->screenRes->height) / virtualResolution->height;
+	_dump->width = (_width * settings->screenRes->width) / virtualResolution->width;
+	_dump->height = (_height * settings->screenRes->height) / virtualResolution->height;
 
-	return _size;
+	return 1;
 }
 
 float DirectXRenderer::GetActualFontSize(float _size)
@@ -570,10 +567,10 @@ int DirectXRenderer::DrawFPS()
 		StringConverter::Instance()->IntToWString(framerate).length(),
 		engineTextFormat,
 		D2D1::RectF(
-		positionForFPS->X,
-		positionForFPS->Y,
-		positionForFPS->X + settings->screenRes->width,
-		positionForFPS->Y + settings->screenRes->height
+		positionForFPS.X,
+		positionForFPS.Y,
+		positionForFPS.X + settings->screenRes->width,
+		positionForFPS.Y + settings->screenRes->height
 		),
 		engineTextBrush,
 		D2D1_DRAW_TEXT_OPTIONS_CLIP,

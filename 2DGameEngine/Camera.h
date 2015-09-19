@@ -9,8 +9,10 @@
 #include "GFXController.h"
 #include "VideoSettings.h"
 #include "Entity.h"
+#include "TimeController.h"
 
 #define PI 3.14159265358979323846
+#define CAMERA_DEFAULT_SPEED 7
 
 /// <summary>
 /// The camera is used by the renderer to determine what portion of the active scene to draw.
@@ -25,7 +27,7 @@ public:
 	/// @param3 The GFXController the camera uses to pass motion blur information
 	/// @param4 The Video settings so the camera can determine whether or not to calculace motion blur
 	/// </summary>
-	Camera(int, Dimension*, GFXController*, VideoSettings*);
+	Camera(int, Dimension*, GFXController*, VideoSettings*, TimeController*);
 	~Camera();
 
 	/// <summary>
@@ -59,6 +61,7 @@ private:
 
 	GFXController* gfx;
 	VideoSettings* settings;
+	TimeController* time;
 
 	// Camera movement mode
 	CameraMovement movement;

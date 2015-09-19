@@ -23,6 +23,7 @@
 #include "AudioManager.h"
 #include "XAudio2Player.h"
 #include "XAudio2Manager.h"
+#include "TimeController.h"
 #include "Camera.h"
 #include <thread>
 
@@ -102,6 +103,7 @@ private:
 	Window* mainWindow;
 	Renderer* gameRenderer;
 	Camera* camera;
+	TimeController* time;
 
 	GamepadInputReciever* gamepadReciever;
 	PcInputReciever* pcReciever;

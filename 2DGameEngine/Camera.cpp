@@ -1,15 +1,13 @@
 #include "Camera.h"
 
 
-Camera::Camera(int _gamepadno, Dimension* _virtualResolution, GFXController* _gfx, VideoSettings* _settings)
+Camera::Camera(int _gamepadno, Dimension* _virtualResolution, GFXController* _gfx, VideoSettings* _settings, TimeController* _time)
 {
 	gamepadNumber = _gamepadno;
 	virtualResolution = _virtualResolution;
 	gfx = _gfx;
 	settings = _settings;
-	
-	cameraPosition.X = 0;
-	cameraPosition.Y = 0;
+	time = _time;
 
 	// Default camera movement mode is MOUSE_MOVE
 	SetCameraMovement(CameraMovement::NORMAL);
@@ -115,28 +113,32 @@ int Camera::HandleGamepadInput(GamepadState* _state)
 	// Only move the camera if the camera movement is set to NORMAL
 	if (movement != NORMAL) return 0;
 
+	// Normalize the movespeed for all framerates
+	int _moveAmount = time->GetMoveDistanceForSpeed(CAMERA_DEFAULT_SPEED);
+
 	// Initialize the move amounts, depending on what direction(s) the stick is facing
 	int _moveX = 0;
 	int _moveY = 0;
 
 	if (_state->RightStickDirection(GAMEPADSTATE_RIGHT))
 	{
-		_moveX += 50;
+		_moveX += _moveAmount;
 	}
 	if (_state->RightStickDirection(GAMEPADSTATE_LEFT))
 	{
-		_moveX -= 50;
+		_moveX -= _moveAmount;
 	}
 	if (_state->RightStickDirection(GAMEPADSTATE_UP))
 	{
-		_moveY -= 50;
+		_moveY -= _moveAmount;
 	}
 	if (_state->RightStickDirection(GAMEPADSTATE_DOWN))
 	{
-		_moveY += 50;
+		_moveY += _moveAmount;
 	}
 
-	Move(_moveX, _moveY);
+	// Only call Move() if _moveX or _moveY is not 0
+	if(_moveX != 0 || _moveY != 0) Move(_moveX, _moveY);
 
 	return 0;
 }
@@ -179,11 +181,15 @@ int Camera::HandleMouseInput(MouseState*_state )
 		_deltaY = _mouseY - windowCenterY;
 	}
 
-	// Move the camera in deltaX and deltaY direction
-	Move(_deltaX, _deltaY);
+	// If either DeltaX or DeltaY is not 0
+	if (_deltaX != 0 || _deltaY != 0)
+	{
+		// Move the camera
+		Move(_deltaX, _deltaY);
 
-	// Return the cursor to the center of the screen
-	SetCursorPos(monitorCenterX, monitorCenterY);
+		// Return the cursor to the center of the screen
+		SetCursorPos(monitorCenterX, monitorCenterY);
+	}
 
 	return 1;
 }
@@ -204,8 +210,8 @@ int Camera::CalculateMotionBlur(float _deltaX, float _deltaY)
 int Camera::ChaseEntity()
 {
 	Move(
-		chasableEntity->GetPosition().X - virtualCenterX + entityCenterX - cameraPosition.X, 
-		chasableEntity->GetPosition().Y - virtualCenterY + entityCenterY - cameraPosition.Y
+		chasableEntity->GetPosition()->X - virtualCenterX + entityCenterX - cameraPosition.X, 
+		chasableEntity->GetPosition()->Y - virtualCenterY + entityCenterY - cameraPosition.Y
 	);
 	return 1;
 }

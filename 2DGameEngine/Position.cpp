@@ -9,7 +9,7 @@ Position::Position()
 }
 
 
-Position::Position(double _x, double _y, double _z)
+Position::Position(int _x, int _y, int _z)
 {
 	X = _x;
 	Y = _y;

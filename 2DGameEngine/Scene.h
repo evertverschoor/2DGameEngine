@@ -1,17 +1,19 @@
-#define MAX_ENTITIES 64
 #ifndef SCENE_H
 #define SCENE_H
 
 #include "Entity.h"
 #include "Dimension.h"
 #include "BackgroundType.h"
+#include "CollisionDetector.h"
 #include <string>
 #include <limits>
+
+#define MAX_ENTITIES 64
 
 /// <summary>
 /// A scene is a space in which entities exist, a scene is drawn to the screen by the renderer.
 /// </summary>
-class Scene
+class Scene : public CollisionDetector
 {
 public:
 	Scene();
@@ -61,6 +63,8 @@ public:
 	/// Order the entity list by Z-Index, from lowest to highest.
 	/// </summary>
 	int OrderByZIndex();
+
+	bool IsValidMove(int, int, Position*, Dimension*);
 protected:
 	/// <summary>
 	/// A list of all the entities that are in the scene.

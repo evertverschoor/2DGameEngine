@@ -91,8 +91,11 @@ int Kernel::Init(LPCWSTR _name)
 	gfx = new GFXController();
 	gameRenderer->SetGFXController(gfx);
 
-	// Initialize the camera
-	camera = new Camera(0, &virtualResolution, gfx, vSettings);
+	// Get a copy of the timecontroller
+	time = TimeController::Instance();
+
+	// Initialize the camera and pass timecontroller along
+	camera = new Camera(0, &virtualResolution, gfx, vSettings, time);
 
 	// Make pc reciever
 	pcReciever->AddPcHandler(camera);
@@ -216,6 +219,9 @@ int Kernel::Run()
 
 int Kernel::OnGameUpdate()
 {
+	// Update the time
+	time->Update();
+
 	// Read input if available
 	if(gamepadReciever) gamepadReciever->ReadInput();
 	if(pcReciever) pcReciever->ReadInput();

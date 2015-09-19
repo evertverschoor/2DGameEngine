@@ -17,6 +17,9 @@ public:
 	int HandleKeyboardInput(KeyboardState*);
 	int HandleGamepadInput(GamepadState*);
 	int GetGamepadNumber();
+
+private:
+	int MoveFromInput(bool, bool, bool, bool);
 };
 
 #endif

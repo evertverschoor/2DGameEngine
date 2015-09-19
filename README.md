@@ -2,13 +2,11 @@
 
 ## Planned Work
 
--> Let entities have multiple assets and they point to their current one that the renderer draws
+-> Rework motion blur to a more proper way
 
 -> Collision detection
 
 -> Gravity
-
--> Implement proper way of making entities move (not a certain distance every frame)
 
 -> Convert to DLL
 
@@ -19,7 +17,7 @@
 
 ## Could Haves
 
--> OpenGL Renderer for Mac and Linux support (also xinput alternative?)
+-> OpenGL Renderer for Mac and Linux support (also xinput and xaudio alternatives?)
 
 
 ## Changelog
@@ -78,6 +76,21 @@
 -> Deleted ControllableEntity
 
 -> StartScene() now orders the entities in a scene by z-index, so lower z-index is overlapped by higher z-indexes
+
+
+### Sept. 18, 2015
+
+-> Added framerate independence in camera and entity movement (they move at a constant speed regardless of fps)
+
+-> Added support for entities having more than one asset, loading them all during loadtime and switching between them during runtime
+   
+-> Added partial collision detection (if an entity wants to move into another one, it doesn't move next to it yet, instead it stays where it is, leaving a small gap)
+
+
+### Sept. 19, 2015
+
+-> Fixed major bug where entities would be attracted to 0,0 on any resolution other than 1080p and would start moving to 0,0 at 1080p anyway if you moved the camera,
+   by reworking the resolution independence through the usage of memory dumps (this is far better anyway)
 
 
 ## Benchmarks

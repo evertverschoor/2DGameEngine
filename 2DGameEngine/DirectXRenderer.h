@@ -45,6 +45,16 @@ private:
 	ID2D1BitmapRenderTarget* bitmapRenderTarget;
 	ID2D1DeviceContext* deviceContext;
 
+	// Memory dumps for resolution independent scaling
+	Position actualEntityPositionDump;
+	Position actualBackgroundPositionDump;
+	Position actualTextPositionDump;
+	Dimension actualEntitySizeDump;
+	Dimension actualBackgroundSizeDump;
+
+	// Default background position is 0,0,0
+	Position defaultBackgroundPosition;
+
 	// Postproccessing effects
 	Microsoft::WRL::ComPtr<ID2D1Effect> motionBlur;
 	Microsoft::WRL::ComPtr<ID2D1Effect> sharpen;
@@ -58,7 +68,7 @@ private:
 	// Text appearance objects for in-engine text
 	IDWriteTextFormat* engineTextFormat;
 	ID2D1SolidColorBrush* engineTextBrush;
-	Position* positionForFPS;
+	Position positionForFPS;
 
 	// Engine objects
 	VideoSettings* settings;
@@ -85,13 +95,18 @@ private:
 
 	/// <summary>
 	/// Calculates the actual draw position for an entity if the virtual resolution is different from the actual resolution.
+	/// @param1 The entity position
+	/// @param2 The memory dump to write to
 	/// </summary>
-	Position* GetActualDrawPosition(Position*);
+	int GetActualDrawPosition(Position*, Position*);
 
 	/// <summary>
 	/// Calculates the actual draw size for an entity if the virtual resolution is different from the actual resolution.
+	/// @param1 The entity width
+	/// @param2 The entity height
+	/// @param3 The memory dump to write to
 	/// </summary>
-	Dimension* GetActualDrawSize(Dimension*);
+	int GetActualDrawSize(int, int, Dimension*);
 
 	/// <summary>
 	/// Calculates the actual font size for a piece of text if the virtual resolution is different from the actual resolution.

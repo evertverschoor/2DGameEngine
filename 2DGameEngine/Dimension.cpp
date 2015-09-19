@@ -10,6 +10,8 @@ Dimension::Dimension(int _width, int _height)
 
 Dimension::Dimension()
 {
+	width = 0;
+	height = 0;
 }
 
 
