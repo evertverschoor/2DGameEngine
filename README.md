@@ -2,17 +2,21 @@
 
 ## Planned Work
 
+-> Finalize and optimize Gravity
+
+-> Look at collisions stuff
+
+-> Unfocus postprocess effect
+
 -> Rework motion blur to a more proper way
 
--> Collision detection
+-> Support for day/night cycle
 
--> Gravity
+-> Depth of field postprocess effect
 
 -> Convert to DLL
 
 -> Allow for normal alt-tabbing without the mouse getting stuck on NORMAL camera move
-
--> Add optimize function to the renderer (???) to resize bitmaps permanently during load time
 
 
 ## Could Haves
@@ -91,6 +95,15 @@
 
 -> Fixed major bug where entities would be attracted to 0,0 on any resolution other than 1080p and would start moving to 0,0 at 1080p anyway if you moved the camera,
    by reworking the resolution independence through the usage of memory dumps (this is far better anyway)
+   
+
+### Sept. 20, 2015
+
+-> Finished proper collision detection that now suggests what position an entity should take to get as close to the target entity as possible
+
+-> Added scene-wide gravity
+
+-> Added collision handling for all entities (entity and collisiondetector #include each other, it works??? god help us all)
 
 
 ## Benchmarks

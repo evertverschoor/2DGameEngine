@@ -15,6 +15,7 @@ Batman::Batman()
 	// Set speed and phase property
 	SetSpeed(10);
 	SetPhaseState(false);
+	SetFloatState(false);
 }
 
 
@@ -109,4 +110,10 @@ int Batman::MoveFromInput(bool _up, bool _left, bool _down, bool _right)
 int Batman::GetGamepadNumber()
 {
 	return 0;
+}
+
+
+int Batman::HandleCollision(Entity* _entity)
+{
+	return 1;
 }

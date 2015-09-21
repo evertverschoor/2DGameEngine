@@ -1,7 +1,7 @@
 #include "Kernel.h"
 #include "Gotham.h"
 #include "Batman.h"
-#include "AudioEngine.h"
+#include "Ground.h"
 
 int runnerThread(Kernel* _kernel)
 {
@@ -37,12 +37,12 @@ int CreateDemoScene(Kernel* _kernel)
 	// Set camera movement to ENTITY_CHASE and pass Batman along
 	//_kernel->SetCameraMovement(ENTITY_CHASE, _batman);
 
-	// Create second Batman
-	Batman* _batmanTwo = new Batman();
-	_gotham->AddEntity(_batmanTwo);
-	_batmanTwo->JumpTo(100, 500);
-	_batmanTwo->SetZindex(2);
-	_batmanTwo->SetDirection(0);
+	// Create ground
+	Ground* _ground = new Ground();
+	_gotham->AddEntity(_ground);
+	_ground->JumpTo(0, 980);
+	_ground->SetZindex(1);
+	_ground->SetDirection(0);
 
 	// Load the assets that belong to the scene
 	_kernel->GetAssetManager()->LoadScene(_gotham);

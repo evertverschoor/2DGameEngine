@@ -80,6 +80,8 @@
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="GFXController.cpp" />
     <ClCompile Include="Gotham.cpp" />
+    <ClCompile Include="Gravity.cpp" />
+    <ClCompile Include="Ground.cpp" />
     <ClCompile Include="PcInputReciever.cpp" />
     <ClCompile Include="StringConverter.cpp" />
     <ClCompile Include="TimeController.cpp" />
@@ -110,6 +112,7 @@
     <ClInclude Include="CollisionDetector.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantMouseState.h" />
+    <ClInclude Include="Direction.h" />
     <ClInclude Include="DirectXAssetLoader.h" />
     <ClInclude Include="DirectXAssetManager.h" />
     <ClInclude Include="DirectXRenderer.h" />
@@ -118,6 +121,8 @@
     <ClInclude Include="GamepadState.h" />
     <ClInclude Include="GFXController.h" />
     <ClInclude Include="Gotham.h" />
+    <ClInclude Include="Gravity.h" />
+    <ClInclude Include="Ground.h" />
     <ClInclude Include="PcInputReciever.h" />
     <ClInclude Include="StringConverter.h" />
     <ClInclude Include="TimeController.h" />

@@ -26,6 +26,16 @@ public:
 	int GetRotateDistanceForSpeed(int);
 
 	/// <summary>
+	/// Get framerate-independent move distance based on momentum.
+	/// </summary>
+	int GetMoveDistanceForMomentum(int);
+
+	/// <summary>
+	/// Get framerate-independent momentum increase.
+	/// </summary>
+	int GetMomentumIncrease(int);
+
+	/// <summary>
 	/// Get the instance of the time controller using a static call.
 	/// </summary>
 	static TimeController* Instance();

@@ -93,6 +93,7 @@ int Kernel::Init(LPCWSTR _name)
 
 	// Get a copy of the timecontroller
 	time = TimeController::Instance();
+	time->Update();
 
 	// Initialize the camera and pass timecontroller along
 	camera = new Camera(0, &virtualResolution, gfx, vSettings, time);
@@ -208,6 +209,10 @@ int Kernel::Run()
 	while (Running())
 	{
 		if (activeScene) OnGameUpdate();
+		else
+		{
+			time->Update();
+		}
 	}
 
 	// End the window thread (killing the window)

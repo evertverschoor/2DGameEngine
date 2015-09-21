@@ -6,6 +6,8 @@
 #include "TimeController.h"
 #include "StringConverter.h"
 #include "CollisionDetector.h"
+#include "Entity.h"
+#include "Direction.h"
 #include <string>
 #include <map>
 
@@ -24,6 +26,11 @@ public:
 	/// Main function that is constantly called if this entity is in the active scene.
 	/// </summary>
 	virtual int Act() = 0;
+
+	/// <summary>
+	/// Handle a collision with another entity.
+	/// </summary>
+	virtual int HandleCollision(Entity*) = 0;
 
 	/// <summary>
 	/// Put the entity at a new x-y position.
@@ -81,9 +88,26 @@ public:
 	Dimension* GetHitbox();
 
 	/// <summary>
-	/// Returns if the entity may phase through other entities.
+	/// Returns if the entity may phase through other entities. (unaffected by collisions)
 	/// </summary>
 	bool IsPhased();
+
+	/// <summary>
+	/// Returns if the entity is unaffected by gravity.
+	/// </summary>
+	bool Floating();
+
+	/// <summary>
+	/// Set the entity momentum for gravitation
+	/// @param1 How much to INCREASE the momentum by
+	/// @param2 The direction of the momentum
+	/// </summary>
+	int SetMomentum(int, Direction);
+
+	/// <summary>
+	/// Fall into the momentum direction, with the momentum as speed
+	/// </summary>
+	int Fall();
 
 	/// <summary>
 	/// Set the collision detector to use whenever moving.
@@ -125,6 +149,11 @@ protected:
 	/// </summary>
 	int SetPhaseState(bool);
 
+	/// <summary>
+	/// Is the entity unaffected by gravity?
+	/// </summary>
+	int SetFloatState(bool);
+
 private:
 	Position position;
 	Dimension hitbox;
@@ -145,7 +174,13 @@ private:
 
 	int direction;
 	int speed;
+
+	// Gravity-related physics
+	int momentum;
+	Direction momentumDirection;
+
 	bool phased;
+	bool floating;
 };
 
 #endif

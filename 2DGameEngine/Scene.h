@@ -1,10 +1,12 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "Entity.h"
 #include "Dimension.h"
 #include "BackgroundType.h"
 #include "CollisionDetector.h"
+#include "Gravity.h"
+#include "TimeController.h"
+#include "Entity.h"
 #include <string>
 #include <limits>
 
@@ -64,7 +66,7 @@ public:
 	/// </summary>
 	int OrderByZIndex();
 
-	bool IsValidMove(int, int, Position*, Dimension*);
+	bool DetectCollision(int*, int*, Entity*);
 protected:
 	/// <summary>
 	/// A list of all the entities that are in the scene.
@@ -91,12 +93,23 @@ protected:
 	/// Set the way the background behaves.
 	/// </summary>
 	int SetBackgroundType(BackgroundType);
+
+	/// <summary>
+	/// Set the gravity direction (0-360)
+	/// </summary>
+	int SetGravityDirection(Direction);
+
+	/// <summary>
+	/// Set the gravity intensity
+	/// </summary>
+	int SetGravityIntensity(int);
 private:
 	int numberOfEntities;
 	std::string name;
 	std::wstring backgroundAssetURI;
 	Dimension* size;
 	BackgroundType backgroundType;
+	Gravity gravity;
 };
 
 #endif

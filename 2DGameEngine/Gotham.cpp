@@ -10,6 +10,8 @@ Gotham::Gotham()
 	// Set background image and type
 	SetBackgroundAssetURI("Assets/Backgrounds/gotham_back.jpg");
 	SetBackgroundType(SLOW_MOVE);
+
+	SetGravityIntensity(10);
 }
 
 

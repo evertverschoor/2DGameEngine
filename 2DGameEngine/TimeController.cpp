@@ -26,13 +26,25 @@ int TimeController::Update()
 
 int TimeController::GetMoveDistanceForSpeed(int _speed)
 {
-	return (_speed*currentFrametime) / 10;
+	return (_speed*currentFrametime) / 16;
 }
 
 
 int TimeController::GetRotateDistanceForSpeed(int _speed)
 {
-	return (_speed*currentFrametime) / 40;
+	return (_speed*currentFrametime) / 32;
+}
+
+
+int TimeController::GetMoveDistanceForMomentum(int _value)
+{
+	return (_value*currentFrametime) / 160;
+}
+
+
+int TimeController::GetMomentumIncrease(int _value)
+{
+	return (_value*currentFrametime) / 16;
 }
 
 

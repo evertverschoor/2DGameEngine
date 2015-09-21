@@ -6,6 +6,8 @@ Entity::Entity()
 	SetSpeed(10);
 	SetHitbox(100, 100);
 	SetPhaseState(true);
+	SetFloatState(true);
+	SetMomentum(0, SOUTH);
 }
 
 
@@ -22,8 +24,12 @@ Position* Entity::GetPosition()
 
 int Entity::JumpTo(int _xPos, int _yPos)
 {
-	// Check for collisions
-	if (!phased && !collisionDetector->IsValidMove(_xPos, _yPos, &position, &hitbox)) return 0;
+	// If not phased, check for collisions
+	if (!phased)
+	{
+		// If we collided, momentum back to 0
+		if (!collisionDetector->DetectCollision(&_xPos, &_yPos, this)) momentum = 0;
+	}
 
 	position.X = _xPos;
 	position.Y = _yPos;
@@ -37,7 +43,7 @@ int Entity::Move(float _xJump, float _yJump)
 	// Calculate the actual distance we should traverse based on the framerate
 	int _actualDistance = TimeController::Instance()->GetMoveDistanceForSpeed(speed);
 
-	// Jump to the target point, the X and Y jump values multiplied by the jump distance
+	// Multiply jump distance by the xJump and yJump values, jump to the target point
 	JumpTo(position.X + _actualDistance*_xJump, position.Y + _actualDistance*_yJump);
 
 	return 1;
@@ -157,6 +163,54 @@ bool Entity::IsPhased()
 int Entity::SetPhaseState(bool _value)
 {
 	phased = _value;
+	return 1;
+}
+
+
+bool Entity::Floating()
+{
+	return floating;
+}
+
+
+int Entity::SetFloatState(bool _value)
+{
+	floating = _value;
+	return 1;
+}
+
+
+int Entity::SetMomentum(int _additive, Direction _direction)
+{
+	momentum += _additive;
+	momentumDirection = _direction;
+
+	return 1;
+}
+
+
+int Entity::Fall()
+{
+	// If we're affected by gravity, fall into the correct direction
+	if (!floating)
+	{
+		switch (momentumDirection)
+		{
+		case NORTH:
+			JumpTo(position.X, position.Y - TimeController::Instance()->GetMoveDistanceForMomentum(momentum));
+			break;
+		case EAST:
+			JumpTo(position.X + TimeController::Instance()->GetMoveDistanceForMomentum(momentum), position.Y);
+			break;
+		case SOUTH:
+			JumpTo(position.X, position.Y + TimeController::Instance()->GetMoveDistanceForMomentum(momentum));
+			break;
+		case WEST:
+			JumpTo(position.X - TimeController::Instance()->GetMoveDistanceForMomentum(momentum), position.Y);
+			break;
+		}
+	}
+
 	return 1;
 }
 
