@@ -37,12 +37,16 @@ int DirectXRenderer::Render(Scene* _renderableScene)
 	// End drawing here
 	bitmapRenderTarget->EndDraw();
 
-	// Get the bitmap that was just drawn
+	// Get drawn bitmap from render target
 	ID2D1Bitmap* _bitmap;
 	bitmapRenderTarget->GetBitmap(&_bitmap);
 
 	// Send the bitmap to postprocessing
 	PostProcess(_bitmap);
+
+	// Last camera position is its current one
+	cameraLastPosition.X = camera->GetPosition()->X;
+	cameraLastPosition.Y = camera->GetPosition()->Y;
 
 	// Release the temporary bitmap
 	_bitmap->Release();
@@ -56,36 +60,60 @@ int DirectXRenderer::PostProcess(ID2D1Bitmap* _bitmap)
 
 	deviceContext->BeginDraw();
 
+	// Apply motion blur if turned on
+	if (settings->motionBlur)
+	{
+		// Input is image postprocessed so far
+		motionBlur->SetInput(0, _finalImage);
+
+		// Calculate delta X and delta Y for camera position
+		float _cameraDeltaX = camera->GetPosition()->X - cameraLastPosition.X;
+		float _cameraDeltaY = camera->GetPosition()->Y - cameraLastPosition.Y;
+
+		// Calculate motion blur angle
+		float _angle = atan2(_cameraDeltaX, _cameraDeltaY)*(180 / PI);
+		_angle -= 90;
+
+		// Calculate motion blur amount
+		float _amount = fabs(_cameraDeltaX + _cameraDeltaY) / 2;
+
+		// Angle
+		motionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_ANGLE, _angle);
+
+		// Amount
+		motionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_STANDARD_DEVIATION, _amount);
+
+		// Draw output to image
+		motionBlur.Get()->GetOutput(&_finalImage);
+	}
+
 	// Apply saturation if turned on
 	if (settings->saturate)
 	{
+		// Input is image postprocessed so far
 		saturate->SetInput(0, _finalImage);
+
+		// Draw output to image
 		saturate.Get()->GetOutput(&_finalImage);
-	}
-
-	// Apply motion blur if turned on
-	if (settings->motionBlur && gfx->GetMotionBlurAmount() > 0.0f)
-	{
-		motionBlur->SetInput(0, _finalImage);
-		motionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_ANGLE, gfx->GetMotionBlurAngle());
-		motionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_STANDARD_DEVIATION, gfx->GetMotionBlurAmount());
-		motionBlur->GetOutput(&_finalImage);
-
-		// Reset the motion blur data after we're done
-		gfx->SetMotionBlur(0.0f, 0.0f);
 	}
 
 	// Apply sharpening if turned on
 	if (settings->sharpen)
 	{
+		// Input is image postprocessed so far
 		sharpen->SetInput(0, _finalImage);
+
+		// Draw output to image
 		sharpen.Get()->GetOutput(&_finalImage);
 	}
 
 	// Apply brightening if turned on
 	if (settings->brighten)
 	{
+		// Input is image postprocessed so far
 		brighten->SetInput(0, _finalImage);
+
+		// Draw output to image
 		brighten.Get()->GetOutput(&_finalImage);
 	}
 

@@ -17,6 +17,8 @@
 #include <d2d1_1.h>
 #include <wrl.h>
 
+#define PI 3.14159265358979323846
+
 /// <summary>
 /// The DirectX Renderer that realizes the Renderer interface.
 /// Responsible for rendering to the main window.
@@ -60,6 +62,9 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Effect> sharpen;
 	Microsoft::WRL::ComPtr<ID2D1Effect> saturate;
 	Microsoft::WRL::ComPtr<ID2D1Effect> brighten;
+
+	// Postprocessing helpers
+	Position cameraLastPosition;
 
 	// Text appearance objects for in-game text
 	IDWriteTextFormat* defaultTextFormat;

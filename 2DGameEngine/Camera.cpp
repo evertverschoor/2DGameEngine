@@ -1,19 +1,24 @@
 #include "Camera.h"
 
 
-Camera::Camera(int _gamepadno, Dimension* _virtualResolution, GFXController* _gfx, VideoSettings* _settings, TimeController* _time)
+Camera::Camera(int _gamepadno, Dimension* _virtualResolution, VideoSettings* _settings)
 {
 	gamepadNumber = _gamepadno;
 	virtualResolution = _virtualResolution;
-	gfx = _gfx;
 	settings = _settings;
-	time = _time;
+	time = TimeController::Instance();
 
 	// Default camera movement mode is MOUSE_MOVE
 	SetCameraMovement(CameraMovement::NORMAL);
 
 	// And no chasable entity yet
 	chasableEntity = NULL;
+
+	// No momentum
+	momentum = 0;
+
+	// Save a copy of timecontroller
+	time = TimeController::Instance();
 
 	// Determine the monitor center
 	monitorCenterX = settings->monitorRes->width / 2;
@@ -58,11 +63,8 @@ int Camera::Move(int _x, int _y)
 	if (0 > _newPosY) _newPosY = 0;
 
 	// Validate the new position for values above the scene size
-	if (sceneSize->width < _newPosX) _newPosX = sceneSize->width;
-	if (sceneSize->height < _newPosY) _newPosY = sceneSize->height;
-
-	// Calculate motion blur based on x and y move values, if turned on
-	if (settings->motionBlur && movement == NORMAL) CalculateMotionBlur(_newPosX - cameraPosition.X, _newPosY - cameraPosition.Y);
+	if (sceneSize->width - virtualResolution->width < _newPosX) _newPosX = sceneSize->width - virtualResolution->width;
+	if (sceneSize->height - virtualResolution->height < _newPosY) _newPosY = sceneSize->height - virtualResolution->height;
 
 	// Make the jump
 	JumpTo(_newPosX, _newPosY);
@@ -113,32 +115,51 @@ int Camera::HandleGamepadInput(GamepadState* _state)
 	// Only move the camera if the camera movement is set to NORMAL
 	if (movement != NORMAL) return 0;
 
-	// Normalize the movespeed for all framerates
-	int _moveAmount = time->GetMoveDistanceForSpeed(CAMERA_DEFAULT_SPEED);
-
 	// Initialize the move amounts, depending on what direction(s) the stick is facing
 	int _moveX = 0;
 	int _moveY = 0;
 
+	// Determine what direction, if at all, to move in
 	if (_state->RightStickDirection(GAMEPADSTATE_RIGHT))
 	{
-		_moveX += _moveAmount;
+		_moveX += 1;
 	}
 	if (_state->RightStickDirection(GAMEPADSTATE_LEFT))
 	{
-		_moveX -= _moveAmount;
+		_moveX -= 1;
 	}
 	if (_state->RightStickDirection(GAMEPADSTATE_UP))
 	{
-		_moveY -= _moveAmount;
+		_moveY -= 1;
 	}
 	if (_state->RightStickDirection(GAMEPADSTATE_DOWN))
 	{
-		_moveY += _moveAmount;
+		_moveY += 1;
 	}
 
-	// Only call Move() if _moveX or _moveY is not 0
-	if(_moveX != 0 || _moveY != 0) Move(_moveX, _moveY);
+	// Get momentum increase
+	int _increase = time->GetMomentumIncrease(CAMERA_DEFAULT_MOMENTUM_INCREASE);
+
+	// If we haven't moved
+	if (_moveX == 0 && _moveY == 0)
+	{
+		// Momentum becomes 0
+		momentum = 0;
+	}
+
+	// If we have moved
+	else
+	{
+		// And if we haven't hit max speed yet, increase momentum
+		if (momentum + _increase < CAMERA_DEFAULT_SPEED) momentum += _increase;
+
+		// Multiply move values by momentum
+		_moveX *= momentum;
+		_moveY *= momentum;
+
+		// Move
+		Move(_moveX, _moveY);
+	}
 
 	return 0;
 }
@@ -190,18 +211,6 @@ int Camera::HandleMouseInput(MouseState*_state )
 		// Return the cursor to the center of the screen
 		SetCursorPos(monitorCenterX, monitorCenterY);
 	}
-
-	return 1;
-}
-
-
-int Camera::CalculateMotionBlur(float _deltaX, float _deltaY)
-{
-	// Calculate angle
-	float _angle = atan2(_deltaX, _deltaY) * (180 / PI);
-
-	// Pass the information along, amount is the average of deltaX and deltaY
-	gfx->SetMotionBlur(_angle -90, fabs(_deltaX + _deltaY) / 2);
 
 	return 1;
 }

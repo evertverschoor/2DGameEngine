@@ -6,13 +6,12 @@
 #include "CameraMovement.h"
 #include "PcInputHandler.h"
 #include "GamepadInputHandler.h"
-#include "GFXController.h"
 #include "VideoSettings.h"
 #include "Entity.h"
 #include "TimeController.h"
 
-#define PI 3.14159265358979323846
-#define CAMERA_DEFAULT_SPEED 7
+#define CAMERA_DEFAULT_SPEED 50
+#define CAMERA_DEFAULT_MOMENTUM_INCREASE 2
 
 /// <summary>
 /// The camera is used by the renderer to determine what portion of the active scene to draw.
@@ -24,10 +23,9 @@ public:
 	/// <summary>
 	/// @param1 The gamepad number
 	/// @param2 The virtual resolution (make sure the virtual resolution is the same everywhere)
-	/// @param3 The GFXController the camera uses to pass motion blur information
-	/// @param4 The Video settings so the camera can determine whether or not to calculace motion blur
+	/// @param3 The Video settings so the camera can determine the screen size
 	/// </summary>
-	Camera(int, Dimension*, GFXController*, VideoSettings*, TimeController*);
+	Camera(int, Dimension*, VideoSettings*);
 	~Camera();
 
 	/// <summary>
@@ -59,7 +57,6 @@ private:
 	Dimension* virtualResolution;
 	Dimension* sceneSize;
 
-	GFXController* gfx;
 	VideoSettings* settings;
 	TimeController* time;
 
@@ -78,12 +75,8 @@ private:
 	int virtualCenterX, virtualCenterY;
 	int entityCenterX, entityCenterY;
 
-	/// <summary>
-	/// Calculate the motion blur from two deltas
-	/// @param1 Delta X (difference between current and last mouse X position)
-	/// @param2 Delta Y (difference between current and last mouse Y position)
-	/// </summary>
-	int CalculateMotionBlur(float, float);
+	// Camera momentum for smooth camera movement
+	int momentum;
 
 	/// <summary>
 	/// Move the camera based on the entity we're chasing.

@@ -8,11 +8,13 @@
 
 -> Unfocus postprocess effect
 
--> Rework motion blur to a more proper way
-
 -> Support for day/night cycle
 
 -> Depth of field postprocess effect
+
+-> Fade in/out effect
+
+-> Camera remote control
 
 -> Convert to DLL
 
@@ -106,6 +108,13 @@
 -> Added collision handling for all entities (entity and collisiondetector #include each other, it works??? god help us all)
 
 
+### Sept. 21, 2015
+
+-> Fixed motion blur to a more proper way done by the renderer
+
+-> Fixed gamepad camera movement happening more smoothly now
+
+
 ## Benchmarks
 
 	Always 1080p, maxed out everything there is at the time.
@@ -120,6 +129,11 @@
 ### Sept. 11, 2015
 
 -> avg 60+fps during heavy motion blur
+
+
+### Sept. 21, 2015
+
+-> avg 40fps during heavy motion blur, collisions and gravity
 
 ## How to use
 

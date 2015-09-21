@@ -96,7 +96,7 @@ int Kernel::Init(LPCWSTR _name)
 	time->Update();
 
 	// Initialize the camera and pass timecontroller along
-	camera = new Camera(0, &virtualResolution, gfx, vSettings, time);
+	camera = new Camera(0, &virtualResolution, vSettings);
 
 	// Make pc reciever
 	pcReciever->AddPcHandler(camera);
