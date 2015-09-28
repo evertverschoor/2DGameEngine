@@ -104,6 +104,13 @@ int Camera::SetActiveSceneSize(Dimension* _size)
 }
 
 
+int Camera::RemoteMove(int _x, int _y) 
+{
+	if (movement == REMOTE_CONTROL) Move(_x, _y);
+	return 1;
+}
+
+
 int Camera::GetGamepadNumber()
 {
 	return gamepadNumber;

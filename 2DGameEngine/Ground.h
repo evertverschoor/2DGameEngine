@@ -11,6 +11,7 @@ public:
 
 	int Act();
 	int HandleCollision(Entity*);
+	int Tell(int);
 };
 
 #endif

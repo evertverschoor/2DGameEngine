@@ -9,6 +9,7 @@
 #include "VideoSettings.h"
 #include "Entity.h"
 #include "TimeController.h"
+#include "CameraRemote.h"
 
 #define CAMERA_DEFAULT_SPEED 50
 #define CAMERA_DEFAULT_MOMENTUM_INCREASE 2
@@ -17,7 +18,7 @@
 /// The camera is used by the renderer to determine what portion of the active scene to draw.
 /// It is controlled by user input or chases an entity in the active scene.
 /// </summary>
-class Camera : public PcInputHandler, public GamepadInputHandler
+class Camera : public PcInputHandler, public GamepadInputHandler, public CameraRemote
 {
 public:
 	/// <summary>
@@ -48,6 +49,7 @@ public:
 	/// </summary>
 	int SetActiveSceneSize(Dimension*);
 
+	int RemoteMove(int, int);
 	int GetGamepadNumber();
 	int HandleGamepadInput(GamepadState*);
 	int HandleKeyboardInput(KeyboardState*);
@@ -91,7 +93,6 @@ private:
 
 	/// <summary>
 	/// Move the camera certain values in X and Y direction.
-	/// Using this function makes motion blur happen.
 	/// @param1 How far the camera moves in direction X.
 	/// @param2 How far the camera moves in direction Y.
 	/// </summary>

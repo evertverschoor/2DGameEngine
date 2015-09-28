@@ -14,7 +14,12 @@ enum CameraMovement
 	/// <summary>
 	/// Follow an entity in the active scene with the camera.
 	/// </summary>
-	ENTITY_CHASE
+	ENTITY_CHASE,
+
+	/// <summary>
+	/// The game controls the camera.
+	/// </summary>
+	REMOTE_CONTROL
 };
 
 #endif

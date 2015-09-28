@@ -133,16 +133,31 @@ int Kernel::Init(LPCWSTR _name)
 int Kernel::SetCameraMovement(CameraMovement _value)
 {
 	camera->SetCameraMovement(_value);
+
+	switch (_value)
+	{
+		case ENTITY_CHASE: 
+			gfx->SetMotionBlur(false);
+			break;
+		case NORMAL:
+			gfx->SetMotionBlur(true);
+			break;
+	}
+
 	return 1;
 }
 
 
-int Kernel::SetCameraMovement(CameraMovement _value, Entity* _entity)
+int Kernel::SetCameraChasableEntity(Entity* _entity)
 {
-	SetCameraMovement(_value);
 	camera->SetChasableEntity(_entity);
-
 	return 1;
+}
+
+
+CameraRemote* Kernel::GetCameraRemote()
+{
+	return (CameraRemote*)camera;
 }
 
 

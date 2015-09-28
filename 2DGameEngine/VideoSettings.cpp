@@ -150,6 +150,13 @@ int VideoSettings::SetGraphicsSettingsFromString(std::string _string)
 			saturate = (_saturateString == "1") ? true : false;
 		}
 
+		// Check the enhance color setting
+		else if (_strings[i].find("EnhanceColor") != std::string::npos)
+		{
+			std::string _colorString = _strings[i].substr(13, _strings[i].find(";") - 13);
+			enhanceColor = (_colorString == "1") ? true : false;
+		}
+
 		// Check the brighten setting
 		else if (_strings[i].find("Brighten") != std::string::npos)
 		{
@@ -171,6 +178,8 @@ int VideoSettings::SetGraphicsSettingsFromString(std::string _string)
 	Logger::Instance()->Log(sharpen);
 	Logger::Instance()->Log("\nSaturate: ");
 	Logger::Instance()->Log(saturate);
+	Logger::Instance()->Log("\nEnhance Color: ");
+	Logger::Instance()->Log(enhanceColor);
 	Logger::Instance()->Log("\nBrighten: ");
 	Logger::Instance()->Log(brighten);
 

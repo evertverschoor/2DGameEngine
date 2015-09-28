@@ -2,19 +2,13 @@
 
 ## Planned Work
 
--> Finalize and optimize Gravity
-
 -> Look at collisions stuff
 
 -> Unfocus postprocess effect
 
--> Support for day/night cycle
-
 -> Depth of field postprocess effect
 
 -> Fade in/out effect
-
--> Camera remote control
 
 -> Convert to DLL
 
@@ -113,6 +107,20 @@
 -> Fixed motion blur to a more proper way done by the renderer
 
 -> Fixed gamepad camera movement happening more smoothly now
+
+
+### Sept. 22, 2015
+
+-> Fixed motion blur being resolution dependent
+
+-> Added enhance color postprocess effect, removed brighten postprocess effect
+
+-> Added brightness effect again, because color enhancement makes the image too dark
+
+
+### Sept. 28, 2015
+
+-> Added camera remote control
 
 
 ## Benchmarks

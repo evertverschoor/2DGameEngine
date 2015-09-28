@@ -60,8 +60,29 @@ int DirectXRenderer::PostProcess(ID2D1Bitmap* _bitmap)
 
 	deviceContext->BeginDraw();
 
+	// Apply ambient occlusion if turned on
+	if (settings->enhanceColor)
+	{
+		// Input for both is image postprocessed so far
+		enhanceColor->SetInput(0, _finalImage);
+		enhanceColor->SetInput(1, _finalImage);
+
+		// Draw output to image
+		enhanceColor.Get()->GetOutput(&_finalImage);
+	}
+
+	// Apply saturation if turned on
+	if (settings->saturate)
+	{
+		// Input is image postprocessed so far
+		saturate->SetInput(0, _finalImage);
+
+		// Draw output to image
+		saturate.Get()->GetOutput(&_finalImage);
+	}
+
 	// Apply motion blur if turned on
-	if (settings->motionBlur)
+	if (settings->motionBlur && gfx->MotionBlurOn())
 	{
 		// Input is image postprocessed so far
 		motionBlur->SetInput(0, _finalImage);
@@ -75,7 +96,7 @@ int DirectXRenderer::PostProcess(ID2D1Bitmap* _bitmap)
 		_angle -= 90;
 
 		// Calculate motion blur amount
-		float _amount = fabs(_cameraDeltaX + _cameraDeltaY) / 2;
+		float _amount = GetActualFloatValue(fabs(_cameraDeltaX + _cameraDeltaY) / 2);
 
 		// Angle
 		motionBlur->SetValue(D2D1_DIRECTIONALBLUR_PROP_ANGLE, _angle);
@@ -85,16 +106,6 @@ int DirectXRenderer::PostProcess(ID2D1Bitmap* _bitmap)
 
 		// Draw output to image
 		motionBlur.Get()->GetOutput(&_finalImage);
-	}
-
-	// Apply saturation if turned on
-	if (settings->saturate)
-	{
-		// Input is image postprocessed so far
-		saturate->SetInput(0, _finalImage);
-
-		// Draw output to image
-		saturate.Get()->GetOutput(&_finalImage);
 	}
 
 	// Apply sharpening if turned on
@@ -337,7 +348,7 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 		DWRITE_FONT_WEIGHT_REGULAR,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
-		GetActualFontSize(40.0f),
+		GetActualFloatValue(40.0f),
 		L"en-us",
 		&engineTextFormat
 		);
@@ -439,11 +450,18 @@ int DirectXRenderer::Init(HWND* _windowhandle)
 		saturate->SetValue(D2D1_SATURATION_PROP_SATURATION, 1.8f);
 	}
 
+	// Set up the enhance color effect
+	if (settings->enhanceColor)
+	{
+		deviceContext->CreateEffect(CLSID_D2D1Blend, &enhanceColor);
+		enhanceColor->SetValue(D2D1_BLEND_PROP_MODE, D2D1_BLEND_MODE_OVERLAY);
+	}
+
 	// Set up the brighten effect
 	if (settings->brighten)
 	{
 		deviceContext->CreateEffect(CLSID_D2D1Brightness, &brighten);
-		brighten->SetValue(D2D1_BRIGHTNESS_PROP_BLACK_POINT, D2D1::Vector2F(0.0f, 0.2f));
+		brighten->SetValue(D2D1_BRIGHTNESS_PROP_BLACK_POINT, D2D1::Vector2F(0.0f, 0.1f));
 	}
 
 	Position* _fpsPos = new Position(5, 5, 5);
@@ -488,7 +506,7 @@ int DirectXRenderer::SetDefaultTextFormat(std::string _fontname, float _fontsize
 		DWRITE_FONT_WEIGHT_REGULAR,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
-		GetActualFontSize(_fontsize),
+		GetActualFloatValue(_fontsize),
 		L"en-us",
 		&defaultTextFormat
 		);
@@ -575,7 +593,7 @@ int DirectXRenderer::GetActualDrawSize(int _width, int _height, Dimension* _dump
 	return 1;
 }
 
-float DirectXRenderer::GetActualFontSize(float _size)
+float DirectXRenderer::GetActualFloatValue(float _size)
 {
 	_size = (_size * settings->screenRes->width) / virtualResolution->width;
 

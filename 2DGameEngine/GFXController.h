@@ -11,23 +11,16 @@ public:
 	~GFXController();
 
 	/// <summary>
-	/// Set the current motion blur angle and amount, put 0.0f on amount for no motion blur.
-	/// @param1 The motion blur angle, between 0 and 360.
-	/// @param2 The motion blur amount.
+	/// Set motion blur state, only if it's turned on by the user in the video settings.
 	/// </summary>
-	int SetMotionBlur(float, float);
+	int SetMotionBlur(bool);
 
 	/// <summary>
-	/// Get the motion blur amount.
+	/// Returns whether or not motion blur should happen now.
 	/// </summary>
-	float GetMotionBlurAmount();
-
-	/// <summary>
-	/// Get the motion blur angle.
-	/// </summary>
-	float GetMotionBlurAngle();
+	bool MotionBlurOn();
 private:
-	float motionBlurAmount, motionBlurAngle;
+	bool motionBlurToggle;
 };
 
 #endif

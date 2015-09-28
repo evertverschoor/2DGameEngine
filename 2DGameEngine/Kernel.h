@@ -69,10 +69,14 @@ public:
 	int SetCameraMovement(CameraMovement);
 
 	/// <summary>
-	/// Set the way the camera moves and set the entity to chase if the mode is ENTITY_CHASE.
-	/// (Use this one if you set it to ENTITY_CHASE.
+	/// Set the entity for the camera to chase if the camera mode is ENTITY_CHASE.
 	/// </summary>
-	int SetCameraMovement(CameraMovement, Entity*);
+	int SetCameraChasableEntity(Entity*);
+
+	/// <summary>
+	/// Get the remote to control the camera.
+	/// </summary>
+	CameraRemote* GetCameraRemote();
 
 	/// <summary>
 	/// Get a copy of the asset manager to load all the assets in a scene.

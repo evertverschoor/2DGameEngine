@@ -18,7 +18,7 @@ public:
 	int HandleGamepadInput(GamepadState*);
 	int GetGamepadNumber();
 	int HandleCollision(Entity*);
-
+	int Tell(int);
 private:
 	int MoveFromInput(bool, bool, bool, bool);
 };

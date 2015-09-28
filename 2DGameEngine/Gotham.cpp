@@ -5,7 +5,7 @@ Gotham::Gotham()
 {
 	// Set name and size
 	SetName("Gotham");
-	SetSize(new Dimension(3840, 2160));
+	SetSize(new Dimension(3000, 1080));
 
 	// Set background image and type
 	SetBackgroundAssetURI("Assets/Backgrounds/gotham_back.jpg");

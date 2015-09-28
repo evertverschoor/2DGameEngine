@@ -3,9 +3,9 @@
 
 Ground::Ground()
 {
-	AddAsset("main", "Assets/UI/ArkhamKnight.jpg");
+	AddAsset("main", "Assets/Environment/Ground.png");
 	SetCurrentAsset("main");
-	SetHitbox(2000, 100);
+	SetHitbox(3840, 100);
 	SetSpeed(0);
 	SetPhaseState(false);
 	SetFloatState(true);
@@ -24,6 +24,12 @@ int Ground::Act()
 
 
 int Ground::HandleCollision(Entity* _entity)
+{
+	return 1;
+}
+
+
+int Ground::Tell(int)
 {
 	return 1;
 }

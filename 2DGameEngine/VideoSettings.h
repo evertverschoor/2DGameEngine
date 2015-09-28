@@ -47,7 +47,12 @@ public:
 	bool saturate;
 
 	/// <summary>
-	/// Increase the image shadows and highlights.
+	/// Enhance image color.
+	/// </summary>
+	bool enhanceColor;
+
+	/// <summary>
+	/// Brighten the image a bit if it's too dark.
 	/// </summary>
 	bool brighten;
 

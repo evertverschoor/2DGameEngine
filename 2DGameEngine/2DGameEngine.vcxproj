@@ -109,6 +109,7 @@
     <ClInclude Include="Batman.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraMovement.h" />
+    <ClInclude Include="CameraRemote.h" />
     <ClInclude Include="CollisionDetector.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConstantMouseState.h" />

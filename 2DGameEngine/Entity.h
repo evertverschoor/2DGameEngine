@@ -33,6 +33,11 @@ public:
 	virtual int HandleCollision(Entity*) = 0;
 
 	/// <summary>
+	/// Tell the entity something.
+	/// </summary>
+	virtual int Tell(int) = 0;
+
+	/// <summary>
 	/// Put the entity at a new x-y position.
 	/// </summary>
 	int JumpTo(int, int);

@@ -239,5 +239,8 @@
     <ClInclude Include="Ground.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CameraRemote.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

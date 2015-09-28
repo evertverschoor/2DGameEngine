@@ -61,6 +61,7 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Effect> motionBlur;
 	Microsoft::WRL::ComPtr<ID2D1Effect> sharpen;
 	Microsoft::WRL::ComPtr<ID2D1Effect> saturate;
+	Microsoft::WRL::ComPtr<ID2D1Effect> enhanceColor;
 	Microsoft::WRL::ComPtr<ID2D1Effect> brighten;
 
 	// Postprocessing helpers
@@ -114,9 +115,9 @@ private:
 	int GetActualDrawSize(int, int, Dimension*);
 
 	/// <summary>
-	/// Calculates the actual font size for a piece of text if the virtual resolution is different from the actual resolution.
+	/// Calculates the actual value of a float (for text and motion blur amount) if the virtual resolution is different from the actual resolution.
 	/// </summary>
-	float GetActualFontSize(float);
+	float GetActualFloatValue(float);
 
 	/// <summary>
 	/// Draw the framerate on the screen.

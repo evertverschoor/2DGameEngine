@@ -3,8 +3,7 @@
 
 GFXController::GFXController()
 {
-	motionBlurAmount = 0.0f;
-	motionBlurAngle = 0.0f;
+	motionBlurToggle = true;
 }
 
 
@@ -12,22 +11,14 @@ GFXController::~GFXController()
 {
 }
 
-int GFXController::SetMotionBlur(float _angle, float _amount)
+int GFXController::SetMotionBlur(bool _value)
 {
-	motionBlurAngle = _angle;
-	motionBlurAmount = _amount;
-
+	motionBlurToggle = _value;
 	return 1;
 }
 
 
-float GFXController::GetMotionBlurAmount()
+bool GFXController::MotionBlurOn()
 {
-	return motionBlurAmount;
-}
-
-
-float GFXController::GetMotionBlurAngle()
-{
-	return motionBlurAngle;
+	return motionBlurToggle;
 }
